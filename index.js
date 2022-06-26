@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import pg from "pg";
 
 //initialize postgres connection
@@ -15,15 +16,36 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(express.json());
+app.use(
+	session({
+		secret: "notable",
+		resave: false,
+		saveUninitialized: true,
+		cookie: {
+			maxAge: 1000 * 60 * 60 * 24 * 7 * 2, //two weeks
+		},
+	})
+);
 app.use(express.static("public"));
 
-app.post("/api/login", async (req, res) => {
+app.get("/", (req, res) => {
+	const session = req.session;
+	if (session.user) {
+		res.sendFile("secured/index.html");
+	} else {
+		res.redirect("/login");
+	}
+});
+
+app.post("/api/login", express.urlencoded(), async (req, res) => {
 	const { username, password } = req.body;
 	const result = await pool.query("SELECT * FROM users WHERE username = $1 AND password = $2", [username, password]);
 	if (result.rows.length === 0) {
 		res.status(401).send("Invalid username or password");
 	} else {
-		res.redirect("/dashboard");
+		req.session.regenerate(() => {
+			req.session.user = username;
+			req.session.save(() => res.redirect("/"));
+		});
 	}
 });
