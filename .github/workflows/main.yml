@@ -22,6 +22,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - env: 
           token: ${{ secrets.GITLAB_TOKEN }}
         name: Run a multi-line script
