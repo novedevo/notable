@@ -28,4 +28,4 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           git remote add csil "https://oauth2:${token}@csil-git1.cs.surrey.sfu.ca/jlc58/notable.git"
-          git push csil main
+          git push --force csil main
