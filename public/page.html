@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<body>
+  <h1>DEMO TEXT TOP <br></h1>
+  <iframe id = "videoDisplay" width = "420" height = "315"
+  src = ""></iframe>
+  <br>
+  <label for="videoForm">URL: </label>
+  <input name = "videoForm" type = "text" id = "videoForm">
+  <button onclick="setVideo()">Load Video </button>
+
+  <p>CURRENT LINK:</p>
+  <p id="demo"></p>
+
+  <p>TEST URLs YOU CAN COPY AND PASTE:<br>
+    https://www.youtube.com/watch?v=VOK4NtCkNGg&ab_channel=Dio-Z-Mio4th<br>
+    https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW <br><br>
+    
+  </p>
+
+  
+  <!-- Perhaps this is the hard part -->
+  CURRENT TIME:
+  <button onclick="getTime()">Current Time not working</button>
+  <p id="time"></p>
+
+  <label for="timeForm">Time (seconds): </label>
+  <input name = "timeForm" type = "number" id = "timeForm">
+  <button onclick="goToTime()">Jump to time in video ALSO not working </button>
+  <p id="timeResult"></p>
+  
+
+  <script src = "helper.js"></script>
+</body>
