@@ -6,14 +6,13 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// This function creates an <iframe> (and YouTube player)
-// after the API code downloads.
+// This function creates an <iframe> (and YouTube player) after the API code downloads.
 var player;
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
-    height: '850',
+    height: '850', // Consider modifying size of video player in future iterations.
     width: '1350',
-    videoId: '', // Initialize with no video ID. Replace with a nice default later.
+    videoId: '', // Initialized with no video ID. Replace with a nice default later.
     playerVars: {
       'playsinline': 1
     },
@@ -23,17 +22,20 @@ function onYouTubeIframeAPIReady() {
     }
   });
 }
+
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   event.target.playVideo();
 }
-// This literally does nothing, but the iframe breaks without it.
+
+// This literally does nothing, but the Iframe breaks without it.
 function onPlayerStateChange(event) {}
+
 // Method takes URL input, displays video if valid.
-function setVideo(){
-  videoURL = getId(document.getElementById("videoForm").value) ; // Get ID from form.
+function setVideo(inputURL){
+  videoURL = getId(document.getElementById(inputURL).value) ; // Get ID from form.
   player.loadVideoById(videoURL);
-  document.getElementById("videoForm").value = ""; // Reset form.
+  document.getElementById(inputURL).value = ""; // Reset form to blank state.
 }
 
 // Method, YT Parser. Not ours.
@@ -55,15 +57,16 @@ function getTime(){
   var timeStamp = ~~player.getCurrentTime();
   return timeStamp;
 }
+
 // Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
-function createTimeNote(){
-  var noteText = document.getElementById("note").value;
-  document.getElementById("timeStampNote").innerHTML = noteText + " - Time Stamp: " + getTime() + " seconds";
+function createTimeNote(inputForm,outputHTML){
+  var noteText = document.getElementById(inputForm).value;
+  document.getElementById(outputHTML).innerHTML = noteText + " - Time Stamp: " + getTime() + " seconds";
 }
-// Method activates when target text element is clicked, jumps to text specified timestamp in video.
-function goToTimeStamp(){
-  var timeStamp = document.getElementById("timeStampNote").innerHTML;
+
+// Method parses timestamp from element to jump to point in video.
+function goToTimeStamp(timeStampNote){
+  var timeStamp = document.getElementById(timeStampNote).innerHTML;
   var time = timeStamp.replace(/\D/g, '');
   player.seekTo(time);
 }
- 

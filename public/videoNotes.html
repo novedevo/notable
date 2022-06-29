@@ -12,22 +12,22 @@
 		<title>Edit Note</title>
 	</head>
 	<body>
-        <label for="videoForm">URL: </label>
-        <input name = "videoForm" type = "text" id = "videoForm">
-        <button onclick="setVideo()">Load Video </button>
-        <p>TEST URLs YOU CAN COPY AND PASTE:<br>
-            https://www.youtube.com/watch?v=LEENEFaVUzU<br>
-            https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW <br><br>
-          </p>
+      <label for="videoForm">URL: </label>
+      <input name = "videoForm" type = "text" id = "videoForm">
+      <button onclick="setVideo('videoForm')">Load Video </button>
+      <p>TEST URLs YOU CAN COPY AND PASasdfTE:<br>
+        https://www.youtube.com/watch?v=LEENEFaVUzU<br>
+        https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW <br><br>
+      </p>
 		<div id="container">
 			<div class="leftside" id="player"></div>
 			<div class="rightside">
 				<div class="timer">
-                    Note Taking
+          Note Taking
 				</div>
 				<div class="notesbox">
-					<ul><a id="timeStampNote" href="javascript:void(0);" onclick="goToTimeStamp()"></a></ul>
-                </div>
+					<ul><a id="timeStampNote" href="javascript:void(0);" onclick="goToTimeStamp('timeStampNote')"></a></ul>
+        </div>
 				<div class="inputbox">
 					<textarea
 						name=""
@@ -36,10 +36,10 @@
 						rows="5"
 						placeholder="Write notes here..."
 					></textarea>
-                    <input type="submit" value="Post" onclick="createTimeNote()"/>
+          <input type="submit" value="Post" onclick="createTimeNote('note','timeStampNote')"/>
 				</div>
 			</div>
 		</div>
-        <script src="videoNotes.js" defer></script>
+    <script src="videoNotes.js" defer></script>
 	</body>
 </html>
