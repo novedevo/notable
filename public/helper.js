@@ -11,8 +11,8 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var player;
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
-    height: '390',
-    width: '640',
+    height: '850',
+    width: '1350',
     videoId: '', // Initialize with no video ID. Replace with a nice default later.
     playerVars: {
       'playsinline': 1
@@ -68,15 +68,16 @@ function goToTime(){
 // Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
 function createTimeNote(){
   var noteText = document.getElementById("note").value;
-  document.getElementById("timeStampNote").innerHTML = noteText;
+  //document.getElementById("timeStampNote").innerHTML = noteText;
 
   var timeStamp = ~~player.getCurrentTime();
-  document.getElementById("timeStamp").innerHTML = "Time Stamp: " + timeStamp + " seconds";
+  document.getElementById("timeStampNote").innerHTML = noteText + " - Time Stamp: " + timeStamp + " seconds";
+
 }
 
 // Method activates when target text element is clicked, jumps to text specified timestamp in video.
 function goToTimeStamp(){
-  var timeStamp = document.getElementById("timeStamp").innerHTML;
+  var timeStamp = document.getElementById("timeStampNote").innerHTML;
   var time = timeStamp.replace(/\D/g, '');
   player.seekTo(time);
 }

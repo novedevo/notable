@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link href="videoNotes.css" rel="stylesheet" />
+		<title>Edit Note</title>
+	</head>
+	<body>
+        <label for="videoForm">URL: </label>
+        <input name = "videoForm" type = "text" id = "videoForm">
+        <button onclick="setVideo()">Load Video </button>
+        <p>TEST URLs YOU CAN COPY AND PASTE:<br>
+            https://www.youtube.com/watch?v=LEENEFaVUzU<br>
+            https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW <br><br>
+          </p>
+		<div id="container">
+			<div class="leftside" id="player"></div>
+			<div class="rightside">
+				<div class="timer">
+                    Note Taking
+				</div>
+				<div class="notesbox">
+					<ul><a id="timeStampNote" href="javascript:void(0);" onclick="goToTimeStamp()"></a></ul>
+                </div>
+				<div class="inputbox">
+					<textarea
+						name=""
+						id="note"
+						cols="20"
+						rows="5"
+						placeholder="Write notes here..."
+					></textarea>
+                    <input type="submit" value="Post" onclick="createTimeNote()"/>
+				</div>
+			</div>
+		</div>
+        <script src="helper.js" defer></script>
+	</body>
+</html>
