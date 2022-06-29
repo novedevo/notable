@@ -29,7 +29,6 @@ function onPlayerReady(event) {
 }
 // This literally does nothing, but the iframe breaks without it.
 function onPlayerStateChange(event) {}
-
 // Method takes URL input, displays video if valid.
 function setVideo(){
   videoURL = getId(document.getElementById("videoForm").value) ; // Get ID from form.
@@ -52,29 +51,15 @@ function getId(url) {
 }
 
 // Method gets current time on displayed YT Video. Returns timestamp.
-// Displays as text for debugging purposes.
 function getTime(){
   var timeStamp = ~~player.getCurrentTime();
-  document.getElementById("time").innerHTML = timeStamp; // This line would get removed.
   return timeStamp;
 }
-
-// Method for jumping to a time in a video. Repeat code atm.
-function goToTime(){
-  player.seekTo(document.getElementById("timeForm").value);
-  document.getElementById("timeForm").value = "";
-}
-
 // Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
 function createTimeNote(){
   var noteText = document.getElementById("note").value;
-  //document.getElementById("timeStampNote").innerHTML = noteText;
-
-  var timeStamp = ~~player.getCurrentTime();
-  document.getElementById("timeStampNote").innerHTML = noteText + " - Time Stamp: " + timeStamp + " seconds";
-
+  document.getElementById("timeStampNote").innerHTML = noteText + " - Time Stamp: " + getTime() + " seconds";
 }
-
 // Method activates when target text element is clicked, jumps to text specified timestamp in video.
 function goToTimeStamp(){
   var timeStamp = document.getElementById("timeStampNote").innerHTML;
