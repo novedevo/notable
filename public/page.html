@@ -1,8 +1,7 @@
+<!-- Test page for video feature -->
 <!DOCTYPE html>
 <body>
-  <h1>METAL GEAR RISING POKERAP DOT COM <br></h1>
-
-  <!--<iframe id = "player" width = "420" height = "315"></iframe>-->
+  <h1>Video Demo Page <br></h1>
   <div id="player"></div>
 
   <br>
@@ -10,23 +9,26 @@
   <input name = "videoForm" type = "text" id = "videoForm">
   <button onclick="setVideo()">Load Video </button>
 
+  <!-- Convinient YT links for copying and pasting into forms for testing. -->
   <p>TEST URLs YOU CAN COPY AND PASTE:<br>
     https://www.youtube.com/watch?v=VOK4NtCkNGg&ab_channel=Dio-Z-Mio4th<br>
     https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW <br><br>
   </p>
 
   
-  <!-- Perhaps this is the hard part -->
-  CURRENT TIME:<p id="time"></p>
+  <!-- Demo form retrieving current time in video -->
+  GET CURRENT TIME:<p id="time"></p>
   <button onclick="getTime()">Get Current Time</button><br><br>
   
 
+  <!-- Demo form jumping to specific times in video -->
   <label for="timeForm">Time (seconds): </label>
   <input name = "timeForm" type = "number" id = "timeForm">
   <button onclick="goToTime()">Jump to Timestamp</button>
   <p id="timeResult"></p>
-  
   <br>
+
+  <!-- Demo form creating timestamp links -->
   <label for="timestampnote">Create a note at the video time </label>
   <br>
   <input name = "note" type = "text" id = "note">

@@ -1,4 +1,4 @@
-var videoURL; // Holds the URL being used currently.
+var videoURL; // Holds the YouTube video ID in use.
 
 // This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
@@ -13,7 +13,7 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
     height: '390',
     width: '640',
-    videoId: '',
+    videoId: '', // Initialize with no video ID. Replace with a nice default later.
     playerVars: {
       'playsinline': 1
     },
@@ -37,7 +37,7 @@ function setVideo(){
   document.getElementById("videoForm").value = ""; // Reset form.
 }
 
-// Method, YT Parser. Not Mine.
+// Method, YT Parser. Not ours.
 function getId(url) {
   // Regular expression, all possible combinations before YT unique ID.
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -45,19 +45,18 @@ function getId(url) {
   // Comparison between arg and the regular expression
   const match = url.match(regExp);
 
-  // Return the video ID.
+  // Return the video ID by itself.
   return (match && match[2].length === 11)
     ? match[2]
     : null;
 }
 
-// Nothing beyond here works yet.
-
-// Method gets current time on displayed YT Video and displays it as text.
-// Hopefully can be modified to return timestamps for use. Might need API.
+// Method gets current time on displayed YT Video. Returns timestamp.
+// Displays as text for debugging purposes.
 function getTime(){
-  var videoTime = document.getElementById("videoDisplay")[0];
-  document.getElementById("time").innerHTML = videoTime.getCurrentTime();
+  var timeStamp = ~~player.getCurrentTime();
+  document.getElementById("time").innerHTML = timeStamp; // This line would get removed.
+  return timeStamp;
 }
 
 // Method for jumping to a time in a video. Repeat code atm.
@@ -66,8 +65,8 @@ function goToTime(){
   document.getElementById("timeForm").value = "";
 }
 
+// Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
 function createTimeNote(){
-  var videoTime = document.getElementById("videoDisplay");
   var noteText = document.getElementById("note").value;
   document.getElementById("timeStampNote").innerHTML = noteText;
 
@@ -75,6 +74,7 @@ function createTimeNote(){
   document.getElementById("timeStamp").innerHTML = "Time Stamp: " + timeStamp + " seconds";
 }
 
+// Method activates when target text element is clicked, jumps to text specified timestamp in video.
 function goToTimeStamp(){
   var timeStamp = document.getElementById("timeStamp").innerHTML;
   var time = timeStamp.replace(/\D/g, '');
