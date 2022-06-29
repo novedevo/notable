@@ -60,11 +60,24 @@ function getTime(){
   document.getElementById("time").innerHTML = videoTime.getCurrentTime();
 }
 
-
 // Method for jumping to a time in a video. Repeat code atm.
-function goToTime(timeInSeconds){
-  var timePrefix = "?t=";
-  document.getElementById("videoDisplay").src = currentVideo+timePrefix+timeInSeconds;
+function goToTime(){
+  player.seekTo(document.getElementById("timeForm").value);
   document.getElementById("timeForm").value = "";
-  document.getElementById("timeResult").innerHTML = url+time;
 }
+
+function createTimeNote(){
+  var videoTime = document.getElementById("videoDisplay");
+  var noteText = document.getElementById("note").value;
+  document.getElementById("timeStampNote").innerHTML = noteText;
+
+  var timeStamp = ~~player.getCurrentTime();
+  document.getElementById("timeStamp").innerHTML = "Time Stamp: " + timeStamp + " seconds";
+}
+
+function goToTimeStamp(){
+  var timeStamp = document.getElementById("timeStamp").innerHTML;
+  var time = timeStamp.replace(/\D/g, '');
+  player.seekTo(time);
+}
+ 

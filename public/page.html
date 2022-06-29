@@ -26,6 +26,18 @@
   <button onclick="goToTime()">Jump to Timestamp</button>
   <p id="timeResult"></p>
   
+  <br>
+  <label for="timestampnote">Create a note at the video time </label>
+  <br>
+  <input name = "note" type = "text" id = "note">
+  <br>
+  <button onclick="createTimeNote()">Create Time stamped note</button>
+  <br> <br> <br> <br>
+
+  <label for="timestampnote2">Time Stamped Note: </label>
+  <br> <br>
+  <div id = "timeStampNote"> </div>
+  <a id = "timeStamp" href="javascript:void(0);" onclick="goToTimeStamp()"> </a>
 
   <script src = "helper.js"></script>
 </body>
