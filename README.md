@@ -1,8 +1,11 @@
 ## Project Proposal: Notable Note Taking Application
+
 ### Group 15: Devon, Jamie, Owen, Tim, Nic
+
 The Notable web application allows for time-stamped note taking and synchronous file sharing during live and recorded video presentations. Users can log in to the application and create private or public instances, where they may stream a presentation while sharing supplementary files through the app in real time with limited in-app viewing support. Users attending as audience members will be able to write and share notes during and after a session, with time stamps attached to indicate when, in the video stream, their individual notes are written. This note taking feature allows for users to write detailed notes relevant to a presenter’s spoken/non-visual content. Users will also be able to share these notes with others. While this is a multipurpose application, it is mainly intended to support lectures and conferences with large audiences.
 
 Notable’s target audience is educators and students in a post-secondary context. This application is also useful for other situations featuring one main speaking party and many viewers. This not being limited to formal education, business seminars and large scale presentations (such as TED Talks) naturally fit within the Notable model. With these audiences in mind, the following sample stories have been taken into consideration for Notable’s development:
+
 - As a speaker, I can create a new instance and indicate a video or schedule a live event.
 - As a speaker, I can upload PowerPoint slides or notes to an instance alongside a video or before a live event.
 - As a viewer, I can select a live instance to join.

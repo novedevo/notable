@@ -5,16 +5,22 @@ import pg from "pg";
 //initialize postgres connection
 const { Pool } = pg;
 const pool = new Pool({
-	connectionString: process.env.DATABASE_URL || "postgres://postgres:postgres@localhost/notable",
-	ssl: {
-		rejectUnauthorized: false,
-	},
+	connectionString:
+		process.env.DATABASE_URL ||
+		"postgres://postgres:postgres@localhost/notable",
+	ssl: process.env.DATABASE_URL
+		? {
+				rejectUnauthorized: false,
+		  }
+		: false,
 });
 await pool.connect();
 
 const PORT = process.env.PORT || 5000;
 
-const __dirname = import.meta.url.replace("file://", "").replace("/index.js", "");
+const __dirname = import.meta.url
+	.replace("file://", "")
+	.replace("/index.js", "");
 const app = express();
 
 app.use(
@@ -38,36 +44,48 @@ app.get("/", (req, res) => {
 	}
 });
 
-app.post("/api/login", express.urlencoded({ extended: true }), async (req, res) => {
-	const { username, password } = req.body;
-	const result = await pool.query("SELECT * FROM users WHERE username = $1 AND password = $2", [username, password]);
-	if (result.rows.length === 0) {
-		res.status(401).send("Invalid username or password");
-	} else {
-		req.session.regenerate(() => {
-			req.session.user = username;
-			req.session.save(() => res.redirect("/"));
-		});
+app.post(
+	"/api/login",
+	express.urlencoded({ extended: true }),
+	async (req, res) => {
+		const { username, password } = req.body;
+		const result = await pool.query(
+			"SELECT * FROM users WHERE username = $1 AND password = $2",
+			[username, password]
+		);
+		if (result.rows.length === 0) {
+			res.status(401).send("Invalid username or password");
+		} else {
+			req.session.regenerate(() => {
+				req.session.user = username;
+				req.session.save(() => res.redirect("/"));
+			});
+		}
 	}
-});
+);
 
 app.post("/api/logout", (req, res) => {
 	req.session.destroy(() => res.redirect("/"));
 });
 
-app.post("/api/register", express.urlencoded({ extended: true }), async (req, res) => {
-	const { username, password, name } = req.body;
-	const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
-	if (result.rows.length > 0) {
-		res.status(401).send("Username already exists");
-	} else {
-		await pool.query("INSERT INTO users (username, password, name) VALUES ($1, $2, $3)", [
+app.post(
+	"/api/register",
+	express.urlencoded({ extended: true }),
+	async (req, res) => {
+		const { username, password, name } = req.body;
+		const result = await pool.query("SELECT * FROM users WHERE username = $1", [
 			username,
-			password,
-			name,
 		]);
-		res.redirect("/login.html");
+		if (result.rows.length > 0) {
+			res.status(401).send("Username already exists");
+		} else {
+			await pool.query(
+				"INSERT INTO users (username, password, name) VALUES ($1, $2, $3)",
+				[username, password, name]
+			);
+			res.redirect("/login.html");
+		}
 	}
-});
+);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
