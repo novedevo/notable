@@ -30,3 +30,26 @@ function calculateTimer() {
 
   timerHtml.innerHTML = ` ${h} : ${m} : ${s}`;
 }
+
+
+/////////////////////// Notes posting functions /////////////////////
+/////////////////////// Notes posting functions /////////////////////
+
+function post() {
+  var ptag = document.createElement("p")
+  var br = document.createElement("br");
+  var input = document.getElementById("inputnotes").value;
+  var note = document.createTextNode(input)
+  var notesdisplay = document.getElementById("notesdisplay")
+  var to_post = ptag.appendChild(note);
+  notesdisplay.appendChild(to_post);
+  notesdisplay.appendChild(br);
+  document.getElementById("inputnotes").value = "";
+}
+
+var notesdisplay = document.querySelector("#notesdisplay");
+notesdisplay.value = localstorage.getItem("notes")
+
+notesdisplay.addEventListener("keyup", event => {
+  localStorage.setItem("notes", event.target.value)
+})
