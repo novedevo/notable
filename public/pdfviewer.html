@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link href="edit-note.css" rel="stylesheet" />
+		<title>Edit Note</title>
+	</head>
+	<body>
+        <button id="prev">Prev</button>
+        <button id="next">Next</button>
+        <span id="pagenum">not yet</span>
+        <input type="file" id="uploadPDF" accept=".pdf,application/pdf" required>
+		<div id="container">
+			<canvas class="leftside" id="canvas">
+            </canvas>
+			<div class="rightside">
+				<div class="timer">
+					<div class="buttons">
+						<button class="btn-group" id="startTimer">start</button>
+						<button class="btn-group" id="stopTimer">pause</button>
+					</div>
+					<div class="displayTime">00 : 00 : 00</div>
+				</div>
+				<div class="notesbox">
+					Currently an empty div. Soon to hold a bunch of notes!
+				</div>
+				<div class="inputbox">
+					<textarea
+						name=""
+						id=""
+						cols="20"
+						rows="5"
+						placeholder="Write notes here..."
+					></textarea
+					><input type="submit" value="Post" />
+				</div>
+			</div>
+		</div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.8.349/pdf.min.js"></script>
+        <script src="stopwatch.js" defer></script>
+        <script src="./app.js"></script>
+	</body>
+</html>
