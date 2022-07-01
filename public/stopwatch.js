@@ -37,7 +37,7 @@ function calculateTimer() {
 function post() {
 	var paragraphTag = document.createElement("p");
 	var lineBreak = document.createElement("br");
-	var input = document.getElementById("inputnotes").value;
+	var input = document.getElementById("inputnotes").value + '\t '.repeat(20);
 	var note = document.createTextNode(input);
 	var notesDisplay = document.getElementById("notesdisplay");
 	var toPost = paragraphTag.appendChild(note);
