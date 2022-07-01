@@ -15,8 +15,8 @@
 	<body>
 		<div id="container">
 			<div class="leftside">
-				This div is meant to be the video window :) <br> Black outlines are for the
-				visualization of divs. Can be removed later
+				This div is meant to be the video window :) <br />
+				Black outlines are for the visualization of divs. Can be removed later
 			</div>
 			<div class="rightside">
 				<div class="timer">
@@ -24,10 +24,9 @@
 						<button class="btn-group" id="startTimer">start</button>
 						<button class="btn-group" id="stopTimer">pause</button>
 					</div>
-					<div class="displayTime">00 : 00 : 00</div>
+					<div id="displayTime">00:00:00</div>
 				</div>
-				<div name="notesdisplay" id="notesdisplay">
-				</div>
+				<div name="notesdisplay" id="notesdisplay"></div>
 				<div class="inputbox">
 					<textarea
 						name=""
@@ -35,8 +34,9 @@
 						cols="20"
 						rows="5"
 						placeholder="Write notes here..."
+						onkeypress="postOnEnter()"
 					></textarea
-					><input type="Button" value="Post" onclick="post()"/>
+					><input id="postButton" type="Button" value="Post" onclick="post()"/>
 				</div>
 			</div>
 		</div>
