@@ -11,7 +11,7 @@ async function regenTable() {
 
 		cols[0].textContent = user.name;
 		cols[1].textContent = user.username;
-		cols[2].textContent = user.admin;
+		cols[2].textContent = user.admin ? "admin" : "user";
 
 		const moteButton = document.createElement("button");
 		moteButton.classList.add("btn", "btn-primary");
