@@ -8,13 +8,13 @@
 	height: 100vh;
 }
 
-#notesdisplay {
+#notes-display {
 	overflow-y: scroll;
 	overflow-x: hidden;
 	word-break: break-all;
 }
 
-.leftside {
+.left-side {
 	display: grid;
 	background-color: bisque;
 	align-content: center;
@@ -22,7 +22,7 @@
 	outline: 2px black solid;
 }
 
-.rightside {
+.right-side {
 	display: grid;
 	background-color: aliceblue;
 	grid-template-rows: 10% 70% 20%;
@@ -37,16 +37,16 @@
 	justify-content: center;
 }
 
-.notesbox {
+.notes-box {
 	outline: 2px black solid;
 }
 
-.inputbox {
+.input-box {
 	display: grid;
 	grid-template-columns: 80% 20%;
 	outline: 2px black solid;
 }
 
-.displayTime {
+.display-time {
 	font-size: larger;
 }
