@@ -1,44 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<link href="edit-note.css" rel="stylesheet" />
-		<script src="stopwatch.js" defer></script>
-		<title>Edit Note</title>
-	</head>
-	<body>
-		<div id="container">
-			<div class="leftside">
-				This div is meant to be the video window :) <br />
-				Black outlines are for the visualization of divs. Can be removed later
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="edit-note.css" rel="stylesheet" />
+	<script src="stopwatch.js" defer></script>
+	<title>Edit Note</title>
+</head>
+
+<body>
+	<div id="container">
+		<div class="leftside">
+			This div is meant to be the video window :) <br />
+			Black outlines are for the visualization of divs. Can be removed later
+		</div>
+		<div class="rightside">
+			<div class="timer">
+				<div class="buttons">
+					<button class="btn-group" id="startTimer">start</button>
+					<button class="btn-group" id="stopTimer">pause</button>
+				</div>
+				<div id="displayTime">00:00:00</div>
 			</div>
-			<div class="rightside">
-				<div class="timer">
-					<div class="buttons">
-						<button class="btn-group" id="startTimer">start</button>
-						<button class="btn-group" id="stopTimer">pause</button>
-					</div>
-					<div id="displayTime">00:00:00</div>
-				</div>
-				<div name="notesdisplay" id="notesdisplay"></div>
-				<div class="inputbox">
-					<textarea
-						name=""
-						id="inputnotes"
-						cols="20"
-						rows="5"
-						placeholder="Write notes here..."
-						onkeypress="postOnEnter()"
-					></textarea
-					><input id="postButton" type="Button" value="Post" onclick="post()"/>
-				</div>
+			<div name="notesdisplay" id="notesdisplay"></div>
+			<div class="inputbox">
+				<textarea name="" id="inputnotes" cols="20" rows="5" placeholder="Write notes here..."
+					onkeypress="postOnEnter()"></textarea><input id="postButton" type="Button" value="Post"
+					onclick="post()" />
 			</div>
 		</div>
-	</body>
+	</div>
+</body>
+
 </html>

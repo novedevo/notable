@@ -35,39 +35,37 @@ function calculateTimer() {
 /////////////////////// Notes posting functions /////////////////////
 
 function post() {
+	if (document.getElementById("inputnotes").value != "") {
+		// initializing tags to display in edit-note.html
+		var paragraphTag = document.createElement("p");
+		var linkTag = document.createElement("a");
+		var lineBreak = document.createElement("br");
 
-  if(document.getElementById("inputnotes").value != "") {
+		// retrieving text filled out in "inputnotes" textarea
+		var input = document.getElementById("inputnotes").value + "\t ".repeat(20);
 
-    // initializing tags to display in edit-note.html
-    var paragraphTag = document.createElement("p");
-    var linkTag = document.createElement("a");
-    var lineBreak = document.createElement("br");
+		// turning input text into a node that can be appended to notesDisplay div
+		var note = document.createTextNode(input);
 
-    // retrieving text filled out in "inputnotes" textarea
-    var input = document.getElementById("inputnotes").value + '\t '.repeat(20);
+		var notesDisplay = document.getElementById("notesdisplay");
 
-    // turning input text into a node that can be appended to notesDisplay div
-    var note = document.createTextNode(input);
+		// inserting input text to our previously initialized paragraph tag
+		var toPost = paragraphTag.appendChild(note);
 
-    var notesDisplay = document.getElementById("notesdisplay");
+		// displaying written notes into notesDisplay
+		notesDisplay.appendChild(toPost);
 
-    // inserting input text to our previously initialized paragraph tag
-    var toPost = paragraphTag.appendChild(note);
+		// retrieving current time to append to notesDisplay
+		var currentTime = document.getElementById("displayTime").textContent;
+		var timeNode = document.createTextNode(currentTime);
 
-    // displaying written notes into notesDisplay
-    notesDisplay.appendChild(toPost);
-
-    // retrieving current time to append to notesDisplay
-    var currentTime = document.getElementById("displayTime").textContent;
-    var timeNode = document.createTextNode(currentTime);
-
-    // turning current time into a link tag and appending it to notesDisplay
-    linkTag.appendChild(timeNode);
-    linkTag.href = "https://github.com/novedevo/notable";
-    notesDisplay.appendChild(linkTag);
-    notesDisplay.appendChild(lineBreak);
-    document.getElementById("inputnotes").value = "";
-  }
+		// turning current time into a link tag and appending it to notesDisplay
+		linkTag.appendChild(timeNode);
+		linkTag.href = "https://github.com/novedevo/notable";
+		notesDisplay.appendChild(linkTag);
+		notesDisplay.appendChild(lineBreak);
+		document.getElementById("inputnotes").value = "";
+	}
 }
 
 // trigger post button click on enter
