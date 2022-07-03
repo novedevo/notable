@@ -1,41 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link href="videoNotes.css" rel="stylesheet" />
+		<title>Edit Note</title>
+	</head>
 
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
-	<link href="videoNotes.css" rel="stylesheet" />
-	<title>Edit Note</title>
-</head>
-
-<body>
-	<label for="videoForm">URL: </label>
-	<input name="videoForm" type="text" id="videoForm">
-	<button onclick="setVideo('videoForm')">Load Video </button>
-	<p>TEST URLs YOU CAN COPY AND PASTE:<br>
-		https://www.youtube.com/watch?v=LEENEFaVUzU<br>
-		https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW <br><br>
-	</p>
-	<div id="container">
-		<div class="left-side" id="player"></div>
-		<div class="right-side">
-			<div class="timer">
-				Note Taking
-			</div>
-			<div class="notes-box">
-				<ul>
-					<a id="timestamp-note" href="javascript:void(0);" onclick="goToTimeStamp('timestamp-note')"></a>
-				</ul>
-			</div>
-			<div class="input-box">
-				<textarea name="" id="note" cols="20" rows="5" placeholder="Write notes here..."></textarea>
-				<input type="submit" value="Post" onclick="createTimeNote('note','timestamp-note')" />
+	<body>
+		<label for="videoForm">URL: </label>
+		<input name="videoForm" type="text" id="videoForm" />
+		<button onclick="setVideo('videoForm')">Load Video</button>
+		<p>
+			TEST URLs YOU CAN COPY AND PASTE:<br />
+			https://www.youtube.com/watch?v=LEENEFaVUzU<br />
+			https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW
+			<br /><br />
+		</p>
+		<div id="container">
+			<div class="left-side" id="player"></div>
+			<div class="right-side">
+				<div class="timer">Note Taking</div>
+				<div class="notes-box">
+					<ul>
+						<a
+							id="timestamp-note"
+							href="javascript:void(0);"
+							onclick="goToTimeStamp('timestamp-note')"
+						></a>
+					</ul>
+				</div>
+				<div class="input-box">
+					<textarea
+						name=""
+						id="note"
+						cols="20"
+						rows="5"
+						placeholder="Write notes here..."
+					></textarea>
+					<input
+						type="submit"
+						value="Post"
+						onclick="createTimeNote('note','timestamp-note')"
+					/>
+				</div>
 			</div>
 		</div>
-	</div>
-	<script src="videoNotes.js" defer></script>
-</body>
-
+		<script src="videoNotes.js" defer></script>
+	</body>
 </html>
