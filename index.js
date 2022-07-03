@@ -16,16 +16,19 @@ const pool = new Pool({
 });
 await pool.connect();
 
+//setup constants
 const PORT = process.env.PORT || 5000;
-
 const __dirname = import.meta.url
 	.replace("file://", "")
 	.replace("/index.js", "");
+
+//initialize express
 const app = express();
 
+//setup express-session
 app.use(
 	session({
-		secret: "notable",
+		secret: "notable", //really should be a truly secure string, but this is fine considering we have zero real adversaries
 		resave: false,
 		saveUninitialized: true,
 		cookie: {
@@ -50,13 +53,15 @@ function requiresAdmin(req, res, next) {
 }
 
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", requiresLogin, (req, res) => {
 	res.sendFile(__dirname + "/secured/dashboard.html");
 });
 
 app.get("/secured/adminConsole.html", requiresAdmin, (req, res) => {
-	res.sendFile(__dirname + "/secured/adminConsole.html/");
+	const path = __dirname + "/secured/adminConsole.html";
+	res.sendFile(path);
 });
 
 app.get("/secured/:file", requiresLogin, (req, res) => {
@@ -65,55 +70,47 @@ app.get("/secured/:file", requiresLogin, (req, res) => {
 
 // API section
 
-app.post(
-	"/api/login",
-	express.urlencoded({ extended: true }),
-	async (req, res) => {
-		const { username, password } = req.body;
-		const result = await pool.query(
-			"SELECT * FROM users WHERE username = $1 AND password = $2",
-			[username, password]
-		);
-		if (result.rows.length === 0) {
-			res.status(401).send("Invalid username or password");
-		} else {
-			req.session.regenerate(() => {
-				req.session.user = username;
-				req.session.name = result.rows[0].name;
-				req.session.admin = result.rows[0].admin;
-				req.session.save(() => res.redirect("/"));
-			});
-		}
+app.post("/api/login", async (req, res) => {
+	const { username, password } = req.body;
+	const result = await pool.query(
+		"SELECT * FROM users WHERE username = $1 AND password = $2",
+		[username, password]
+	);
+	if (result.rows.length === 0) {
+		res.status(401).send("Invalid username or password");
+	} else {
+		req.session.regenerate(() => {
+			req.session.user = username;
+			req.session.name = result.rows[0].name;
+			req.session.admin = result.rows[0].admin;
+			req.session.save(() => res.redirect("/"));
+		});
 	}
-);
+});
 
 app.get("/logout", requiresLogin, (req, res) => {
 	req.session.destroy(() => res.redirect("/"));
 });
 
-app.post(
-	"/api/register",
-	express.urlencoded({ extended: true }),
-	async (req, res) => {
-		const { username, password, name } = req.body;
-		const result = await pool.query("SELECT * FROM users WHERE username = $1", [
-			username,
-		]);
-		if (result.rowCount > 0) {
-			res.status(401).send("Username already exists");
-		} else {
-			try {
-				await pool.query(
-					"INSERT INTO users (username, password, name, admin) VALUES ($1, $2, $3, $4)",
-					[username, password, name, false]
-				);
-				res.redirect("/login.html");
-			} catch (err) {
-				res.status(500).send(err);
-			}
+app.post("/api/register", async (req, res) => {
+	const { username, password, name } = req.body;
+	const result = await pool.query("SELECT * FROM users WHERE username = $1", [
+		username,
+	]);
+	if (result.rowCount > 0) {
+		res.status(401).send("Username already exists");
+	} else {
+		try {
+			await pool.query(
+				"INSERT INTO users (username, password, name, admin) VALUES ($1, $2, $3, $4)",
+				[username, password, name, false]
+			);
+			res.redirect("/login.html");
+		} catch (err) {
+			res.status(500).send(err);
 		}
 	}
-);
+});
 
 app.get("/api/users", requiresAdmin, async (req, res) => {
 	const result = await pool.query("SELECT username, name, admin FROM users");
@@ -125,19 +122,19 @@ app.get("/api/user_info", requiresLogin, async (req, res) => {
 	]);
 	res.json(result.rows?.[0]);
 });
-app.get("/api/promote_user", requiresAdmin, async (req, res) => {
+app.patch("/api/promote_user", requiresAdmin, async (req, res) => {
 	await pool.query("UPDATE users SET admin = true WHERE username = $1", [
 		req.query.username,
 	]);
 	res.send("User promoted");
 });
-app.get("/api/demote_user", requiresAdmin, async (req, res) => {
+app.patch("/api/demote_user", requiresAdmin, async (req, res) => {
 	await pool.query("UPDATE users SET admin = false WHERE username = $1", [
 		req.query.username,
 	]);
 	res.send("User demoted");
 });
-app.get("/api/delete_user", requiresAdmin, async (req, res) => {
+app.delete("/api/delete_user", requiresAdmin, async (req, res) => {
 	const result = await pool.query("DELETE FROM users WHERE username = $1", [
 		req.query.username,
 	]);
