@@ -1,13 +1,13 @@
-var videoURL; // Holds the YouTube video ID in use.
+let videoURL; // Holds the YouTube video ID in use.
 
 // This code loads the IFrame Player API code asynchronously.
-var tag = document.createElement("script");
+const tag = document.createElement("script");
 tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName("script")[0];
+const firstScriptTag = document.getElementsByTagName("script")[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // This function creates an <iframe> (and YouTube player) after the API code downloads.
-var player;
+let player;
 function onYouTubeIframeAPIReady() {
 	player = new YT.Player("player", {
 		height: "850", // Consider modifying size of video player in future iterations.
@@ -52,20 +52,19 @@ function getId(url) {
 
 // Method gets current time on displayed YT Video. Returns timestamp.
 function getTime() {
-	var timeStamp = ~~player.getCurrentTime();
-	return timeStamp;
+	return Math.floor(player.getCurrentTime());
 }
 
 // Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
 function createTimeNote(inputForm, outputHTML) {
-	var noteText = document.getElementById(inputForm).value;
+	const noteText = document.getElementById(inputForm).value;
 	document.getElementById(outputHTML).innerHTML =
 		noteText + " - Time Stamp: " + getTime() + " seconds";
 }
 
 // Method parses timestamp from element to jump to point in video.
-function goToTimeStamp(timeStampNote) {
-	var timeStamp = document.getElementById(timeStampNote).innerHTML;
-	var time = timeStamp.replace(/\D/g, "");
+function goToTimeStamp(timestampNote) {
+	const timestamp = document.getElementById(timestampNote).innerHTML;
+	const time = timestamp.replace(/\D/g, "");
 	player.seekTo(time);
 }
