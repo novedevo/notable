@@ -8,12 +8,6 @@
 	height: 100vh;
 }
 
-#notes-display {
-	overflow-y: scroll;
-	overflow-x: hidden;
-	word-break: break-all;
-}
-
 .left-side {
 	display: grid;
 	background-color: bisque;
@@ -41,12 +35,18 @@
 	outline: 2px black solid;
 }
 
+.display-time {
+	font-size: larger;
+}
+
+#notes-display {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	word-break: break-all;
+}
+
 .input-box {
 	display: grid;
 	grid-template-columns: 80% 20%;
 	outline: 2px black solid;
-}
-
-.display-time {
-	font-size: larger;
 }
