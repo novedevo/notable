@@ -50,37 +50,24 @@ function getId(url) {
 	return match && match[2].length === 11 ? match[2] : null;
 }
 
-// Method gets current time on displayed YT Video. Returns timestamp.
-function getTime() {
-	return Math.floor(player.getCurrentTime());
-}
-
-//--------------------- playing with Notes as an object ----------------------------
-let note = { note: "",
-			 timeStamp: 0};
-let notes = [];
-
+/* NOTE CODE EXAMPLE NO LONG NEEDED
 // Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
 function createTimeNote(inputForm,outputNote,outputTimeStamp){
   var noteText = document.getElementById(inputForm).value;
   document.getElementById(outputNote).innerHTML = noteText;
   document.getElementById(outputTimeStamp).innerHTML = "Time Stamp: " + secondsToMinutes(getTime());
-
-  // inserting a note into the notes array
-  let currentNote = { note: noteText,
-			 timeStamp: getTime()};
-  notes.push(currentNote);
-  console.log(notes);
 }
-
 // Method parses timestamp from element to jump to point in video.
 function goToTimeStamp(timeStampLink){
-  //var timeStamp = document.getElementById(timeStampLink).innerHTML;
-  //var time = timeStamp.replace(/\D/g, '');
-
-  //getting the latest timeStamp note
-  var time = notes[notes.length-1].timeStamp;
+  var timeStamp = document.getElementById(timeStampLink).innerHTML;
+  var time = timeStamp.replace(/\D/g, '');
   player.seekTo(time);
+}
+*/
+
+// Method gets current time on displayed YT Video. Returns timestamp.
+function getTime() {
+	return Math.floor(player.getCurrentTime());
 }
 
 //converts and formats seconds into hours, minutes and seconds
