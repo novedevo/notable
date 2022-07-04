@@ -157,12 +157,15 @@ function post() {
 
 		// retrieving current time to append to notesDisplay
 		const currentTime = secondsToMinutes(getTime());
+        const linkTime = player.getCurrentTime();
 		const timeNode = document.createTextNode(currentTime);
 
 		// turning current time into a link tag and appending it to notesDisplay
 		linkTag.appendChild(timeNode);
 		linkTag.href = "javascript:void(0);";
-        linkTag.onclick = player.seekTo(getTime, true);
+        linkTag.onclick = () => {
+            player.seekTo(linkTime);
+        }
 		notesDisplay.appendChild(linkTag);
 		notesDisplay.appendChild(lineBreak);
 		document.getElementById("input-notes").value = "";
