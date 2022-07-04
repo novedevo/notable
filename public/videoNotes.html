@@ -26,7 +26,8 @@
           Note Taking
 				</div>
 				<div class="notesbox">
-					<ul><a id="timeStampNote" href="javascript:void(0);" onclick="goToTimeStamp('timeStampNote')"></a></ul>
+					<ul><a id="timeStampNote"> </a>
+						<a id="timeStampLink" href="javascript:void(0);" onclick="goToTimeStamp('timeStampLink')"></a></ul>
         </div>
 				<div class="inputbox">
 					<textarea
@@ -36,7 +37,7 @@
 						rows="5"
 						placeholder="Write notes here..."
 					></textarea>
-          <input type="submit" value="Post" onclick="createTimeNote('note','timeStampNote')"/>
+          <input type="submit" value="Post" onclick="createTimeNote('note','timeStampNote','timeStampLink')"/>
 				</div>
 			</div>
 		</div>

@@ -59,14 +59,35 @@ function getTime(){
 }
 
 // Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
-function createTimeNote(inputForm,outputHTML){
+function createTimeNote(inputForm,outputNote,outputTimeStamp){
   var noteText = document.getElementById(inputForm).value;
-  document.getElementById(outputHTML).innerHTML = noteText + " - Time Stamp: " + getTime() + " seconds";
+  document.getElementById(outputNote).innerHTML = noteText;
+  document.getElementById(outputTimeStamp).innerHTML = "Time Stamp: " + secondsToMinutes(getTime());
 }
 
 // Method parses timestamp from element to jump to point in video.
-function goToTimeStamp(timeStampNote){
-  var timeStamp = document.getElementById(timeStampNote).innerHTML;
+function goToTimeStamp(timeStampLink){
+  var timeStamp = document.getElementById(timeStampLink).innerHTML;
   var time = timeStamp.replace(/\D/g, '');
   player.seekTo(time);
+}
+
+//converts and formats seconds into hours, minutes and seconds
+function secondsToMinutes(time) {
+    var seconds = ~~(time % 60);
+    var minutes = ~~((time / 60) % 60);
+    var hours = ~~((time/60)/60);
+
+    if (seconds < 9) {
+      seconds = "0" + seconds;
+    }
+    if (minutes < 9) {
+      minutes = "0" + minutes;
+    }
+    if (hours < 9) {
+      hours = "0" + hours;
+    }
+  
+    return hours + ":" + minutes + ":" + seconds;
+
 }
