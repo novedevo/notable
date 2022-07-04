@@ -1,46 +1,52 @@
 #container {
-    display: grid;
-    grid-template-columns: 70% 25%;
-    grid-template-rows: 95%;
-    grid-gap: 2em;
-    align-content: center;
-    justify-content: center;
-    height: 100vh;
+	display: grid;
+	grid-template-columns: 70% 25%;
+	grid-template-rows: 95%;
+	grid-gap: 2em;
+	align-content: center;
+	justify-content: center;
+	height: 100vh;
 }
 
-.leftside {
-    display: grid;
-    background-color:bisque;
-    align-content: center;
-    justify-content: center;
-    outline: 2px black solid
+#notes-display {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	word-break: break-all;
 }
 
-.rightside {
-    display: grid;
-    background-color:aliceblue;
-    grid-template-rows: 10% 70% 20%;
-    outline: 2px black solid
+.left-side {
+	display: grid;
+	background-color: bisque;
+	align-content: center;
+	justify-content: center;
+	outline: 2px black solid;
+}
+
+.right-side {
+	display: grid;
+	background-color: aliceblue;
+	grid-template-rows: 10% 70% 20%;
+	outline: 2px black solid;
 }
 
 .timer {
-    display: grid;
-    grid-template-columns: 40% 40%;
-    outline: 2px black solid;
-    align-content: center;
-    justify-content: center;
+	display: grid;
+	grid-template-columns: 40% 40%;
+	outline: 2px black solid;
+	align-content: center;
+	justify-content: center;
 }
 
-.notesbox {
-    outline: 2px black solid;
+.notes-box {
+	outline: 2px black solid;
 }
 
-.inputbox {
-    display: grid;
-    grid-template-columns: 80% 20%;
-    outline: 2px black solid;
+.input-box {
+	display: grid;
+	grid-template-columns: 80% 20%;
+	outline: 2px black solid;
 }
 
-.displayTime {
-    font-size: larger;
+.display-time {
+	font-size: larger;
 }
