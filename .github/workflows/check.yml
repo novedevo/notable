@@ -1,0 +1,12 @@
+name: Format
+on:
+  push:
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check Format
+        run: |
+          npm i prettier
+          npx prettier . -c

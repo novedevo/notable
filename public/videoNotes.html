@@ -11,24 +11,31 @@
 		<link href="videoNotes.css" rel="stylesheet" />
 		<title>Edit Note</title>
 	</head>
+
 	<body>
-      <label for="videoForm">URL: </label>
-      <input name = "videoForm" type = "text" id = "videoForm">
-      <button onclick="setVideo('videoForm')">Load Video </button>
-      <p>TEST URLs YOU CAN COPY AND PASasdfTE:<br>
-        https://www.youtube.com/watch?v=LEENEFaVUzU<br>
-        https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW <br><br>
-      </p>
+		<label for="videoForm">URL: </label>
+		<input name="videoForm" type="text" id="videoForm" />
+		<button onclick="setVideo('videoForm')">Load Video</button>
+		<p>
+			TEST URLs YOU CAN COPY AND PASTE:<br />
+			https://www.youtube.com/watch?v=LEENEFaVUzU<br />
+			https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW
+			<br /><br />
+		</p>
 		<div id="container">
-			<div class="leftside" id="player"></div>
-			<div class="rightside">
-				<div class="timer">
-          Note Taking
+			<div class="left-side" id="player"></div>
+			<div class="right-side">
+				<div class="timer">Note Taking</div>
+				<div class="notes-box">
+					<ul>
+						<a
+							id="timestamp-note"
+							href="javascript:void(0);"
+							onclick="goToTimeStamp('timestamp-note')"
+						></a>
+					</ul>
 				</div>
-				<div class="notesbox">
-					<ul><a id="timeStampNote" href="javascript:void(0);" onclick="goToTimeStamp('timeStampNote')"></a></ul>
-        </div>
-				<div class="inputbox">
+				<div class="input-box">
 					<textarea
 						name=""
 						id="note"
@@ -36,10 +43,14 @@
 						rows="5"
 						placeholder="Write notes here..."
 					></textarea>
-          <input type="submit" value="Post" onclick="createTimeNote('note','timeStampNote')"/>
+					<input
+						type="submit"
+						value="Post"
+						onclick="createTimeNote('note','timestamp-note')"
+					/>
 				</div>
 			</div>
 		</div>
-    <script src="videoNotes.js" defer></script>
+		<script src="videoNotes.js" defer></script>
 	</body>
 </html>
