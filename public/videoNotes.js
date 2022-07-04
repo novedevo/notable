@@ -1,3 +1,4 @@
+/*global YT*/
 let videoURL; // Holds the YouTube video ID in use.
 
 document
@@ -15,7 +16,6 @@ document
 let player;
 //eslint-disable-next-line no-unused-vars
 function onYouTubeIframeAPIReady() {
-	//eslint-disable-next-line no-undef
 	player = new YT.Player("player", {
 		height: "850", // Consider modifying size of video player in future iterations.
 		width: "1350",
