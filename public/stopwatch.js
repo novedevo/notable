@@ -3,14 +3,14 @@ let timerHtml = document.querySelector(".displayTime");
 let interval = null;
 
 document.getElementById("startTimer").addEventListener("click", () => {
-  if (interval !== null) {
-    clearInterval(interval);
-  }
-  interval = setInterval(calculateTimer, 1000); //idk how many ms to set yet
+	if (interval !== null) {
+		clearInterval(interval);
+	}
+	interval = setInterval(calculateTimer, 1000); //idk how many ms to set yet
 });
 
 document.getElementById("stopTimer").addEventListener("click", () => {
-  clearInterval(interval); //probably doesn't do what we want yet...
+	clearInterval(interval); //probably doesn't do what we want yet...
 });
 
 function calculateTimer() {
@@ -45,6 +45,9 @@ function postOnEnter() {
 const inputNotes = document.getElementById("inputnotes");
 const notesDisplay = document.getElementById("notesdisplay");
 const displayTime = document.getElementById("displayTime");
+const paragraphTag = document.createElement("p");
+const linkTag = document.createElement("a");
+const lineBreak = document.createElement("br");
 
 let notesStorage = localStorage.getItem("notesDisplay")
 	? JSON.parse(localStorage.getItem("notesDisplay"))
@@ -52,30 +55,22 @@ let notesStorage = localStorage.getItem("notesDisplay")
 
 function post() {
 	if (inputNotes.value != "") {
-		// initializing tags to display in edit-note.html
-		var paragraphTag = document.createElement("p");
-		var linkTag = document.createElement("a");
-		var lineBreak = document.createElement("br");
-
-    var input = inputNotes.value + "\t ".repeat(20);
-		// saveNotesToLocalStorage(inputNotes.value); //TODO: include tabs? for now...
+		var input = inputNotes.value + "\t ".repeat(20);
+		saveNotesToLocalStorage(inputNotes.value);
 
 		var note = document.createTextNode(input);
-
-		// var notesDisplay = document.getElementById("notesdisplay");
-
 		var toPost = paragraphTag.appendChild(note);
 
 		notesDisplay.appendChild(toPost);
 
 		var currentTime = displayTime.textContent;
-    // saveNotesToLocalStorage(currentTime); // !!!!!!!!!!!!!!!!!!!
+		// saveNotesToLocalStorage(currentTime); 
 		var timeNode = document.createTextNode(currentTime);
 
-    // saveNotesToLocalStorage(inputNotes.value + " " + currentTime);
+		// saveNotesToLocalStorage(inputNotes.value + " " + currentTime);
 		linkTag.appendChild(timeNode);
 		linkTag.href = "https://github.com/novedevo/notable";
-    saveNotesToLocalStorage(inputNotes.value + " " + linkTag);
+		// saveNotesToLocalStorage(inputNotes.value + " " + linkTag);
 		notesDisplay.appendChild(linkTag);
 		notesDisplay.appendChild(lineBreak);
 		inputNotes.value = "";
@@ -87,9 +82,14 @@ function saveNotesToLocalStorage(value) {
 	localStorage.setItem("notes", JSON.stringify(notesStorage));
 }
 
-function renderNotes() {
-	const getNotes = JSON.parse(localStorage.getItem("notes"));
-	post();
-}
+// function renderNotes() {
+// const getNotes = JSON.parse(localStorage.getItem("notes"));
+// getNotes.forEach((noteSaved) => {
+// var note = document.createTextNode(noteSaved);
+// var toPost = paragraphTag.appendChild(note);
+// notesDisplay.appendChild(toPost);		
+// notesDisplay.appendChild(lineBreak);
+// });
+// }
 
 console.log(localStorage.getItem("notes"));
