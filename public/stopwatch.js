@@ -1,4 +1,3 @@
-let [seconds, minutes, hours] = [0, 0, 0];
 let beginning;
 let timerHtml = document.getElementById("display-time");
 let interval = null;
@@ -15,6 +14,9 @@ document.getElementById("start-timer").addEventListener("click", () => {
 document.getElementById("stop-timer").addEventListener("click", () => {
 	clearInterval(interval); //probably doesn't do what we want yet...
 });
+
+document.getElementById("input-notes").addEventListener("keydown", postOnEnter);
+document.getElementById("post-note").addEventListener("click", post);
 
 function calculateTimer() {
 	const difference = new Date(new Date() - beginning);
@@ -60,9 +62,9 @@ function post() {
 }
 
 // trigger post button click on enter
-function postOnEnter() {
-	if (window.event.key === "Enter") {
-		window.event.preventDefault();
+function postOnEnter(event) {
+	if (event.key === "Enter") {
+		event.preventDefault();
 		post();
 	}
 }
