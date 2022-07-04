@@ -102,4 +102,3 @@ function saveTimesToLocalStorage(value) {
 console.log(localStorage.getItem("storedNotes"));
 console.log(notes);
 console.log(times);
-

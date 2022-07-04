@@ -6,6 +6,7 @@
 	"scripts": {
 		"start": "nodemon index.js",
 		"production": "node index.js",
+		"lint": "eslint .",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "",
@@ -16,10 +17,29 @@
 		"pg": "^8.7.3"
 	},
 	"devDependencies": {
+		"@types/youtube": "^0.0.47",
+		"eslint": "^8.19.0",
+		"eslint-config-prettier": "^8.5.0",
 		"nodemon": "^2.0.18",
 		"prettier": "^2.7.1"
 	},
 	"prettier": {
 		"useTabs": true
+	},
+	"eslintConfig": {
+		"env": {
+			"browser": true,
+			"es2021": true,
+			"node": true
+		},
+		"extends": [
+			"eslint:recommended",
+			"prettier"
+		],
+		"parserOptions": {
+			"ecmaVersion": "latest",
+			"sourceType": "module"
+		},
+		"rules": {}
 	}
 }

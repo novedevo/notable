@@ -17,7 +17,7 @@ async function regenTable() {
 		moteButton.classList.add("btn", "btn-primary");
 		moteButton.textContent = user.admin ? "Demote to User" : "Promote to Admin";
 		moteButton.addEventListener("click", async () => {
-			await fetch(
+			const res = await fetch(
 				`/api/${user.admin ? "demote" : "promote"}_user?username=${
 					user.username
 				}`,
