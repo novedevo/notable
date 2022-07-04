@@ -1,14 +1,21 @@
 let videoURL; // Holds the YouTube video ID in use.
 
-// This code loads the IFrame Player API code asynchronously.
-const tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-const firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+document
+	.getElementById("load-video")
+	.addEventListener("click", () => setVideo("video-form"));
+document
+	.getElementById("timestamp-note")
+	.addEventListener("click", () => goToTimeStamp("timestamp-note"));
+document
+	.getElementById("post-note")
+	.addEventListener("click", () => createTimeNote("note", "timestamp-note"));
 
 // This function creates an <iframe> (and YouTube player) after the API code downloads.
+//automatically called by the API after the page has loaded.
 let player;
+//eslint-disable-next-line no-unused-vars
 function onYouTubeIframeAPIReady() {
+	//eslint-disable-next-line no-undef
 	player = new YT.Player("player", {
 		height: "850", // Consider modifying size of video player in future iterations.
 		width: "1350",
@@ -17,19 +24,13 @@ function onYouTubeIframeAPIReady() {
 			playsinline: 1,
 		},
 		events: {
-			onReady: onPlayerReady,
-			onStateChange: onPlayerStateChange,
+			// The API will call this function when the video player is ready.
+			onReady: (event) => event.target.playVideo(),
+			// This literally does nothing, but the Iframe breaks without it.
+			onStateChange: () => {},
 		},
 	});
 }
-
-// The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-	event.target.playVideo();
-}
-
-// This literally does nothing, but the Iframe breaks without it.
-function onPlayerStateChange(event) {}
 
 // Method takes URL input, displays video if valid.
 function setVideo(inputURL) {

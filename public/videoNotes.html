@@ -9,13 +9,15 @@
 			rel="stylesheet"
 		/>
 		<link href="videoNotes.css" rel="stylesheet" />
+		<script src="https://youtube.com/iframe_api" async defer></script>
+		<script src="videoNotes.js" defer></script>
 		<title>Edit Note</title>
 	</head>
 
 	<body>
-		<label for="videoForm">URL: </label>
-		<input name="videoForm" type="text" id="videoForm" />
-		<button onclick="setVideo('videoForm')">Load Video</button>
+		<label for="video-form">URL: </label>
+		<input name="video-form" type="text" id="video-form" />
+		<button id="load-video">Load Video</button>
 		<p>
 			TEST URLs YOU CAN COPY AND PASTE:<br />
 			https://www.youtube.com/watch?v=LEENEFaVUzU<br />
@@ -28,11 +30,7 @@
 				<div class="timer">Note Taking</div>
 				<div class="notes-box">
 					<ul>
-						<a
-							id="timestamp-note"
-							href="javascript:void(0);"
-							onclick="goToTimeStamp('timestamp-note')"
-						></a>
+						<a id="timestamp-note" href="javascript:void(0);"></a>
 					</ul>
 				</div>
 				<div class="input-box">
@@ -43,14 +41,9 @@
 						rows="5"
 						placeholder="Write notes here..."
 					></textarea>
-					<input
-						type="submit"
-						value="Post"
-						onclick="createTimeNote('note','timestamp-note')"
-					/>
+					<input id="post-note" type="submit" value="Post" />
 				</div>
 			</div>
 		</div>
-		<script src="videoNotes.js" defer></script>
 	</body>
 </html>
