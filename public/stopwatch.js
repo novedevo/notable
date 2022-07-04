@@ -43,50 +43,63 @@ function postOnEnter() {
 	}
 }
 
+// CURRENTLY DOES NOT POST A NOTE WITH THE TIMESTAMP NEXT TO THE NOTE PROPERLY
+// i had to mess it up a bit in order to save the timestamp
 const inputNotes = document.getElementById("input-notes");
 const notesDisplay = document.getElementById("notes-display");
+const notes = JSON.parse(localStorage.getItem("storedNotes") || "[]");
+const times = JSON.parse(localStorage.getItem("storedTimes") || "[]");
 
-const notesStorage = JSON.parse(localStorage.getItem("notesDisplay") || "[]");
+notes.forEach((note) => {
+	renderNote(note);
+});
 
+times.forEach((time) => {
+	renderTime(time);
+});
+
+// posts the note and saves it to localstorage 
 function post() {
 	if (inputNotes.value != "") {
 		const input = inputNotes.value + "\t ".repeat(20);
-		saveNotesToLocalStorage(inputNotes.value);
-
-		const note = document.createTextNode(input);
-		const toPost = document.createElement("p");
-		toPost.appendChild(note);
-
-		notesDisplay.appendChild(toPost);
-
 		const currentTime = displayTime.textContent;
-		// saveNotesToLocalStorage(currentTime);
-		const timeNode = document.createTextNode(currentTime);
-
-		// saveNotesToLocalStorage(inputNotes.value + " " + currentTime);
-		const linkTag = document.createElement("a");
-		linkTag.appendChild(timeNode);
-		linkTag.href = "https://github.com/novedevo/notable";
-		// saveNotesToLocalStorage(inputNotes.value + " " + linkTag);
-		notesDisplay.appendChild(linkTag);
-		notesDisplay.appendChild(document.createElement("br"));
+		saveNotesToLocalStorage(inputNotes.value);
+		saveTimesToLocalStorage(currentTime)
+		renderNote(input);
+		renderTime(currentTime);
 		inputNotes.value = "";
 	}
+}
 
-	console.log(localStorage.getItem("notes"));
+// renders the text portion of the note into the section
+function renderNote(text) {
+	const note = document.createTextNode(text);
+	const toPost = document.createElement("p");
+	toPost.appendChild(note);
+	notesDisplay.appendChild(toPost);
+}
+
+// renders the hyperlinked time portion of the note onto the note section 
+function renderTime(time) {
+	const timeNode = document.createTextNode(time);
+	const linkTag = document.createElement("a");
+	linkTag.appendChild(timeNode);
+	linkTag.href = "https://github.com/novedevo/notable";
+	notesDisplay.appendChild(linkTag);
+	notesDisplay.appendChild(document.createElement("br"));
 }
 
 function saveNotesToLocalStorage(value) {
-	notesStorage.push(value);
-	localStorage.setItem("notes", JSON.stringify(notesStorage));
+	notes.push(value);
+	localStorage.setItem("storedNotes", JSON.stringify(notes));
 }
 
-// function renderNotes() {
-// const getNotes = JSON.parse(localStorage.getItem("notes"));
-// getNotes.forEach((noteSaved) => {
-// var note = document.createTextNode(noteSaved);
-// var toPost = paragraphTag.appendChild(note);
-// notesDisplay.appendChild(toPost);
-// notesDisplay.appendChild(lineBreak);
-// });
-// }
+function saveTimesToLocalStorage(value) {
+	times.push(value);
+	localStorage.setItem("storedTimes", JSON.stringify(times));
+}
+
+console.log(localStorage.getItem("storedNotes"));
+console.log(notes);
+console.log(times);
+
