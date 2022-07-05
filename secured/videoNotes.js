@@ -69,3 +69,71 @@ function goToTimeStamp(timestampNote) {
 	const time = timestamp.replace(/\D/g, "");
 	player.seekTo(time);
 }
+
+//converts and formats seconds into hours, minutes and seconds
+function secondsToMinutes(time) {
+	var seconds = ~~(time % 60);
+	var minutes = ~~((time / 60) % 60);
+	var hours = ~~(time / 60 / 60);
+
+	if (seconds < 9) {
+		seconds = "0" + seconds;
+	}
+	if (minutes < 9) {
+		minutes = "0" + minutes;
+	}
+	if (hours < 9) {
+		hours = "0" + hours;
+	}
+
+	return hours + ":" + minutes + ":" + seconds;
+}
+
+/////////////////////// Notes posting functions /////////////////////
+
+function post() {
+	if (document.getElementById("input-notes").value != "") {
+		// initializing tags to display in edit-note.html
+		const paragraphTag = document.createElement("p");
+		const linkTag = document.createElement("a");
+		const lineBreak = document.createElement("br");
+
+		// retrieving text filled out in "inputnotes" textarea
+		const input =
+			document.getElementById("input-notes").value + "\t ".repeat(20);
+
+		// turning input text into a node that can be appended to notesDisplay div
+		const note = document.createTextNode(input);
+
+		const notesDisplay = document.getElementById("notes-display");
+
+		// inserting input text to our previously initialized paragraph tag
+		const toPost = paragraphTag.appendChild(note);
+
+		// displaying written notes into notesDisplay
+		notesDisplay.appendChild(toPost);
+
+		// retrieving current time to append to notesDisplay
+		const currentTime = secondsToMinutes(getTime());
+		const linkTime = player.getCurrentTime();
+		const timeNode = document.createTextNode(currentTime);
+
+		// turning current time into a link tag and appending it to notesDisplay
+		linkTag.appendChild(timeNode);
+		linkTag.href = "javascript:void(0);";
+		linkTag.onclick = () => {
+			player.seekTo(linkTime);
+		};
+		notesDisplay.appendChild(linkTag);
+		notesDisplay.appendChild(lineBreak);
+		document.getElementById("input-notes").value = "";
+	}
+}
+
+// trigger post button click on enter
+function postOnEnter() {
+	if (window.event.key === "Enter") {
+		window.event.preventDefault();
+		post();
+	}
+}
