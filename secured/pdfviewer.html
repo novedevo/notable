@@ -8,7 +8,7 @@
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
 			rel="stylesheet"
 		/>
-		<link href="edit-note.css" rel="stylesheet" />
+		<link href="secured/style.css" rel="stylesheet" />
 		<title>Edit Note</title>
 	</head>
 	<body>
@@ -38,16 +38,11 @@
 						rows="5"
 						placeholder="Write notes here..."
 					></textarea>
-					<input
-						id="post-button"
-						type="Button"
-						value="Post"
-						onclick="post('input-notes','notes-display','display-time')"
-					/>
+					<input id="post-button" type="Button" value="Post" />
 				</div>
 			</div>
 		</div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.8.349/pdf.min.js"></script>
-		<script src="pdfviewer.js"></script>
+		<script src="secured/pdfviewer.js"></script>
 	</body>
 </html>
