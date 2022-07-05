@@ -58,13 +58,13 @@ times.forEach((time) => {
 	renderTime(time);
 });
 
-// posts the note and saves it to localstorage 
+// posts the note and saves it to localstorage
 function post() {
 	if (inputNotes.value != "") {
 		const input = inputNotes.value + "\t ".repeat(20);
 		const currentTime = displayTime.textContent;
 		saveNotesToLocalStorage(inputNotes.value);
-		saveTimesToLocalStorage(currentTime)
+		saveTimesToLocalStorage(currentTime);
 		renderNote(input);
 		renderTime(currentTime);
 		inputNotes.value = "";
@@ -79,7 +79,7 @@ function renderNote(text) {
 	notesDisplay.appendChild(toPost);
 }
 
-// renders the hyperlinked time portion of the note onto the note section 
+// renders the hyperlinked time portion of the note onto the note section
 function renderTime(time) {
 	const timeNode = document.createTextNode(time);
 	const linkTag = document.createElement("a");

@@ -1,65 +1,66 @@
+/* global PDFJS */
+
 var SCALE = 1.3;
 var NUM_PAGE = 1;
 var HEIGHT = 950;
 var WIDTH = 1150;
 
 //get the PDF selected by the user and display it on the screen
-document.getElementById("uploadPDF").addEventListener("change", function(e) {
-    var file = e.target.files[0]
-    if(file.type != "application/pdf") {
-        console.error(file.name, "is not a pdf file.")
-        return
-    }
-    var fileReader = new FileReader();  
+document.getElementById("uploadPDF").addEventListener("change", function (e) {
+	var file = e.target.files[0];
+	if (file.type != "application/pdf") {
+		console.error(file.name, "is not a pdf file.");
+		return;
+	}
+	var fileReader = new FileReader();
 
-    fileReader.onload = function() {
-        var typedarray = new Uint8Array(this.result);
-        
-        PDFJS.getDocument(typedarray).then(function(pdf) {
-            GeneratePDF(NUM_PAGE);
+	fileReader.onload = function () {
+		var typedarray = new Uint8Array(this.result);
 
-            //called everytime a new page is switched to
-            function GeneratePDF(NUM_PAGE) {
-                pdf.getPage(NUM_PAGE).then(function(page) {
-                  var viewport = page.getViewport(SCALE);
-                  var canvas = document.getElementById("canvas");  
-                  canvas.height = HEIGHT;
-                  canvas.width = WIDTH;
+		PDFJS.getDocument(typedarray).then(function (pdf) {
+			GeneratePDF(NUM_PAGE);
 
-                page.render({
-                    canvasContext: canvas.getContext('2d'),
-                    viewport: viewport
-                });
-            });
-            document.getElementById('pagenum').innerHTML = NUM_PAGE;  
-            
-        }
+			//called everytime a new page is switched to
+			function GeneratePDF(NUM_PAGE) {
+				pdf.getPage(NUM_PAGE).then(function (page) {
+					var viewport = page.getViewport(SCALE);
+					var canvas = document.getElementById("canvas");
+					canvas.height = HEIGHT;
+					canvas.width = WIDTH;
 
-        //changes PDF to the previous page
-        function PrevPage() {
-            if(NUM_PAGE === 1) {
-                return
-            }
-            NUM_PAGE--;
-            GeneratePDF(NUM_PAGE);
-        }
+					page.render({
+						canvasContext: canvas.getContext("2d"),
+						viewport: viewport,
+					});
+				});
+				document.getElementById("pagenum").innerHTML = NUM_PAGE;
+			}
 
-        //changes PDF to the next page
-        function NextPage() {
-            if(NUM_PAGE >= pdf.numPages) {
-                return
-            }
-            NUM_PAGE++;
-            GeneratePDF(NUM_PAGE);
-        }
+			//changes PDF to the previous page
+			function PrevPage() {
+				if (NUM_PAGE === 1) {
+					return;
+				}
+				NUM_PAGE--;
+				GeneratePDF(NUM_PAGE);
+			}
 
-        //add next and prev functionality to buttons
-        document.getElementById('prev').addEventListener('click', PrevPage);
-        document.getElementById('next').addEventListener('click', NextPage);
-        });
-    };
-    fileReader.readAsArrayBuffer(file);
-})
+			//changes PDF to the next page
+			function NextPage() {
+				if (NUM_PAGE >= pdf.numPages) {
+					return;
+				}
+				NUM_PAGE++;
+				GeneratePDF(NUM_PAGE);
+			}
+
+			//add next and prev functionality to buttons
+			document.getElementById("prev").addEventListener("click", PrevPage);
+			document.getElementById("next").addEventListener("click", NextPage);
+		});
+	};
+	fileReader.readAsArrayBuffer(file);
+});
 
 //
 // STOP WATCH AND NOTES
@@ -92,10 +93,10 @@ function calculateTimer() {
 var pageNumNoteBool = false;
 
 function toggleNumNoteBool() {
-    pageNumNoteBool = !pageNumNoteBool;
+	pageNumNoteBool = !pageNumNoteBool;
 }
 
-function post(inputNotes,outputNotes,time) {
+function post(inputNotes, outputNotes, time) {
 	if (document.getElementById(inputNotes).value != "") {
 		// initializing tags to display in edit-note.html
 		const paragraphTag = document.createElement("p");
@@ -103,8 +104,7 @@ function post(inputNotes,outputNotes,time) {
 		const lineBreak = document.createElement("br");
 
 		// retrieving text filled out in "inputnotes" textarea
-		const input =
-			document.getElementById(inputNotes).value + "\t ".repeat(20);
+		const input = document.getElementById(inputNotes).value + "\t ".repeat(20);
 
 		// turning input text into a node that can be appended to notesDisplay div
 		const note = document.createTextNode(input);
@@ -126,12 +126,12 @@ function post(inputNotes,outputNotes,time) {
 		linkTag.href = "https://github.com/novedevo/notable";
 		notesDisplay.appendChild(linkTag);
 
-        // turn on page number with note
-        if (pageNumNoteBool == true) {
-        var pageNumNote = " Page #" + NUM_PAGE;
-        var pageNumNoteNode = document.createTextNode(pageNumNote);
-        notesDisplay.appendChild(pageNumNoteNode);
-        }
+		// turn on page number with note
+		if (pageNumNoteBool == true) {
+			var pageNumNote = " Page #" + NUM_PAGE;
+			var pageNumNoteNode = document.createTextNode(pageNumNote);
+			notesDisplay.appendChild(pageNumNoteNode);
+		}
 
 		notesDisplay.appendChild(lineBreak);
 		document.getElementById("input-notes").value = "";
@@ -139,10 +139,10 @@ function post(inputNotes,outputNotes,time) {
 }
 
 // trigger post button click on enter
-function postOnEnter(inputNotes,outputNotes,time) {
+function postOnEnter(inputNotes, outputNotes, time) {
 	if (window.event.key === "Enter") {
 		window.event.preventDefault();
-        console.log(inputNotes);
-		post(inputNotes,outputNotes,time);
+		console.log(inputNotes);
+		post(inputNotes, outputNotes, time);
 	}
 }
