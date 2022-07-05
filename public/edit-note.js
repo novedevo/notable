@@ -50,21 +50,6 @@ function getId(url) {
 	return match && match[2].length === 11 ? match[2] : null;
 }
 
-/* NOTE CODE EXAMPLE NO LONG NEEDED
-// Method for demo time note creation. Text accompanied with clickable link to activate timestamp.
-function createTimeNote(inputForm,outputNote,outputTimeStamp){
-  var noteText = document.getElementById(inputForm).value;
-  document.getElementById(outputNote).innerHTML = noteText;
-  document.getElementById(outputTimeStamp).innerHTML = "Time Stamp: " + secondsToMinutes(getTime());
-}
-// Method parses timestamp from element to jump to point in video.
-function goToTimeStamp(timeStampLink){
-  var timeStamp = document.getElementById(timeStampLink).innerHTML;
-  var time = timeStamp.replace(/\D/g, '');
-  player.seekTo(time);
-}
-*/
-
 // Method gets current time on displayed YT Video. Returns timestamp.
 function getTime() {
 	return Math.floor(player.getCurrentTime());
@@ -87,35 +72,6 @@ function secondsToMinutes(time) {
     }
   
     return hours + ":" + minutes + ":" + seconds;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-let [seconds, minutes, hours] = [0, 0, 0];
-let beginning;
-let timerHtml = document.getElementById("display-time");
-let interval = null;
-
-document.getElementById("start-timer").addEventListener("click", () => {
-	if (interval !== null) {
-		clearInterval(interval);
-	}
-	beginning = new Date();
-	calculateTimer();
-	interval = setInterval(calculateTimer, 1000);
-});
-
-document.getElementById("stop-timer").addEventListener("click", () => {
-	clearInterval(interval); //probably doesn't do what we want yet...
-});
-
-function calculateTimer() {
-	const difference = new Date(new Date() - beginning);
-
-	timerHtml.textContent = difference.toISOString().substring(11, 19);
 }
 
 /////////////////////// Notes posting functions /////////////////////
