@@ -1,13 +1,10 @@
-let videoURL; // Holds the YouTube video ID in use.
+/* global YT*/
 
-// This code loads the IFrame Player API code asynchronously.
-const tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-const firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+let videoURL; // Holds the YouTube video ID in use.
 
 // This function creates an <iframe> (and YouTube player) after the API code downloads.
 let player;
+//eslint-disable-next-line no-unused-vars
 function onYouTubeIframeAPIReady() {
 	player = new YT.Player("player", {
 		height: "800", // Consider modifying size of video player in future iterations.
@@ -17,25 +14,20 @@ function onYouTubeIframeAPIReady() {
 			playsinline: 1,
 		},
 		events: {
-			onReady: onPlayerReady,
-			onStateChange: onPlayerStateChange,
+			// The API will call this function when the video player is ready.
+			onReady: (event) => event.target.playVideo(),
+			// This literally does nothing, but the Iframe breaks without it.
+			onStateChange: () => {},
 		},
 	});
 }
 
-// The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-	event.target.playVideo();
-}
-
-// This literally does nothing, but the Iframe breaks without it.
-function onPlayerStateChange(event) {}
-
+const videoForm = document.getElementById("video-form");
 // Method takes URL input, displays video if valid.
-function setVideo(inputURL) {
-	videoURL = getId(document.getElementById(inputURL).value); // Get ID from form.
+function setVideo() {
+	videoURL = getId(videoForm.value); // Get ID from form.
 	player.loadVideoById(videoURL);
-	document.getElementById(inputURL).value = ""; // Reset form to blank state.
+	videoForm.value = ""; // Reset form to blank state.
 }
 
 // Method, YT Parser. Not ours.
@@ -57,21 +49,21 @@ function getTime() {
 
 //converts and formats seconds into hours, minutes and seconds
 function secondsToMinutes(time) {
-    var seconds = ~~(time % 60);
-    var minutes = ~~((time / 60) % 60);
-    var hours = ~~((time/60)/60);
+	var seconds = ~~(time % 60);
+	var minutes = ~~((time / 60) % 60);
+	var hours = ~~(time / 60 / 60);
 
-    if (seconds < 9) {
-      seconds = "0" + seconds;
-    }
-    if (minutes < 9) {
-      minutes = "0" + minutes;
-    }
-    if (hours < 9) {
-      hours = "0" + hours;
-    }
-  
-    return hours + ":" + minutes + ":" + seconds;
+	if (seconds < 9) {
+		seconds = "0" + seconds;
+	}
+	if (minutes < 9) {
+		minutes = "0" + minutes;
+	}
+	if (hours < 9) {
+		hours = "0" + hours;
+	}
+
+	return hours + ":" + minutes + ":" + seconds;
 }
 
 /////////////////////// Notes posting functions /////////////////////
@@ -100,15 +92,15 @@ function post() {
 
 		// retrieving current time to append to notesDisplay
 		const currentTime = secondsToMinutes(getTime());
-        const linkTime = player.getCurrentTime();
+		const linkTime = player.getCurrentTime();
 		const timeNode = document.createTextNode(currentTime);
 
 		// turning current time into a link tag and appending it to notesDisplay
 		linkTag.appendChild(timeNode);
 		linkTag.href = "javascript:void(0);";
-        linkTag.onclick = () => {
-            player.seekTo(linkTime);
-        }
+		linkTag.onclick = () => {
+			player.seekTo(linkTime);
+		};
 		notesDisplay.appendChild(linkTag);
 		notesDisplay.appendChild(lineBreak);
 		document.getElementById("input-notes").value = "";
@@ -116,9 +108,13 @@ function post() {
 }
 
 // trigger post button click on enter
-function postOnEnter() {
-	if (window.event.key === "Enter") {
-		window.event.preventDefault();
+function postOnEnter(event) {
+	if (event.key === "Enter") {
+		event.preventDefault();
 		post();
 	}
 }
+
+document.getElementById("input-notes").addEventListener("keydown", postOnEnter);
+document.getElementById("post-button").addEventListener("click", post);
+document.getElementById("load-video").addEventListener("click", setVideo);
