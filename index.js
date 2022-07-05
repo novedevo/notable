@@ -68,6 +68,16 @@ app.get("/secured/:file", requiresLogin, (req, res) => {
 	res.sendFile(__dirname + "/secured/" + req.params.file);
 });
 
+app.get("/public/edit-note.html", requiresLogin, (req,res) => {
+	const path = __dirname + "/public/edit-note.html";
+	res.sendFile(path);
+})
+
+app.get("/public/pdfviewer.html", requiresLogin, (req,res) => {
+	const path = __dirname + "/public/pdfviewer.html";
+	res.sendFile(path);
+})
+
 // API section
 
 app.post("/api/login", async (req, res) => {
@@ -144,3 +154,8 @@ app.delete("/api/delete_user", requiresAdmin, async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+
+
+
+
