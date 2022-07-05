@@ -16,9 +16,7 @@
 		<button id="next">Next</button>
 		<span id="pagenum">no page</span>
 		<input type="file" id="uploadPDF" accept=".pdf,application/pdf" required />
-		<button id="pagenum-note" onclick="toggleNumNoteBool()">
-			Toggle Page Number
-		</button>
+		<button id="pagenum-note">Toggle Page Number</button>
 		<div id="container">
 			<canvas class="leftside" id="canvas"> </canvas>
 
@@ -39,7 +37,6 @@
 						cols="20"
 						rows="5"
 						placeholder="Write notes here..."
-						onkeypress="postOnEnter('input-notes','notes-display','display-time')"
 					></textarea>
 					<input
 						id="post-button"

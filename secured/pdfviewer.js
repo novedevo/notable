@@ -66,7 +66,6 @@ document.getElementById("uploadPDF").addEventListener("change", function (e) {
 // STOP WATCH AND NOTES
 //
 
-let [seconds, minutes, hours] = [0, 0, 0];
 let beginning;
 let timerHtml = document.getElementById("display-time");
 let interval = null;
@@ -96,7 +95,12 @@ function toggleNumNoteBool() {
 	pageNumNoteBool = !pageNumNoteBool;
 }
 
-function post(inputNotes, outputNotes, time) {
+function post() {
+	const [inputNotes, outputNotes, time] = [
+		"input-notes",
+		"notes-display",
+		"display-time",
+	];
 	if (document.getElementById(inputNotes).value != "") {
 		// initializing tags to display in edit-note.html
 		const paragraphTag = document.createElement("p");
@@ -139,10 +143,15 @@ function post(inputNotes, outputNotes, time) {
 }
 
 // trigger post button click on enter
-function postOnEnter(inputNotes, outputNotes, time) {
-	if (window.event.key === "Enter") {
-		window.event.preventDefault();
-		console.log(inputNotes);
-		post(inputNotes, outputNotes, time);
+function postOnEnter(event) {
+	if (event.key === "Enter") {
+		event.preventDefault();
+		post();
 	}
 }
+
+document.getElementById("input-notes").addEventListener("keydown", postOnEnter);
+document.getElementById("post-button").addEventListener("click", post);
+document
+	.getElementById("pagenum-note")
+	.addEventListener("click", toggleNumNoteBool);
