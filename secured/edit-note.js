@@ -2,12 +2,6 @@
 
 let videoURL; // Holds the YouTube video ID in use.
 
-// This code loads the IFrame Player API code asynchronously.
-const tag = document.createElement("script");
-tag.src = "https://www.youtube.com/iframe_api";
-const firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 // This function creates an <iframe> (and YouTube player) after the API code downloads.
 let player;
 //eslint-disable-next-line no-unused-vars
@@ -28,11 +22,12 @@ function onYouTubeIframeAPIReady() {
 	});
 }
 
+const videoForm = document.getElementById("video-form");
 // Method takes URL input, displays video if valid.
-function setVideo(inputURL) {
-	videoURL = getId(document.getElementById(inputURL).value); // Get ID from form.
+function setVideo() {
+	videoURL = getId(videoForm.value); // Get ID from form.
 	player.loadVideoById(videoURL);
-	document.getElementById(inputURL).value = ""; // Reset form to blank state.
+	videoForm.value = ""; // Reset form to blank state.
 }
 
 // Method, YT Parser. Not ours.
@@ -113,9 +108,13 @@ function post() {
 }
 
 // trigger post button click on enter
-function postOnEnter() {
-	if (window.event.key === "Enter") {
-		window.event.preventDefault();
+function postOnEnter(event) {
+	if (event.key === "Enter") {
+		event.preventDefault();
 		post();
 	}
 }
+
+document.getElementById("input-notes").addEventListener("keydown", postOnEnter);
+document.getElementById("post-button").addEventListener("click", post);
+document.getElementById("load-video").addEventListener("click", setVideo);
