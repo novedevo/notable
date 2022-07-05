@@ -92,14 +92,6 @@ app.get("/logout", requiresLogin, (req, res) => {
 	req.session.destroy(() => res.redirect("/"));
 });
 
-app.get("/public/edit-note.html", requiresLogin, (req,res) => {
-	res.redirect("/public/edit-note.html"));
-});
-
-app.get("/public/pdfviewer.html", requiresLogin, (req,res) => {
-	res.redirect("/public/pdfviewer.html"));
-});
-
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
 	const result = await pool.query("SELECT * FROM users WHERE username = $1", [
