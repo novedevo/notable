@@ -1,21 +1,21 @@
 /* global PDFJS */
 
-var SCALE = 1.3;
-var NUM_PAGE = 1;
-var HEIGHT = 950;
-var WIDTH = 1150;
+const SCALE = 1.3;
+let NUM_PAGE = 1;
+const HEIGHT = 950;
+const WIDTH = 1150;
 
 //get the PDF selected by the user and display it on the screen
 document.getElementById("uploadPDF").addEventListener("change", function (e) {
-	var file = e.target.files[0];
+	const file = e.target.files[0];
 	if (file.type != "application/pdf") {
 		console.error(file.name, "is not a pdf file.");
 		return;
 	}
-	var fileReader = new FileReader();
+	const fileReader = new FileReader();
 
 	fileReader.onload = function () {
-		var typedarray = new Uint8Array(this.result);
+		const typedarray = new Uint8Array(this.result);
 
 		PDFJS.getDocument(typedarray).then(function (pdf) {
 			GeneratePDF(NUM_PAGE);
@@ -23,8 +23,8 @@ document.getElementById("uploadPDF").addEventListener("change", function (e) {
 			//called everytime a new page is switched to
 			function GeneratePDF(NUM_PAGE) {
 				pdf.getPage(NUM_PAGE).then(function (page) {
-					var viewport = page.getViewport(SCALE);
-					var canvas = document.getElementById("canvas");
+					const viewport = page.getViewport(SCALE);
+					const canvas = document.getElementById("canvas");
 					canvas.height = HEIGHT;
 					canvas.width = WIDTH;
 
@@ -67,7 +67,7 @@ document.getElementById("uploadPDF").addEventListener("change", function (e) {
 //
 
 let beginning;
-let timerHtml = document.getElementById("display-time");
+const timerHtml = document.getElementById("display-time");
 let interval = null;
 
 document.getElementById("start-timer").addEventListener("click", () => {
@@ -89,7 +89,7 @@ function calculateTimer() {
 	timerHtml.textContent = difference.toISOString().substring(11, 19);
 }
 
-var pageNumNoteBool = false;
+let pageNumNoteBool = false;
 
 function toggleNumNoteBool() {
 	pageNumNoteBool = !pageNumNoteBool;
@@ -132,8 +132,8 @@ function post() {
 
 		// turn on page number with note
 		if (pageNumNoteBool == true) {
-			var pageNumNote = " Page #" + NUM_PAGE;
-			var pageNumNoteNode = document.createTextNode(pageNumNote);
+			const pageNumNote = " Page #" + NUM_PAGE;
+			const pageNumNoteNode = document.createTextNode(pageNumNote);
 			notesDisplay.appendChild(pageNumNoteNode);
 		}
 
