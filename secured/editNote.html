@@ -14,19 +14,19 @@
 	</head>
 
 	<body>
+		<label for="videoForm">URL: </label>
+		<input name="videoForm" type="text" id="videoForm" />
+		<button onclick="setVideo('videoForm')">Load Video</button>
+		<p>
+			TEST URLs YOU CAN COPY AND PASTE:<br />
+			https://www.youtube.com/watch?v=LEENEFaVUzU<br />
+			https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW
+			<br /><br />
+		</p>
 		<div id="container">
-			<div class="left-side">
-				This div is meant to be the video window :) <br />
-				Black outlines are for the visualization of divs. Can be removed later
-			</div>
+			<div class="left-side" id="player"></div>
 			<div class="right-side">
-				<div class="timer">
-					<div class="buttons">
-						<button class="btn-group" id="start-timer">start</button>
-						<button class="btn-group" id="stop-timer">pause</button>
-					</div>
-					<div id="display-time">00:00:00</div>
-				</div>
+				<div class="timer">Notes</div>
 				<div name="notes-display" id="notes-display"></div>
 				<div class="input-box">
 					<textarea
@@ -41,5 +41,6 @@
 				</div>
 			</div>
 		</div>
+		<script src="edit-note.js" defer></script>
 	</body>
 </html>

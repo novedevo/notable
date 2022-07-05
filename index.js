@@ -92,12 +92,20 @@ app.get("/logout", requiresLogin, (req, res) => {
 	req.session.destroy(() => res.redirect("/"));
 });
 
+app.get("/public/edit-note.html", requiresLogin, (req,res) => {
+	res.redirect("/public/edit-note.html"));
+});
+
+app.get("/public/pdfviewer.html", requiresLogin, (req,res) => {
+	res.redirect("/public/pdfviewer.html"));
+});
+
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
 	const result = await pool.query("SELECT * FROM users WHERE username = $1", [
 		username,
 	]);
-	if (result.rowCount > 0) {
+	if (result.rows.length > 0) {
 		res.status(401).send("Username already exists");
 	} else {
 		try {
@@ -138,7 +146,9 @@ app.delete("/api/delete_user", requiresAdmin, async (req, res) => {
 	const result = await pool.query("DELETE FROM users WHERE username = $1", [
 		req.query.username,
 	]);
-	if (result.rowCount) res.send("User deleted");
+	if (result.rowCount) {
+		res.send("User deleted");
+	}
 });
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
