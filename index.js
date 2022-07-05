@@ -68,16 +68,6 @@ app.get("/secured/:file", requiresLogin, (req, res) => {
 	res.sendFile(__dirname + "/secured/" + req.params.file);
 });
 
-app.get("/public/edit-note.html", requiresLogin, (req,res) => {
-	const path = __dirname + "/public/edit-note.html";
-	res.sendFile(path);
-});
-
-app.get("/public/pdfviewer.html", requiresLogin, (req,res) => {
-	const path = __dirname + "/public/pdfviewer.html";
-	res.sendFile(path);
-});
-
 // API section
 
 app.post("/api/login", async (req, res) => {
@@ -100,6 +90,14 @@ app.post("/api/login", async (req, res) => {
 
 app.get("/logout", requiresLogin, (req, res) => {
 	req.session.destroy(() => res.redirect("/"));
+});
+
+app.get("/public/edit-note.html", requiresLogin, (req,res) => {
+	res.redirect("/public/edit-note.html"));
+});
+
+app.get("/public/pdfviewer.html", requiresLogin, (req,res) => {
+	res.redirect("/public/pdfviewer.html"));
 });
 
 app.post("/api/register", async (req, res) => {
