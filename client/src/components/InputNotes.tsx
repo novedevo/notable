@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
+import { useState } from "react";
 
-export default function InputNotes() {
+export default function InputNotes({ post }: { post: (note: string) => void }) {
+	const [latestNote, setLatestNote] = useState("");
 	return (
 		<>
 			<textarea
@@ -9,8 +11,18 @@ export default function InputNotes() {
 				cols={20}
 				rows={5}
 				placeholder="Write notes here..."
+				onChange={(e) => setLatestNote(e.target.value.trim())}
+				onKeyDown={(e) => {
+					if (e.key === "Enter") {
+						e.preventDefault();
+						if (latestNote !== "") {
+							post(latestNote);
+						}
+						e.target.value = "";
+					}
+				}}
 			/>
-			<Button>Post Note</Button>
+			<Button onClick={() => post(latestNote)}>Post Note</Button>
 		</>
 	);
 }

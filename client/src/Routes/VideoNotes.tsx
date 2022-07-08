@@ -1,8 +1,7 @@
-import { Button, Container, TextField, Typography } from "@mui/material";
+import { Button, Container, Link, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import InputNotes from "../components/InputNotes";
-import NotesDisplay from "../components/NotesDisplay";
 import Video from "../components/Video";
 
 export default function VideoNotes() {
@@ -18,6 +17,8 @@ export default function VideoNotes() {
 		}
 	};
 
+	const [notes, setNotes] = useState<string[]>([]);
+
 	return (
 		<>
 			<TextField
@@ -31,11 +32,26 @@ export default function VideoNotes() {
 				<Video videoId={videoId} ref={myRef} />
 				<div className="right-side">
 					<Typography>Notes</Typography>
-					<NotesDisplay />
-					<InputNotes />
+					<Container>
+						{notes.map((note) => post(note, myRef.current!))}
+					</Container>
+					<InputNotes post={(value) => setNotes([...notes, value])} />
 				</div>
 			</Container>
 		</>
+	);
+}
+
+function post(val: string, ref: Video) {
+	const gotTime: number = ref.getTime();
+
+	return (
+		<p>
+			{val + "\t ".repeat(20)}
+			<Link onClick={() => ref.setTime(gotTime)}>
+				{new Date(Math.floor(gotTime) * 1000).toISOString().substring(11, 19)}
+			</Link>
+		</p>
 	);
 }
 
