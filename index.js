@@ -92,26 +92,6 @@ app.get("/logout", requiresLogin, (req, res) => {
 	req.session.destroy(() => res.redirect("/"));
 });
 
-app.post("/api/register", async (req, res) => {
-	const { username, password, name } = req.body;
-	const result = await pool.query("SELECT * FROM users WHERE username = $1", [
-		username,
-	]);
-	if (result.rows.length > 0) {
-		res.status(401).send("Username already exists");
-	} else {
-		try {
-			await pool.query(
-				"INSERT INTO users (username, password, name, admin) VALUES ($1, $2, $3, $4)",
-				[username, password, name, false]
-			);
-			res.redirect("/login.html");
-		} catch (err) {
-			res.status(500).send(err);
-		}
-	}
-});
-
 app.get("/api/users", requiresAdmin, async (req, res) => {
 	const result = await pool.query("SELECT username, name, admin FROM users");
 	res.json(result.rows);
