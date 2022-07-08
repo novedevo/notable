@@ -33,7 +33,7 @@ export default function VideoNotes() {
 				<div className="right-side">
 					<Typography>Notes</Typography>
 					<Container>
-						{notes.map((note) => post(note, myRef.current!))}
+						{notes.map((note) => generateNote(note, myRef.current!))}
 					</Container>
 					<InputNotes post={(value) => setNotes([...notes, value])} />
 				</div>
@@ -42,7 +42,7 @@ export default function VideoNotes() {
 	);
 }
 
-function post(val: string, ref: Video) {
+function generateNote(val: string, ref: Video) {
 	const gotTime: number = ref.getTime();
 
 	return (

@@ -1,12 +1,24 @@
+import { Button, Container, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 import InputNotes from "../components/InputNotes";
-import NotesDisplay from "../components/NotesDisplay";
-import Timer from "../components/Timer";
+import dayjs from "dayjs";
 
 export default function PdfNotes() {
+	const [notes, setNotes] = useState<string[]>([]);
+	const [date, setDate] = useState(dayjs());
+	const [time, setTime] = useState("");
+	setInterval(() => {
+		let diff = dayjs().diff(date, "second");
+		let neg = diff < 0;
+		setTime(
+			dayjs(Math.abs(diff)).format("HH:mm:ss") + neg ? "from now" : "ago"
+		);
+	}, 1000);
+
 	return (
 		<>
-			<button id="prev">Prev</button>
-			<button id="next">Next</button>
+			<Button variant="contained">Prev</Button>
+			<Button variant="contained">Next</Button>
 			<span id="pagenum">no page</span>
 			<input
 				type="file"
@@ -19,11 +31,34 @@ export default function PdfNotes() {
 				<canvas className="left-side"></canvas>
 
 				<div className="right-side">
-					<Timer />
-					<NotesDisplay />
-					<InputNotes />
+					<Container>
+						<TextField
+							label="Beginning of Presentation"
+							type="datetime-local"
+							defaultValue={date.format("YYYY-MM-DDTHH:mm")}
+							onChange={(e) => {
+								setDate(dayjs(e.target.value));
+							}}
+						/>
+						{time}
+					</Container>
+					<Container>{notes.map((note) => generateNote(note, date))}</Container>
+					<InputNotes post={(note) => setNotes([...notes, note])} />
 				</div>
 			</div>
 		</>
+	);
+}
+
+function generateNote(note: string, date: dayjs.Dayjs) {
+	const diff = dayjs().diff(date, "second");
+	if (diff < 0) {
+		alert("You can't add notes until the presentation has started");
+	}
+	return (
+		<Container>
+			<Typography>{note}</Typography>
+			<Typography>{dayjs(diff).format("HH:mm:ss")}</Typography>
+		</Container>
 	);
 }
