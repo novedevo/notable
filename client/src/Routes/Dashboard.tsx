@@ -1,13 +1,14 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Dashboard() {
+	const { user } = useAuth0();
 	return (
 		<>
-			<h1>
-				Welcome, <span id="name">user</span>!
-			</h1>
+			{/* todo: render the admin console conditionally based on user.sub, maybe? */}
+			<h1>Welcome, {user?.name ?? "unknown user"}!</h1>
 			<div id="selection"></div>
 			<a
 				href="/secured/adminConsole.html"
