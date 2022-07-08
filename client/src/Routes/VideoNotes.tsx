@@ -1,11 +1,19 @@
-import { Button, List, ListItem } from "@mui/material";
+import {
+	Button,
+	Container,
+	List,
+	ListItem,
+	TextField,
+	Typography,
+} from "@mui/material";
 import InputNotes from "../components/InputNotes";
+import NotesDisplay from "../components/NotesDisplay";
+import Video from "../components/Video";
 
 export default function VideoNotes() {
 	return (
 		<>
-			<label htmlFor="video-form">URL: </label>
-			<input name="video-form" type="text" id="video-form" />
+			<TextField variant="outlined" id="video-form" label="URL" />
 			<Button>Load Video</Button>
 			TEST URLs YOU CAN COPY AND PASTE:
 			<List>
@@ -14,14 +22,14 @@ export default function VideoNotes() {
 					https://www.youtube.com/watch?v=xMk8wuw7nek&ab_channel=EXCEEDINGSHADOW
 				</ListItem>
 			</List>
-			<div id="container">
-				<div className="left-side" id="player"></div>
+			<Container>
+				<Video />
 				<div className="right-side">
-					<div className="timer">Notes</div>
-					<div id="notes-display"></div>
+					<Typography>Notes</Typography>
+					<NotesDisplay />
 					<InputNotes />
 				</div>
-			</div>
+			</Container>
 		</>
 	);
 }
