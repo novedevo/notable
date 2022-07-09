@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import pg from "pg";
+import cors from "cors";
 
 //initialize postgres connection
 const { Pool } = pg;
@@ -54,6 +55,15 @@ function requiresAdmin(req, res, next) {
 
 app.use(express.static("client/build"));
 app.use(express.urlencoded({ extended: true }));
+app.use(
+	"/api/*",
+	cors({
+		origin: [
+			`http://localhost:${PORT}`,
+			`https://stormy-plateau-24106.herokuapp.com`,
+		],
+	})
+);
 
 // API section
 
