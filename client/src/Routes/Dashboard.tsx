@@ -1,30 +1,34 @@
-import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Button, Container } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
 
 export default function Dashboard() {
-	const user = { name: "devon" };
+	const [user, setUser] = useState({ name: "user", admin: false });
+	const navigate = useNavigate();
+	axios("/api/user").then((res) => {
+		if (res.data.user) {
+			setUser(res.data.user);
+		} else {
+			navigate("/login");
+		}
+	});
 	return (
-		<>
-			{/* todo: render the admin console conditionally based on user.sub, maybe? */}
-			<h1>Welcome, {user?.name ?? "unknown user"}!</h1>
-			<div id="selection"></div>
-			<a
-				href="/secured/adminConsole.html"
-				id="admin"
-				className="btn btn-primary"
-				style={{ display: "none" }}
-			>
-				Admin Console
-			</a>
-
+		<Container>
+			<h1>Welcome, {user.name}!</h1>
+			{user.admin && (
+				<Button href="/console" variant="contained">
+					Admin Console
+				</Button>
+			)}
 			<LogoutButton />
-			<Button component={Link} to="/edit" variant="contained">
+			<Button href="/edit" variant="contained">
 				Video Notes
 			</Button>
-			<Button component={Link} to="/pdf" variant="contained">
+			<Button href="/pdf" variant="contained">
 				PDF Viewer
 			</Button>
-		</>
+		</Container>
 	);
 }

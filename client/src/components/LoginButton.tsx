@@ -1,12 +1,13 @@
 import { Button } from "@mui/material";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function LoginButton() {
+	let navigate = useNavigate();
 	return (
 		<Button
 			variant="contained"
 			color="primary"
-			onClick={() => {}} //redirect to login page
+			onClick={() => navigate("/login")} //redirect to login page
 		>
 			Login
 		</Button>

@@ -1,10 +1,17 @@
 import "./App.css";
-import LoginButton from "./components/LoginButton";
-import LogoutButton from "./components/LogoutButton";
+import { Route, BrowserRouter, Routes, useNavigate } from "react-router-dom";
+import Login from "./Routes/Login";
+import Register from "./Routes/Register";
+import Splash from "./Routes/Splash";
 
-function App() {
-	const isAuthenticated = true;
-	return isAuthenticated ? <LogoutButton /> : <LoginButton />;
+export default function App() {
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<Splash />} />
+				<Route path="/login" element={<Login />} />
+				<Route path="/register" element={<Register />} />
+			</Routes>
+		</BrowserRouter>
+	);
 }
-
-export default App;

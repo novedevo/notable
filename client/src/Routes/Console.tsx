@@ -1,4 +1,7 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 export default function Console() {
 	const columns: GridColDef[] = [
 		{ field: "name", headerName: "Name", width: 100, editable: true },
@@ -12,11 +15,20 @@ export default function Console() {
 		},
 	];
 
-	const rows = [
-		//TODO: get from API
-		{ name: "John", username: "johndoe", isAdmin: false },
-		{ name: "Jane", username: "janedoe", isAdmin: true },
-	];
+	const [rows, setRows] = useState([
+		{ name: "user", username: "user", isAdmin: false },
+		{ name: "admin", username: "admin", isAdmin: true },
+	]);
+
+	const navigate = useNavigate();
+
+	axios("/api/users").then((res) => {
+		if (res.data.users) {
+			setRows(res.data.users);
+		} else {
+			navigate("/login");
+		}
+	});
 
 	return <DataGrid rows={rows} columns={columns} checkboxSelection />;
 }
