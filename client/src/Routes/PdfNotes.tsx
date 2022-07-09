@@ -70,7 +70,9 @@ export default function PdfNotes() {
 						/>
 						{time}
 					</Container>
-					<Container>{notes.map((note) => generateNote(note, date))}</Container>
+					<Container>
+						{notes.map((note) => generateNote(note, date, pageNumber))}
+					</Container>
 					<InputNotes post={(note) => setNotes([...notes, note])} />
 				</div>
 			</div>
@@ -78,7 +80,7 @@ export default function PdfNotes() {
 	);
 }
 
-function generateNote(note: string, date: dayjs.Dayjs) {
+function generateNote(note: string, date: dayjs.Dayjs, page: number) {
 	const diff = dayjs().diff(date, "second");
 	if (diff < 0) {
 		alert("You can't add notes until the presentation has started");
@@ -87,6 +89,7 @@ function generateNote(note: string, date: dayjs.Dayjs) {
 		<Container>
 			<Typography>{note}</Typography>
 			<Typography>{dayjs(diff).format("HH:mm:ss")}</Typography>
+			<Typography>Page {page}</Typography>
 		</Container>
 	);
 }
