@@ -7,6 +7,7 @@ export default function Splash() {
 	const token = localStorage.getItem("token");
 	if (token) {
 		const decoded = jwtDecode<{ exp: number }>(token);
+		console.log(decoded);
 		if (decoded.exp > Date.now() / 1000) {
 			isLoggedIn = true;
 		}

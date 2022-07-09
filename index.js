@@ -38,15 +38,11 @@ function parseAuth(req) {
 	const authHeader = req.headers.authorization;
 	if (authHeader) {
 		const token = authHeader.split(" ")[1];
-		jwt.verify(token, "notable-secret", (err, decoded) => {
-			if (err) {
-				return;
-			} else {
-				return decoded;
-			}
-		});
+		const decoded = jwt.verify(token, "notable-secret");
+		console.log(decoded);
+		return decoded;
 	} else {
-		return false;
+		console.log("no authorization header");
 	}
 }
 
@@ -58,15 +54,18 @@ function requiresLogin(req, res, next) {
 	}
 }
 function requiresAdmin(req, res, next) {
-	if (parseAuth(req)?.isAdmin) {
+	const decoded = parseAuth(req);
+	console.log(decoded);
+	if (decoded?.isAdmin) {
 		next();
 	} else {
+		console.log(decoded);
 		res.status(401).send("Unauthorized");
 	}
 }
 
 app.use(express.static("client/build"));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
 	"/api/*",
 	cors({
@@ -86,20 +85,27 @@ app.post("/api/login", async (req, res) => {
 		[username, password]
 	);
 	if (result.rows.length === 0) {
-		res.status(401).send("Invalid username or password");
+		console.log(result);
+		console.log(req.body);
+		res.status(403).send("Invalid username or password");
 	} else {
 		const token = generateAccessToken(username, result.rows[0].admin);
-		res.json(token);
+		res.json({
+			token,
+			user: {
+				username,
+				isAdmin: result.rows[0].admin,
+				name: result.rows[0].name,
+			},
+		});
 	}
 });
 
-app.get("/logout", requiresLogin, (req, res) => {
-	req.session.destroy(() => res.redirect("/"));
-});
-
 app.get("/api/users", requiresAdmin, async (req, res) => {
-	const result = await pool.query("SELECT username, name, admin FROM users");
-	res.json(result.rows);
+	const result = await pool.query(
+		"SELECT id, username, name, admin FROM users"
+	);
+	res.json({ users: result.rows });
 });
 app.get("/api/user_info", requiresLogin, async (req, res) => {
 	const result = await pool.query("SELECT * FROM users WHERE username = $1", [

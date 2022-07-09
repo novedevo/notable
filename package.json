@@ -4,8 +4,8 @@
 	"type": "module",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon index.js",
-		"production": "node index.js",
+		"start": "(trap 'kill 0' INT; nodemon index.js & cd client && npm run start)",
+		"production": "cd client && npm run build && node index.js",
 		"lint": "eslint .",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},

@@ -33,7 +33,8 @@ export default function Login() {
 				} else {
 					alert("Invalid username or password");
 				}
-			});
+			})
+			.catch((err) => alert("invalid username or password"));
 	};
 
 	return (

@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
 
 export default function Dashboard() {
-	const user = JSON.parse(localStorage.getItem("user") || "{}");
 	const navigate = useNavigate();
+	const userJson = localStorage.getItem("user");
+	let user;
+	try {
+		user = JSON.parse(userJson!);
+	} catch (err) {
+		user = {};
+	}
 	if (!user.name) {
 		navigate("/login");
 	}
@@ -12,7 +18,7 @@ export default function Dashboard() {
 	return (
 		<Container>
 			<h1>Welcome, {user.name}!</h1>
-			{user.admin && (
+			{user.isAdmin && (
 				<Button href="/console" variant="contained">
 					Admin Console
 				</Button>
