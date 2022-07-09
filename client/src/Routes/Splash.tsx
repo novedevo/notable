@@ -1,20 +1,15 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 import Login from "./Login";
+import jwt from "jsonwebtoken";
 
 export default function Splash() {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	let user = JSON.parse(localStorage.getItem("user") || "{}");
-	if (user.isLoggedIn) {
-		setIsLoggedIn(true);
-	} else {
-		axios("/api/user").then((res) => {
-			if (res.data.user) {
-				setIsLoggedIn(true);
-			}
-		});
+	let isLoggedIn = false;
+	const token = localStorage.getItem("token");
+	if (token) {
+		const decoded = jwt.decode(token) as jwt.JwtPayload;
+		if (decoded.exp! > Date.now() / 1000) {
+			isLoggedIn = true;
+		}
 	}
-	localStorage.setItem("user", JSON.stringify({ isLoggedIn }));
 	return isLoggedIn ? <Dashboard /> : <Login />;
 }

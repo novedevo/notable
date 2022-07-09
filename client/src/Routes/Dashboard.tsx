@@ -1,19 +1,14 @@
 import { Button, Container } from "@mui/material";
-import axios from "axios";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
 
 export default function Dashboard() {
-	const [user, setUser] = useState({ name: "user", admin: false });
+	const user = JSON.parse(localStorage.getItem("user") || "{}");
 	const navigate = useNavigate();
-	axios("/api/user").then((res) => {
-		if (res.data.user) {
-			setUser(res.data.user);
-		} else {
-			navigate("/login");
-		}
-	});
+	if (!user.name) {
+		navigate("/login");
+	}
+
 	return (
 		<Container>
 			<h1>Welcome, {user.name}!</h1>

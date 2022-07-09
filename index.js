@@ -1,7 +1,7 @@
 import express from "express";
-import session from "express-session";
 import pg from "pg";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 
 //initialize postgres connection
 const { Pool } = pg;
@@ -26,27 +26,39 @@ const PORT = process.env.PORT || 5000;
 //initialize express
 const app = express();
 
-//setup express-session
-app.use(
-	session({
-		secret: "notable", //really should be a truly secure string, but this is fine considering we have zero real adversaries
-		resave: false,
-		saveUninitialized: true,
-		cookie: {
-			maxAge: 1000 * 60 * 60 * 24 * 7 * 2, //two weeks
-		},
-	})
-);
+function generateAccessToken(username, isAdmin) {
+	const payload = {
+		username,
+		isAdmin,
+	};
+	return jwt.sign(payload, "notable-secret", { expiresIn: "30d" });
+}
+
+function parseAuth(req) {
+	const authHeader = req.headers.authorization;
+	if (authHeader) {
+		const token = authHeader.split(" ")[1];
+		jwt.verify(token, "notable-secret", (err, decoded) => {
+			if (err) {
+				return;
+			} else {
+				return decoded;
+			}
+		});
+	} else {
+		return false;
+	}
+}
 
 function requiresLogin(req, res, next) {
-	if (req.session.user) {
+	if (parseAuth(req)) {
 		next();
 	} else {
 		res.status(401).send("Unauthorized");
 	}
 }
 function requiresAdmin(req, res, next) {
-	if (req.session.admin) {
+	if (parseAuth(req)?.isAdmin) {
 		next();
 	} else {
 		res.status(401).send("Unauthorized");
@@ -76,12 +88,8 @@ app.post("/api/login", async (req, res) => {
 	if (result.rows.length === 0) {
 		res.status(401).send("Invalid username or password");
 	} else {
-		req.session.regenerate(() => {
-			req.session.user = username;
-			req.session.name = result.rows[0].name;
-			req.session.admin = result.rows[0].admin;
-			req.session.save(() => res.redirect("/"));
-		});
+		const token = generateAccessToken(username, result.rows[0].admin);
+		res.json(token);
 	}
 });
 
