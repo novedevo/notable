@@ -2,6 +2,8 @@ import { Button, Container, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import InputNotes from "../components/InputNotes";
 import dayjs from "dayjs";
+import { Document, Page } from "react-pdf/dist/esm/entry.webpack5";
+import _ from "lodash";
 
 export default function PdfNotes() {
 	const [notes, setNotes] = useState<string[]>([]);
@@ -15,20 +17,46 @@ export default function PdfNotes() {
 		);
 	}, 1000);
 
+	const [numPages, setNumPages] = useState(1);
+	const [pageNumber, setPageNumber] = useState(1);
+	const [file, setFile] = useState<File | null>(null);
+
+	const inc = () => {
+		if (pageNumber !== numPages) {
+			setPageNumber(pageNumber + 1);
+		}
+	};
+	const dec = () => {
+		if (pageNumber !== 1) {
+			setPageNumber(pageNumber - 1);
+		}
+	};
+
 	return (
-		<>
-			<Button variant="contained">Prev</Button>
-			<Button variant="contained">Next</Button>
-			<span id="pagenum">no page</span>
+		<Container>
+			<Button variant="contained" onClick={dec}>
+				Prev
+			</Button>
+			<Button variant="contained" onClick={inc}>
+				Next
+			</Button>
+			<span id="pagenum">{pageNumber}</span>
 			<input
 				type="file"
 				id="uploadPDF"
 				accept=".pdf,application/pdf"
 				required
+				onChange={(e) => setFile(e.target.files?.[0] ?? null)}
 			/>
-			<button id="pagenum-note">Toggle Page Number</button>
 			<div id="container">
-				<canvas className="left-side"></canvas>
+				<Document
+					file={file}
+					onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+				>
+					{_.range(numPages).map((i) => (
+						<Page pageNumber={i + 1} />
+					))}
+				</Document>
 
 				<div className="right-side">
 					<Container>
@@ -46,7 +74,7 @@ export default function PdfNotes() {
 					<InputNotes post={(note) => setNotes([...notes, note])} />
 				</div>
 			</div>
-		</>
+		</Container>
 	);
 }
 
