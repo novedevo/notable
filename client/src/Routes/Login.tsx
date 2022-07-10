@@ -2,14 +2,21 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, Container, TextField } from "@mui/material";
 import { useState } from "react";
+import jwtDecode from "jwt-decode";
 
 export default function Login() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 	let expired = false;
-	if (localStorage.getItem("user")) {
-		expired = true;
+	const token = localStorage.getItem("token");
+	if (token) {
+		const decoded = jwtDecode<{ exp: number }>(token);
+		if (decoded.exp < Date.now() / 1000) {
+			expired = true;
+		} else if (decoded.exp > Date.now() / 1000) {
+			navigate("/");
+		}
 	}
 
 	const submit = () => {
