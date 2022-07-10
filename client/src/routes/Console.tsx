@@ -45,11 +45,15 @@ export default function Console() {
 							alert("You cannot remove your own admin status");
 							return oldRow;
 						}
-						await axios.put(`/api/update_user?username=${newRow.username}`, newRow, {
-							headers: {
-								Authorization: `Bearer ${localStorage.getItem("token")}`,
-							},
-						});
+						await axios.put(
+							`/api/update_user?username=${newRow.username}`,
+							newRow,
+							{
+								headers: {
+									Authorization: `Bearer ${localStorage.getItem("token")}`,
+								},
+							}
+						);
 						return newRow;
 					}}
 				/>
