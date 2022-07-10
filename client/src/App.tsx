@@ -1,11 +1,11 @@
 import "./App.css";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import Login from "./Routes/Login";
-import Register from "./Routes/Register";
-import Splash from "./Routes/Splash";
-import Console from "./Routes/Console";
-import VideoNotes from "./Routes/VideoNotes";
-import PdfNotes from "./Routes/PdfNotes";
+import Login from "./routes/Login";
+import Register from "./routes/Register";
+import Splash from "./routes/Splash";
+import Console from "./routes/Console";
+import VideoNotes from "./routes/VideoNotes";
+import PdfNotes from "./routes/PdfNotes";
 
 export default function App() {
 	return (
