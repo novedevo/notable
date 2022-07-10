@@ -13,8 +13,5 @@ jobs:
       - run: npm ci
       # - run: npm test
       - run: npx prettier . -c
-      - run: npx eslint index.js
-      - run: cd client
-      - run: npm ci
       - run: npx eslint .
-      # - run: npm test
+      # - run: npm run test --workspace=client
