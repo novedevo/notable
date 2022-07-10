@@ -1,13 +1,11 @@
 import { Button, Container, Link, TextField, Typography } from "@mui/material";
-import React from "react";
 import { useState } from "react";
+import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
-import Video from "../components/Video";
 
 export default function VideoNotes() {
-	const [videoUrl, setVideoUrl] = useState("LEENEFaVUzU");
+	const [videoUrl, setVideoUrl] = useState("LEENEFaVUzU"); //kurzgesagt default
 	const [videoId, setVideoId] = useState(videoUrl);
-	const myRef = React.createRef<Video>();
 	const loadVideo = () => {
 		const id = parseId(videoUrl);
 		if (id) {
@@ -17,10 +15,11 @@ export default function VideoNotes() {
 		}
 	};
 
-	const [notes, setNotes] = useState<string[]>([]);
+	const [notes, setNotes] = useState<[string, number][]>([]);
+	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	return (
-		<>
+		<div id="container">
 			<TextField
 				variant="outlined"
 				id="video-form"
@@ -29,29 +28,49 @@ export default function VideoNotes() {
 			/>
 			<Button onClick={loadVideo}>Load Video</Button>
 			<Container>
-				<Video videoId={videoId} ref={myRef} />
+				<YouTube
+					videoId={videoId}
+					opts={{
+						height: 800,
+						width: 1000,
+						playerVars: {
+							// autoplay: 1,
+							playsInline: 1,
+							modestBranding: 1,
+						},
+					}}
+					onReady={(event) => setPlayer(event.target)}
+				/>
 				<div className="right-side">
 					<Typography>Notes</Typography>
 					<Container>
-						{notes.map((note) => generateNote(note, myRef.current!))}
+						{notes.map((note, i) => {
+							return generateNote(note, player, i);
+						})}
 					</Container>
-					<InputNotes post={(value) => setNotes([...notes, value])} />
+					<InputNotes
+						post={(value) =>
+							setNotes([...notes, [value, player.getCurrentTime()]])
+						}
+					/>
 				</div>
 			</Container>
-		</>
+		</div>
 	);
 }
 
-function generateNote(val: string, ref: Video) {
-	const gotTime: number = ref.getTime();
-
+function generateNote(
+	[val, time]: [val: string, time: number],
+	player: YouTubePlayer,
+	index: number
+) {
 	return (
-		<p>
+		<li key={index}>
 			{val + "\t ".repeat(20)}
-			<Link onClick={() => ref.setTime(gotTime)}>
-				{new Date(Math.floor(gotTime) * 1000).toISOString().substring(11, 19)}
+			<Link onClick={() => player.seekTo(time)}>
+				{new Date(Math.floor(time) * 1000).toISOString().substring(11, 19)}
 			</Link>
-		</p>
+		</li>
 	);
 }
 
