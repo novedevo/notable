@@ -15,7 +15,7 @@ export default function Login() {
 		if (decoded.exp < Date.now() / 1000) {
 			expired = true;
 		} else if (decoded.exp > Date.now() / 1000) {
-			navigate("/");
+			document.location.href = "/";
 		}
 	}
 
@@ -48,7 +48,13 @@ export default function Login() {
 		<Container>
 			{expired && <h1>Your session has expired.</h1>}
 			<h1>Please log in</h1>
-			<div>
+			<div
+				onKeyDown={(event) => {
+					if (event.key === "Enter") {
+						submit();
+					}
+				}}
+			>
 				<TextField
 					variant="outlined"
 					label="username"

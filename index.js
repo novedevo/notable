@@ -101,6 +101,20 @@ app.post("/api/login", async (req, res) => {
 	}
 });
 
+app.post("/api/register", async (req, res) => {
+	const { username, password, name } = req.body;
+	const result = await pool.query(
+		"INSERT INTO users (username, password, name) VALUES ($1, $2, $3) RETURNING *",
+		[username, password, name]
+	);
+	if (result.rows.length === 0) {
+		res.status(400).send("Username already exists");
+	} else {
+		const token = generateAccessToken(username, result.rows[0].admin);
+		res.json({ token });
+	}
+});
+
 app.get("/api/users", requiresAdmin, async (req, res) => {
 	const result = await pool.query(
 		"SELECT id, username, name, admin FROM users"

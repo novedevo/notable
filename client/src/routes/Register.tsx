@@ -27,7 +27,13 @@ export default function Register() {
 	return (
 		<Container>
 			<h1>Create a new account</h1>
-			<div>
+			<div
+				onKeyDown={(event) => {
+					if (event.key === "Enter") {
+						submit();
+					}
+				}}
+			>
 				<TextField
 					variant="outlined"
 					label="name"

@@ -1,15 +1,14 @@
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 function LogoutButton() {
-	const navigate = useNavigate();
 	return (
 		<Button
 			variant="contained"
 			color="error"
 			onClick={() => {
 				localStorage.clear();
-				navigate("/");
+				console.log(localStorage.getItem("token"));
+				document.location.href = "/";
 			}} //then redirect to login page
 		>
 			Log out
