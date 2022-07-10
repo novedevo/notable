@@ -125,6 +125,13 @@ app.patch("/api/demote_user", requiresAdmin, async (req, res) => {
 	]);
 	res.send("User demoted");
 });
+app.put("/api/update_user", requiresAdmin, async (req, res) => {
+	await pool.query(
+		"UPDATE users SET name = $1, admin = $2 WHERE username = $3",
+		[req.body.name, req.body.admin, req.body.username]
+	);
+	res.send("User updated");
+});
 app.delete("/api/delete_user", requiresAdmin, async (req, res) => {
 	const result = await pool.query("DELETE FROM users WHERE username = $1", [
 		req.query.username,
