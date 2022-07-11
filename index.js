@@ -76,6 +76,25 @@ app.use(
 	})
 );
 
+// Socket.io section
+
+const { Server } = require("socket.io");
+const io = new Server(app, {
+	cors: {
+		origin: "http://localhost:3000",
+		methods: ["GET", "POST"],
+	},
+});
+
+io.on("connection", (socket) => {
+	console.log(socket.id);
+
+	socket.on("disconnect", () => {
+		console.log("User Disconnected", socket.id);
+	});
+});
+
+
 // API section
 
 app.post("/api/login", async (req, res) => {

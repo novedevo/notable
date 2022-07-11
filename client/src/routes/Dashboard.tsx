@@ -30,6 +30,9 @@ export default function Dashboard() {
 			<Button href="/pdf" variant="contained">
 				PDF Viewer
 			</Button>
+			<Button href="/presentations" variant="contained">
+				Presentations
+			</Button>
 		</Container>
 	);
 }
