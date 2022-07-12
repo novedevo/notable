@@ -1,0 +1,2 @@
+https://www.npmjs.com/package/pdf-parse
+https://www.npmjs.com/package/@react-pdf/renderer

@@ -4,20 +4,21 @@
 	"type": "module",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon index.js",
-		"production": "node index.js",
+		"start": "(trap 'kill 0' INT; nodemon index.js & cd client && npm run start)",
+		"production": "(cd client && npm run build) && node index.js",
 		"lint": "eslint .",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"cors": "^2.8.5",
 		"express": "^4.18.1",
-		"express-session": "^1.17.3",
+		"express-jwt": "^7.7.5",
+		"jsonwebtoken": "^8.5.1",
 		"pg": "^8.7.3"
 	},
 	"devDependencies": {
-		"@types/youtube": "^0.0.47",
 		"eslint": "^8.19.0",
 		"eslint-config-prettier": "^8.5.0",
 		"nodemon": "^2.0.18",
@@ -28,7 +29,6 @@
 	},
 	"eslintConfig": {
 		"env": {
-			"browser": true,
 			"es2021": true,
 			"node": true
 		},
@@ -41,5 +41,8 @@
 			"sourceType": "module"
 		},
 		"rules": {}
-	}
+	},
+	"workspaces": [
+		"client"
+	]
 }
