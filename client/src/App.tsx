@@ -9,6 +9,7 @@ import PdfNotes from "./routes/PdfNotes";
 import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
 
+
 export default function App() {
 	return (
 		<BrowserRouter>
@@ -21,6 +22,7 @@ export default function App() {
 				<Route path="/pdf" element={<PdfNotes />} />
 				<Route path="/presentations" element={<Presentations />} />
 				<Route path="/schedulepresentation" element={<SchedulePresentation />} />
+			
 			</Routes>
 		</BrowserRouter>
 	);

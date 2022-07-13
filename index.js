@@ -2,6 +2,8 @@ import express from "express";
 import pg from "pg";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import { Server } from "socket.io";
+import http from "http";
 
 //initialize postgres connection
 const { Pool } = pg;
@@ -78,22 +80,44 @@ app.use(
 
 // Socket.io section
 
-const { Server } = require("socket.io");
-const io = new Server(app, {
+const io = new Server(3001, {
 	cors: {
 		origin: "http://localhost:3000",
-		methods: ["GET", "POST"],
+		allowEIO3: true,
 	},
 });
 
+let users = [];
+
 io.on("connection", (socket) => {
-	console.log(socket.id);
+	console.log("User Connected", socket.id);
+
+	socket.on("join_room", (data) => {
+		socket.join(data.room);
+		console.log(`User with ID: ${socket.id} joined room: ${data.room}`);
+		let user = {
+			room: data.room,
+			name: data.name,
+			id: socket.id,
+		};
+		users.push(user);
+		console.log("All users: ", users);
+	});
+
+	socket.on("get_users", (room) => {
+		let roomUsers = [];
+		users.forEach(user => {
+			if (user.room == room) {
+				roomUsers.push(user);
+			}
+		});
+		socket.emit("user_list", roomUsers);
+	})
 
 	socket.on("disconnect", () => {
 		console.log("User Disconnected", socket.id);
 	});
 });
-
 
 // API section
 
