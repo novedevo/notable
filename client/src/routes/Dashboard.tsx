@@ -19,18 +19,18 @@ export default function Dashboard() {
 		<Container>
 			<h1>Welcome, {user.name}!</h1>
 			{user.isAdmin && (
-				<Button href="/console" variant="contained">
+				<Button onclick={() => navigate("/console")} variant="contained">
 					Admin Console
 				</Button>
 			)}
 			<LogoutButton />
-			<Button href="/edit" variant="contained">
+			<Button onclick={() => navigate("/edit")} variant="contained">
 				Video Notes
 			</Button>
-			<Button href="/pdf" variant="contained">
+			<Button onclick={() => navigate("/pdf")} variant="contained">
 				PDF Viewer
 			</Button>
-			<Button href="/presentations" variant="contained">
+			<Button onclick={() => navigate("/presentations")} variant="contained">
 				Presentations
 			</Button>
 		</Container>
