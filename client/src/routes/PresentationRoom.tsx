@@ -20,24 +20,13 @@ function PresentationRoom({ socket, username, room } : any) {
         console.log(userInfo);
       }, [userInfo]);
 
-    /*
-    <Button href="" variant="contained" onClick={getUsers}>
-				Get Users
-	</Button>
-
-    const getUsers = () => {
-		socket.emit("get_users", room);
-	}
-
-    */
-
   return (
     <div> 
         <h2>List of Users in Room {room}</h2>
         <div>
         {userInfo.map(user => {
-			return <li>{user}</li>
-		})}
+			    return <li>{user}</li>
+		    })}
         </div>
     </div>
   );
