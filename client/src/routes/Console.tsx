@@ -1,6 +1,9 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import DashboardButton from "../components/DashboardButton";
+
+
 // import { useNavigate } from "react-router-dom";
 export default function Console() {
 	const username = JSON.parse(localStorage.getItem("user")!).username;
@@ -59,6 +62,9 @@ export default function Console() {
 				/>
 			</div>
 		</div>
+		<Container>
+			<DashboardButton />
+		</Container>
 	);
 }
 

@@ -21,9 +21,9 @@ await pool.connect();
 
 //setup constants
 const PORT = process.env.PORT || 5000;
-// const __dirname = import.meta.url
-// 	.replace("file://", "")
-// 	.replace("/index.js", "");
+const __dirname = import.meta.url
+	.replace("file://", "")
+	.replace("/index.js", "");
 
 //initialize express
 const app = express();
@@ -196,6 +196,10 @@ app.delete("/api/delete_user", requiresAdmin, async (req, res) => {
 	if (result.rowCount) {
 		res.send("User deleted");
 	}
+});
+
+app.get("/*", (req, res) => {
+	res.sendFile(`${__dirname}/client/build/index.html`);
 });
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
