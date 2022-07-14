@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
+import DashboardButton from "../components/DashboardButton";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -67,7 +68,7 @@ export default function PdfNotes() {
 						renderTextLayer={false} //https://github.com/wojtekmaj/react-pdf/issues/332
 					/>
 				</Document>
-
+				<DashboardButton />
 				<div className="right-side">
 					<Container>
 						<br />
