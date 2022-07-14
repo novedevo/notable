@@ -37,10 +37,7 @@ export default function Presentations() {
 	return (
 		<Container>
 		{!showPresentation ? (
-			<><Button href="/schedulepresentation" variant="contained">
-			Schedule Presentation
-			</Button>
-			<h1>Join a Presentation</h1><h3>Your name for joining this session is {user.name}</h3>
+			<><h1>Join a Presentation</h1><h3>Your name for joining this session is {user.name}</h3>
 				<TextField
 					variant="outlined"
 					id="PresentationID"
@@ -52,7 +49,9 @@ export default function Presentations() {
 				<Button href="" variant="contained" onClick={joinPresentation}>
 				Join Presentation
 				</Button>
-				
+				<Button href="/schedulepresentation" variant="contained">
+				Schedule Presentation
+				</Button>
 				</>
 		) 
 	: (
