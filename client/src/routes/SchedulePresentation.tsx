@@ -1,15 +1,23 @@
 import { Button, Container, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { forEach } from "lodash";
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 export default function SchedulePresentation() {
 	const [title, setTitle] = useState("");
-	const [date, setDate] = useState("");
+	const [date, setDate] = useState(dayjs());
 	const [pdf, setPdf] = useState("");
 	const [video, setVideo] = useState("");
 	const [presentationId, setPresentationId] = useState("");
+	const [file, setFile] = useState<File | null>(null);
 	const [presentationList, setPresentationList] = useState<any[]>([]);
 
-	const generatePresentation = () => {
+	useEffect( () => {
 		let presentation = {
 			title: title,
 			date: date,
@@ -19,45 +27,68 @@ export default function SchedulePresentation() {
 		};
 		setPresentationList([...presentationList, presentation]);
 		console.log(presentation);
+	}, [presentationId])
+
+
+	const generateId = () => {
+		return Math.random().toString(36);
+	}
+
+	const uniqueId = () => {
+		const tempId = generateId();
+		presentationList.forEach(presentation => {
+			if (tempId === presentation.presentationId) {
+				uniqueId();
+			}
+		});
+		setPresentationId(tempId);
 	}
 
 	return (
 		<Container>
+			<Button href="/presentations" variant="contained">
+				View Presentations
+			</Button>
 			<h1>Schedule Presentation</h1>
 
             <TextField
 				variant="outlined"
 				id="title"
 				label="Title"
-				onChange={(event) => {
-					setTitle(event.target.value);
+				onChange={(e) => {
+					setTitle(e.target.value);
 				}}
 				required
+			/>
+			<input
+				type="file"
+				id="uploadPDF"
+				accept=".pdf,application/pdf"
+				required
+				onChange={(e) => setFile(e.target.files?.[0] ?? null)}
 			/>
 			<TextField
 				variant="outlined"
 				id="video"
 				label="Video"
-				onChange={(event) => {
-					setVideo(event.target.value);
+				onChange={(e) => {
+					setVideo(e.target.value);
 				}}
 				required
 			/>
 			<TextField
-				variant="outlined"
-				id="date"
-				label="Date"
-				onChange={(event) => {
-					setDate(event.target.value);
+				label="Presentation Start Time"
+				type="datetime-local"
+				defaultValue={date.format("YYYY-MM-DDTHH:mm")}
+				onChange={(e) => {
+					setDate(dayjs(e.target.value));
 				}}
-				required
 			/>
-            
-            <Button href="" variant="contained" onClick={generatePresentation}>
+            <Button href="" variant="contained" onClick={uniqueId}>
 				Save and Generate Code
 			</Button>
 
-            <div>Your Presentation Code: </div>
+            <div>Your Presentation Code: {presentationId}</div>
 		</Container>
 	);
 }
