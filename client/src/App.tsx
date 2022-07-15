@@ -8,6 +8,7 @@ import VideoNotes from "./routes/VideoNotes";
 import PdfNotes from "./routes/PdfNotes";
 import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
+import PresentationRoomTest from "./routes/PresentationRoomTest";
 
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
 				<Route path="/pdf" element={<PdfNotes />} />
 				<Route path="/presentations" element={<Presentations />} />
 				<Route path="/schedulepresentation" element={<SchedulePresentation />} />
+				<Route path="/room/:id" element={<PresentationRoomTest />} />
 			
 			</Routes>
 		</BrowserRouter>

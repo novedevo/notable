@@ -1,3 +1,4 @@
+import { Container } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -34,7 +35,7 @@ export default function Console() {
 	}, []);
 
 	return (
-		<div style={{ display: "flex", height: "100%" }}>
+		<><div style={{ display: "flex", height: "100%" }}>
 			<div style={{ flexGrow: 1 }}>
 				<DataGrid
 					autoHeight
@@ -58,13 +59,11 @@ export default function Console() {
 							}
 						);
 						return newRow;
-					}}
-				/>
+					} } />
 			</div>
-		</div>
-		<Container>
-			<DashboardButton />
-		</Container>
+		</div><Container>
+				<DashboardButton />
+			</Container></>
 	);
 }
 
