@@ -80,7 +80,7 @@ export default function PdfNotes() {
 						/>
 						{time}
 					</Container>
-					<Container>{notes.map(generateNote)}</Container>
+					<Container id="notes-display">{notes.map(generateNote)}</Container>
 					<InputNotes
 						post={(note) => {
 							const diff = dayjs().diff(date);
