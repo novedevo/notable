@@ -29,6 +29,7 @@ export default function SchedulePresentation() {
 		console.log(presentation);
 	}, [presentationId])
 
+	useEffect( () => localStorage.setItem("localpresentationList", JSON.stringify(presentationList)), [presentationList]);
 
 	const generateId = () => {
 		return Math.random().toString(36);
