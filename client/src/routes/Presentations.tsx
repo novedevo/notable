@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
-import PresentationRoom from "./PresentationRoom";
 
 // creates the socket endpoint so that we can emit messages to the server
 const ENDPOINT = "http://localhost:3001";
@@ -16,8 +15,8 @@ export default function Presentations() {
 	const navigate = useNavigate();
 	const userJson = localStorage.getItem("user");
 	const [PresentationID, setPresentationID] = useState("");
-	const [showPresentation, setShowPresentation] = useState(false);
 	const localPresentations = localStorage.getItem("localpresentationList");
+	
 	let presentations: any[] = [];
 	try {
 		presentations = JSON.parse(localPresentations!);
@@ -32,9 +31,11 @@ export default function Presentations() {
 		user = {};
 	}
 
+	// Section for testing outputs with console.log 
 	useEffect(() => {
 		console.log(presentations);
 	});
+
 
 	// checks against the localstorage of presentations if there is a valid presentation corresponding to the name
 	const validPresentationId = () => {
@@ -42,8 +43,7 @@ export default function Presentations() {
 		presentations.forEach(presentation => {
 			if (PresentationID === presentation.presentationId) {
 				validCode = true;
-				//joinPresentation();
-				testJoinPresentation();
+				joinPresentation();
 			}
 		});
 		if (validCode === false) {
@@ -51,18 +51,8 @@ export default function Presentations() {
 		}
 	}
 
-	// sends userData to the server so that a person can join a room
+	// sends userData to the server so that a person can join a room and sends the user to that room
 	const joinPresentation = () => {
-			const userData = {
-				room: PresentationID,
-				name: user.name,
-			  };
-		socket.emit("join_room", userData);
-		setShowPresentation(true);	
-	}	
-
-	// sends userData to the server so that a person can join a room but this one navigates to a new page
-	const testJoinPresentation = () => {
 		const userData = {
 			room: PresentationID,
 			name: user.name,
@@ -73,8 +63,7 @@ export default function Presentations() {
 
 	return (
 		<Container>
-		{!showPresentation ? (
-			<><Button href="/schedulepresentation" variant="contained">
+			<Button href="/schedulepresentation" variant="contained">
 			Schedule Presentation
 			</Button>
 			<DashboardButton />
@@ -92,18 +81,7 @@ export default function Presentations() {
 				</Button>
 				<Button href={'/room/' + PresentationID} variant="contained">
 				Join Diff Presentation
-				</Button>
-				
-				</>
-		) 
-	: (
-		<div>
-		<h1>Hello Member {user.name}</h1>
-			<div>
-			<PresentationRoom socket={socket} username={user.name} room={PresentationID} />
-			</div>
-		</div>
-	 )}
+				</Button>			
 		</Container>
 	);
 }

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { forEach } from "lodash";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -11,12 +10,12 @@ dayjs.extend(relativeTime);
 export default function SchedulePresentation() {
 	const [title, setTitle] = useState("");
 	const [date, setDate] = useState(dayjs());
-	const [pdf, setPdf] = useState("");
 	const [video, setVideo] = useState("");
 	const [presentationId, setPresentationId] = useState("");
-	const [file, setFile] = useState<File | null>(null);
+	const [pdf, setPdf] = useState<File | null>(null);
 	const [presentationList, setPresentationList] = useState<any[]>([]);
 
+	// Called everytime a new PresentationId is set and adds all the user inputed info about a presentation to a array
 	useEffect( () => {
 		let presentation = {
 			title: title,
@@ -27,14 +26,19 @@ export default function SchedulePresentation() {
 		};
 		setPresentationList([...presentationList, presentation]);
 		console.log(presentation);
-	}, [presentationId])
+	}, [presentationId]);
 
-	useEffect( () => localStorage.setItem("localpresentationList", JSON.stringify(presentationList)), [presentationList]);
+	// called everytime a new element is added to the presentationList array and adds the current array to local storage
+	useEffect( () => {
+	localStorage.setItem("localpresentationList", JSON.stringify(presentationList))
+	}, [presentationList]);
 
+	// returns a random string of numbers and letters
 	const generateId = () => {
 		return Math.random().toString(36);
 	}
 
+	// checks the randomly generated ID against the ones already in the array so there are no duplicates
 	const uniqueId = () => {
 		const tempId = generateId();
 		presentationList.forEach(presentation => {
@@ -66,7 +70,7 @@ export default function SchedulePresentation() {
 				id="uploadPDF"
 				accept=".pdf,application/pdf"
 				required
-				onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+				onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
 			/>
 			<TextField
 				variant="outlined"
