@@ -106,7 +106,7 @@ app.post("/api/addNote", async (req, res) => {
 	const { note, timestamp, pageNumber } = req.body;
 	const fullnote = note + " " + timestamp + " " + pageNumber;
 	await pool.query("INSERT INTO notes (note) VALUES ($1)", [fullnote]);
-	res.send("Note saved to database")
+	res.send("Note saved to database");
 });
 
 app.post("/api/register", async (req, res) => {

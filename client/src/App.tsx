@@ -6,6 +6,7 @@ import Splash from "./routes/Splash";
 import Console from "./routes/Console";
 import VideoNotes from "./routes/VideoNotes";
 import PdfNotes from "./routes/PdfNotes";
+import ViewNotes from "./routes/ViewNotes";
 
 export default function App() {
 	return (
@@ -17,6 +18,7 @@ export default function App() {
 				<Route path="/console" element={<Console />} />
 				<Route path="/edit" element={<VideoNotes />} />
 				<Route path="/pdf" element={<PdfNotes />} />
+				<Route path="/view" element={<ViewNotes />} />
 			</Routes>
 		</BrowserRouter>
 	);
