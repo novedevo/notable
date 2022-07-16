@@ -158,6 +158,22 @@ app.post("/api/register", async (req, res) => {
 	}
 });
 
+/*
+
+			title: title,
+			date: date,
+			pdf: pdf,
+			video: video,
+			presentationId: presentationId,
+
+*/
+// In PROGRESS: Post for scheduled lecture...
+app.post("/api/schedule",async(req,res) => {
+	const { title, date, pdf, video, presentationId} = req.body;
+	const result = await pool.query("INSERT INTO nameofDatabase (title,date,pdf,video,presentationId) VALUES ($)");
+	
+});
+
 app.get("/api/users", requiresAdmin, async (req, res) => {
 	const result = await pool.query(
 		"SELECT id, username, name, admin FROM users"

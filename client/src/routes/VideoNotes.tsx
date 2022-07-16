@@ -21,7 +21,7 @@ export default function VideoNotes() {
 
 	return (
 		<div id="container">
-			<DashboardButton />
+			<DashboardButton/>
 			<TextField
 				variant="outlined"
 				id="video-form"
