@@ -76,7 +76,8 @@ app.use(
 	})
 );
 
-// API section
+// API section //////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.post("/api/login", async (req, res) => {
 	const { username, password } = req.body;
@@ -99,6 +100,13 @@ app.post("/api/login", async (req, res) => {
 			},
 		});
 	}
+});
+
+app.post("/api/addNote", async (req, res) => {
+	const { note, timestamp, pageNumber } = req.body;
+	const fullnote = note + " " + timestamp + " " + pageNumber;
+	await pool.query("INSERT INTO notes (note) VALUES ($1)", [fullnote]);
+	res.send("Note saved to database")
 });
 
 app.post("/api/register", async (req, res) => {

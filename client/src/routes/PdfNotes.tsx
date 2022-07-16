@@ -2,6 +2,7 @@ import { Button, Card, Container, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import InputNotes from "../components/InputNotes";
 import dayjs from "dayjs";
+import axios from "axios";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack5";
@@ -66,7 +67,6 @@ export default function PdfNotes() {
 						renderTextLayer={false} //https://github.com/wojtekmaj/react-pdf/issues/332
 					/>
 				</Document>
-
 				<div className="right-side">
 					<Container>
 						<br />
@@ -86,6 +86,19 @@ export default function PdfNotes() {
 							const diff = dayjs().diff(date);
 							if (diff > 0 && pageNumber > 0) {
 								setNotes([...notes, [note, pageNumber, diff]]);
+								axios.post(
+									"/api/addNote",
+									{
+										note: note,
+										timestamp: diff,
+										pageNumber: pageNumber,
+									},
+									{
+										headers: {
+											Authorization: `Bearer ${localStorage.getItem("token")}`,
+										},
+									}
+								);
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");
 							} else {
