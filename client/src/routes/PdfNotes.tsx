@@ -41,6 +41,7 @@ export default function PdfNotes() {
 
 	return (
 		<Container>
+			<DashboardButton />
 			<Button variant="contained" onClick={dec}>
 				Prev
 			</Button>
@@ -68,7 +69,6 @@ export default function PdfNotes() {
 						renderTextLayer={false} //https://github.com/wojtekmaj/react-pdf/issues/332
 					/>
 				</Document>
-				<DashboardButton />
 				<div className="right-side">
 					<Container>
 						<br />
