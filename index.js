@@ -115,6 +115,19 @@ app.post("/api/register", async (req, res) => {
 	}
 });
 
+app.post('/api/presentations',async(req,res)=>{
+	const { presentation_instance_id, title, scheduled_date, youtube_url, pdf, presenter_id} = req.body;
+	const result = await pool.query(
+		"INSERT INTO presentations (presentation_instance_id, title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5, $6)",
+		[presentation_instance_id, title, scheduled_date, youtube_url, pdf, presenter_id]	
+	);
+	if (result.rows.length === 0) { // Duplicates should only be an issue if instance ID is not unique.
+		res.status(400).send("Cannot schedule duplicate presentation."); 
+	} else {
+		res.send("Presentation has been scheduled.");
+	}
+});
+
 app.get("/api/users", requiresAdmin, async (req, res) => {
 	const result = await pool.query(
 		"SELECT id, username, name, admin FROM users"
