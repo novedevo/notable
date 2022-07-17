@@ -16,7 +16,7 @@ export default function Presentations() {
 	const userJson = localStorage.getItem("user");
 	const [PresentationID, setPresentationID] = useState("");
 	const localPresentations = localStorage.getItem("localpresentationList");
-	
+
 	let presentations: any[] = [];
 	try {
 		presentations = JSON.parse(localPresentations!);
@@ -78,10 +78,7 @@ export default function Presentations() {
 				/>
 				<Button href="" variant="contained" onClick={validPresentationId}>
 				Join Presentation
-				</Button>
-				<Button href={'/room/' + PresentationID} variant="contained">
-				Join Diff Presentation
-				</Button>			
+				</Button>		
 		</Container>
 	);
 }
