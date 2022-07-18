@@ -2,6 +2,7 @@ import { Button, Container, Link, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
+import DashboardButton from "../components/DashboardButton";
 
 export default function VideoNotes() {
 	const [videoUrl, setVideoUrl] = useState("LEENEFaVUzU"); //kurzgesagt default
@@ -27,6 +28,7 @@ export default function VideoNotes() {
 				onChange={(event) => setVideoUrl(event.target.value)}
 			/>
 			<Button onClick={loadVideo}>Load Video</Button>
+			<DashboardButton />
 			<Container>
 				<YouTube
 					videoId={videoId}

@@ -1,6 +1,9 @@
+import { Container } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import DashboardButton from "../components/DashboardButton";
+
 // import { useNavigate } from "react-router-dom";
 export default function Console() {
 	const username = JSON.parse(localStorage.getItem("user")!).username;
@@ -31,34 +34,39 @@ export default function Console() {
 	}, []);
 
 	return (
-		<div style={{ display: "flex", height: "100%" }}>
-			<div style={{ flexGrow: 1 }}>
-				<DataGrid
-					autoHeight
-					rows={rows}
-					columns={columns}
-					checkboxSelection
-					disableSelectionOnClick
-					experimentalFeatures={{ newEditingApi: true }}
-					processRowUpdate={async (newRow, oldRow) => {
-						if (newRow.username === username && !newRow.admin) {
-							alert("You cannot remove your own admin status");
-							return oldRow;
-						}
-						await axios.put(
-							`/api/update_user?username=${newRow.username}`,
-							newRow,
-							{
-								headers: {
-									Authorization: `Bearer ${localStorage.getItem("token")}`,
-								},
+		<>
+			<div style={{ display: "flex", height: "100%" }}>
+				<div style={{ flexGrow: 1 }}>
+					<DataGrid
+						autoHeight
+						rows={rows}
+						columns={columns}
+						checkboxSelection
+						disableSelectionOnClick
+						experimentalFeatures={{ newEditingApi: true }}
+						processRowUpdate={async (newRow, oldRow) => {
+							if (newRow.username === username && !newRow.admin) {
+								alert("You cannot remove your own admin status");
+								return oldRow;
 							}
-						);
-						return newRow;
-					}}
-				/>
+							await axios.put(
+								`/api/update_user?username=${newRow.username}`,
+								newRow,
+								{
+									headers: {
+										Authorization: `Bearer ${localStorage.getItem("token")}`,
+									},
+								}
+							);
+							return newRow;
+						}}
+					/>
+				</div>
 			</div>
-		</div>
+			<Container>
+				<DashboardButton />
+			</Container>
+		</>
 	);
 }
 

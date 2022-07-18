@@ -5,7 +5,9 @@ import dayjs from "dayjs";
 import axios from "axios";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Document, Page } from "react-pdf/dist/esm/entry.webpack5";
+import { Document, Page, pdfjs } from "react-pdf";
+import DashboardButton from "../components/DashboardButton";
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -40,6 +42,7 @@ export default function PdfNotes() {
 
 	return (
 		<Container>
+			<DashboardButton />
 			<Button variant="contained" onClick={dec}>
 				Prev
 			</Button>
