@@ -14,8 +14,9 @@ socket.on("connect_error", (err: { message: any; }) => {
 export default function Presentations() {
 	const navigate = useNavigate();
 	const userJson = localStorage.getItem("user");
-	const [PresentationID, setPresentationID] = useState("");
+	const [presentationID, setPresentationID] = useState("");
 	const localPresentations = localStorage.getItem("localpresentationList");
+	const [usersPresentations, setusersPresentations] = useState<any[]>([]);
 
 	let presentations: any[] = [];
 	try {
@@ -33,15 +34,16 @@ export default function Presentations() {
 
 	// Section for testing outputs with console.log 
 	useEffect(() => {
-		console.log(presentations);
-	});
+		console.log("users Presentations:", usersPresentations);
+		console.log("local presentations", presentations);
+	}, [usersPresentations]);
 
 
 	// checks against the localstorage of presentations if there is a valid presentation corresponding to the name
 	const validPresentationId = () => {
 		let validCode = false;
 		presentations.forEach(presentation => {
-			if (PresentationID === presentation.presentationId) {
+			if (presentationID === presentation.presentationId) {
 				validCode = true;
 				joinPresentation();
 			}
@@ -54,12 +56,21 @@ export default function Presentations() {
 	// sends userData to the server so that a person can join a room and sends the user to that room
 	const joinPresentation = () => {
 		const userData = {
-			room: PresentationID,
+			room: presentationID,
 			name: user.name,
 		  };
 	socket.emit("join_room", userData);
-	navigate("/room/" + PresentationID);
+	navigate("/room/" + presentationID);
 	}
+
+	// only display the users presentations
+	useEffect(() => {
+		presentations.forEach(presentation => {
+			if (user.name === presentation.presentationHost) {
+				setusersPresentations([...usersPresentations, presentation]);
+			}
+		});
+	}, []);
 
 	return (
 		<Container>
@@ -68,17 +79,28 @@ export default function Presentations() {
 			</Button>
 			<DashboardButton />
 			<h1>Join a Presentation</h1><h3>Your name for joining this session is {user.name}</h3>
-				<TextField
-					variant="outlined"
-					id="PresentationID"
-					label="Presentation ID"
-					onChange={(event) => {
-						setPresentationID(event.target.value);
-					} }
-				/>
-				<Button href="" variant="contained" onClick={validPresentationId}>
-				Join Presentation
-				</Button>		
+			<TextField
+				variant="outlined"
+				id="PresentationID"
+				label="Presentation ID"
+				onChange={(event) => {
+					setPresentationID(event.target.value);
+				}}
+			/>
+			<Button href="" variant="contained" onClick={validPresentationId}>
+			Join Presentation
+			</Button>	
+			<div id="displayPresentations">
+				{usersPresentations.map(presentation => {
+			    return (
+					<Container>
+					<li>{presentation.title}</li>
+					<li>Host: {presentation.presentationHost}</li>
+					<li>Starts at: {presentation.date}</li>
+					<li>Join with: {presentation.presentationId}</li>
+					</Container>
+				)})}
+			</div>	
 		</Container>
 	);
 }

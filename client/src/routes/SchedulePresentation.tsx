@@ -14,6 +14,14 @@ export default function SchedulePresentation() {
 	const [presentationId, setPresentationId] = useState("");
 	const [pdf, setPdf] = useState<File | null>(null);
 	const [presentationList, setPresentationList] = useState<any[]>([]);
+	const userJson = localStorage.getItem("user");
+
+	let user: { name?: any; };
+	try {
+		user = JSON.parse(userJson!);
+	} catch (err) {
+		user = {};
+	}
 
 	// Called everytime a new PresentationId is set and adds all the user inputed info about a presentation to a array
 	useEffect( () => {
@@ -23,9 +31,10 @@ export default function SchedulePresentation() {
 			pdf: pdf,
 			video: video,
 			presentationId: presentationId,
+			presentationHost: user.name,
 		};
-		setPresentationList([...presentationList, presentation]);
 		console.log(presentation);
+		setPresentationList([...presentationList, presentation]);
 	}, [presentationId]);
 
 	// called everytime a new element is added to the presentationList array and adds the current array to local storage
@@ -89,7 +98,7 @@ export default function SchedulePresentation() {
 					setDate(dayjs(e.target.value));
 				}}
 			/>
-            <Button href="" variant="contained" onClick={uniqueId}>
+            <Button href="" variant="contained" onClick={uniqueId} id="generateId">
 				Save and Generate Code
 			</Button>
 
