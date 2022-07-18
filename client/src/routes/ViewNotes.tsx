@@ -26,9 +26,9 @@ const ViewNotes = () => {
             <h1>View Notes</h1>
             <div id="noteSets_container">
                 {notes.map((note) => (
-                    <div id="noteSet">
+                    <a id="noteSet" href="javascript:0">
                         <p>{note.title}</p>
-                    </div>
+                    </a>
                 ))}
             </div>
         </div>
