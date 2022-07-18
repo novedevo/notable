@@ -26,6 +26,8 @@ DROP TABLE notes CASCADE;
 CREATE TABLE notes (
     note_id SERIAL PRIMARY KEY,
     note TEXT,
+    time_stamp integer,
+    page_number TEXT,
     notetaker_id integer REFERENCES users (id),
     presentation_id integer REFERENCES presentations (presentation_instance_id)
 );
