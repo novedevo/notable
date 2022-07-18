@@ -16,7 +16,7 @@ export default function SchedulePresentation() {
 	const [presentationList, setPresentationList] = useState<any[]>([]);
 	const userJson = localStorage.getItem("user");
 
-	let user: { name?: any; };
+	let user: { name?: any };
 	try {
 		user = JSON.parse(userJson!);
 	} catch (err) {
@@ -24,7 +24,7 @@ export default function SchedulePresentation() {
 	}
 
 	// Called everytime a new PresentationId is set and adds all the user inputed info about a presentation to a array
-	useEffect( () => {
+	useEffect(() => {
 		let presentation = {
 			title: title,
 			date: date,
@@ -38,25 +38,28 @@ export default function SchedulePresentation() {
 	}, [presentationId]);
 
 	// called everytime a new element is added to the presentationList array and adds the current array to local storage
-	useEffect( () => {
-	localStorage.setItem("localpresentationList", JSON.stringify(presentationList))
+	useEffect(() => {
+		localStorage.setItem(
+			"localpresentationList",
+			JSON.stringify(presentationList)
+		);
 	}, [presentationList]);
 
 	// returns a random string of numbers and letters
 	const generateId = () => {
 		return Math.random().toString(36);
-	}
+	};
 
 	// checks the randomly generated ID against the ones already in the array so there are no duplicates
 	const uniqueId = () => {
 		const tempId = generateId();
-		presentationList.forEach(presentation => {
+		presentationList.forEach((presentation) => {
 			if (tempId === presentation.presentationId) {
 				uniqueId();
 			}
 		});
 		setPresentationId(tempId);
-	}
+	};
 
 	return (
 		<Container>
@@ -65,7 +68,7 @@ export default function SchedulePresentation() {
 			</Button>
 			<h1>Schedule Presentation</h1>
 
-            <TextField
+			<TextField
 				variant="outlined"
 				id="title"
 				label="Title"
@@ -98,11 +101,11 @@ export default function SchedulePresentation() {
 					setDate(dayjs(e.target.value));
 				}}
 			/>
-            <Button href="" variant="contained" onClick={uniqueId} id="generateId">
+			<Button href="" variant="contained" onClick={uniqueId} id="generateId">
 				Save and Generate Code
 			</Button>
 
-            <div>Your Presentation Code: {presentationId}</div>
+			<div>Your Presentation Code: {presentationId}</div>
 		</Container>
 	);
 }

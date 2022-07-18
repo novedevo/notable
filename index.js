@@ -3,7 +3,6 @@ import pg from "pg";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import { Server } from "socket.io";
-import http from "http";
 
 //initialize postgres connection
 const { Pool } = pg;
@@ -108,13 +107,13 @@ io.on("connection", (socket) => {
 
 	socket.on("get_users", (room) => {
 		let roomUsers = [];
-		users.forEach(user => {
+		users.forEach((user) => {
 			if (user.room == room) {
 				roomUsers.push(user);
 			}
 		});
 		socket.emit("user_list", roomUsers);
-	})
+	});
 
 	socket.on("disconnect", () => {
 		console.log("User Disconnected", socket.id);
