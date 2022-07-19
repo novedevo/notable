@@ -6,6 +6,7 @@ import Splash from "./routes/Splash";
 import Console from "./routes/Console";
 import VideoNotes from "./routes/VideoNotes";
 import PdfNotes from "./routes/PdfNotes";
+import ViewNotes from "./routes/ViewNotes";
 import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
 import PresentationRoom from "./routes/PresentationRoom";
@@ -20,6 +21,7 @@ export default function App() {
 				<Route path="/console" element={<Console />} />
 				<Route path="/edit" element={<VideoNotes />} />
 				<Route path="/pdf" element={<PdfNotes />} />
+				<Route path="/view" element={<ViewNotes />} />
 				<Route path="/presentations" element={<Presentations />} />
 				<Route
 					path="/schedulepresentation"
