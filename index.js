@@ -1,4 +1,5 @@
 import express from "express";
+import { createServer } from "http";
 import pg from "pg";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -70,7 +71,6 @@ function requiresAdmin(req, res, next) {
 app.use(express.static("client/build"));
 app.use(express.json());
 app.use(
-	"/api/*",
 	cors({
 		origin: [
 			`http://localhost:${PORT}`,
@@ -80,15 +80,10 @@ app.use(
 );
 
 // Socket.io section
+const server = createServer(app);
+const io = new Server(server);
 
-const io = new Server(3001, {
-	cors: {
-		origin: "http://localhost:3000",
-		allowEIO3: true,
-	},
-});
-
-let users = [];
+const users = [];
 
 io.on("connection", (socket) => {
 	console.log("User Connected", socket.id);
@@ -96,7 +91,7 @@ io.on("connection", (socket) => {
 	socket.on("join_room", (data) => {
 		socket.join(data.room);
 		console.log(`User with ID: ${socket.id} joined room: ${data.room}`);
-		let user = {
+		const user = {
 			room: data.room,
 			name: data.name,
 			id: socket.id,
@@ -227,4 +222,4 @@ app.get("/*", (req, res) => {
 	res.sendFile(`${__dirname}/client/build/index.html`);
 });
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
