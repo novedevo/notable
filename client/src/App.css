@@ -22,10 +22,10 @@
 
 #noteSet {
 	width: 10em;
-	height : 10em;
+	height: 10em;
 	background-color: aliceblue;
 	border-radius: 1em;
-	display: flex; 
+	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
