@@ -19,19 +19,14 @@ function PresentationRoomTest() {
 	}, []);
 
 	// gets the Presentation ID from the url and finds the corresponding presentation in the database
-	let presentationId = currentURL.split("room/")[1];
-	let currentPresentation: any;
-	databasePresentations.forEach((presentation) => {
-		if (presentationId === presentation.presentation_instance_id) {
-			currentPresentation = presentation;
-		}
-	});
+	const presentationId = currentURL.split("room/")[1];
+	const currentPresentation = databasePresentations.find(
+		(presentation) => presentation.presentation_instance_id === presentationId
+	);
 
-	// Everytime a new user joins the room the socket is updated and this useEffect is called
-	// it calls "get_users" in index.js and sends the presentationId of the room the user joined
-	useEffect(() => {
-		socket.emit("get_users", currentPresentation.presentation_instance_id);
-	}, [socket]);
+	if (!currentPresentation) {
+		return <div>Loading...</div>;
+	}
 
 	// Recieves the call when "user_list" is sent in index.js, it names the usernames of all the users
 	// that have uniquely joined this room and adds it to an array locally
@@ -65,7 +60,11 @@ function PresentationRoomTest() {
 
 async function getPresentations() {
 	try {
-		const result = await axios("/api/presentations");
+		const result = await axios("/api/presentations", {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
+		});
 		console.log(result.data.presentations);
 		return result.data.presentations;
 	} catch (err) {
