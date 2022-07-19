@@ -19,10 +19,11 @@ CREATE TABLE presentations (
     pdf TEXT,
     presenter_id integer REFERENCES users (id) NOT NULL
 );
-INSERT INTO presentations (title, scheduled_date, presenter_id)
+INSERT INTO presentations (title, scheduled_date, youtube_url, presenter_id)
 VALUES (
         'Example Presentation',
         '2022-07-19 10:00:00',
+        'https://youtube.com/watch?v=LEENEFaVUzU',
         1
     );
 DROP TABLE notes CASCADE;
@@ -37,13 +38,12 @@ CREATE TABLE notes (
 INSERT INTO notes (
         note,
         time_stamp,
-        page_number,
         notetaker_id,
         presentation_id
     )
 VALUES (
         'This is an example note',
-        '2022-07-19 10:05:00',
+        120,
         2,
         1
     );
