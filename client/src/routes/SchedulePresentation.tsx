@@ -12,18 +12,8 @@ export default function SchedulePresentation() {
 	const [title, setTitle] = useState("");
 	const [scheduled_date, setscheduled_date] = useState(dayjs());
 	const [youtube_url, setyoutube_url] = useState("");
-	const [presentationId, setPresentationId] = useState("");
 	const [pdf, setPdf] = useState<File | null>(null);
-	const [presentationList, setPresentationList] = useState<any[]>([]);
 	const [presenter_id, setpresenter_id] = useState("");
-	const userJson = localStorage.getItem("user");
-
-	let user: { name?: any };
-	try {
-		user = JSON.parse(userJson!);
-	} catch (err) {
-		user = {};
-	}
 
 	// setting the id of the host
 	useEffect(() => {
@@ -35,36 +25,6 @@ export default function SchedulePresentation() {
 	useEffect(() => {
 		console.log(presenter_id);
 	}, [presenter_id]);
-
-	/*
-
-	// called everytime a new element is added to the presentationList array and adds the current array to local storage
-	useEffect( () => {
-	localStorage.setItem("localpresentationList", JSON.stringify(presentationList))
-	}, [presentationList]);
-	*/
-
-	// returns a random string of numbers and letters
-	/*
-	const generateId = () => {
-		return Math.random().toString(36);
-	}
-
-	// checks the randomly generated ID against the ones already in the array so there are no duplicates
-	const uniqueId = () => {
-		const tempId = generateId();
-		presentationList.forEach(presentation => {
-			if (tempId === presentation.presentationId) {
-				uniqueId();
-			}
-		});
-		setPresentationId(tempId);
-	}
-	*/
-
-	const dateFormat = () => {
-		// might need to format date in future
-	};
 
 	const postPresentation = () => {
 		axios
@@ -129,8 +89,6 @@ export default function SchedulePresentation() {
 			>
 				Save and Generate Code
 			</Button>
-
-			<div>Your Presentation Code: {presentationId}</div>
 		</Container>
 	);
 }

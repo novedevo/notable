@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
@@ -20,20 +19,11 @@ function PresentationRoomTest() {
 		});
 	}, []);
 
-	// Section for testing outputs with console.log
-	useEffect(() => {
-		console.log(currentPresentation);
-	}, []);
-
-	useEffect(() => {
-		console.log(userInfo);
-	}, [userInfo]);
-
 	// gets the Presentation ID from the url and finds the corresponding presentation in the database
 	let presentationId = currentURL.split("room/")[1];
 	let currentPresentation: any;
 	databasePresentations.forEach((presentation) => {
-		if (presentationId == presentation.presentation_instance_id) {
+		if (presentationId === presentation.presentation_instance_id) {
 			currentPresentation = presentation;
 		}
 	});

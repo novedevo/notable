@@ -38,7 +38,7 @@ export default function Presentations() {
 	const validPresentationId = () => {
 		let validCode = false;
 		databasePresentations.forEach((presentation) => {
-			if (presentationID == presentation.presentation_instance_id) {
+			if (presentationID === presentation.presentation_instance_id) {
 				validCode = true;
 				joinPresentation();
 			}
@@ -96,16 +96,14 @@ export default function Presentations() {
 				Join Presentation
 			</Button>
 			<div id="displayPresentations">
-				{userPresentations.map((presentation) => {
-					return (
-						<Container>
-							<li>{presentation.title}</li>
-							<li>Host: {presentation.presenter_id}</li>
-							<li>Starts at: {presentation.scheduled_date}</li>
-							<li>Join with: {presentation.presentation_instance_id}</li>
-						</Container>
-					);
-				})}
+				{userPresentations.map((presentation) => (
+					<Container>
+						<li>{presentation.title}</li>
+						<li>Host: {presentation.presenter_id}</li>
+						<li>Starts at: {presentation.scheduled_date}</li>
+						<li>Join with: {presentation.presentation_instance_id}</li>
+					</Container>
+				))}
 			</div>
 		</Container>
 	);
