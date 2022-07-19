@@ -33,6 +33,9 @@ export default function Dashboard() {
 			<Button href="/presentations" variant="contained">
 				Presentations
 			</Button>
+			<Button href="/view" variant="contained">
+				My Notes
+			</Button>
 		</Container>
 	);
 }
