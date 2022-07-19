@@ -1,4 +1,5 @@
 import { Button, Container, TextField } from "@mui/material";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
@@ -7,78 +8,82 @@ import DashboardButton from "../components/DashboardButton";
 // creates the socket endpoint so that we can emit messages to the server
 const ENDPOINT = "http://localhost:3001";
 const socket = io(ENDPOINT);
-socket.on("connect_error", (err: { message: any; }) => {
-  console.log(`connect_error due to ${err.message}`);
+socket.on("connect_error", (err: { message: any }) => {
+	console.log(`connect_error due to ${err.message}`);
 });
 
 export default function Presentations() {
 	const navigate = useNavigate();
 	const userJson = localStorage.getItem("user");
 	const [presentationID, setPresentationID] = useState("");
-	const localPresentations = localStorage.getItem("localpresentationList");
-	const [usersPresentations, setusersPresentations] = useState<any[]>([]);
+	const [databasePresentations, setDatabasePresentations] = useState<any[]>([]);
+	const [userPresentations, setuserPresentations] = useState<any[]>([]);
+	const [presentationHost, setPresentationHost] = useState("");
 
-	let presentations: any[] = [];
-	try {
-		presentations = JSON.parse(localPresentations!);
-	} catch (err) {
-		presentations = [];
-	}
-
-	let user: { name?: any; };
+	let user: { name?: any };
 	try {
 		user = JSON.parse(userJson!);
 	} catch (err) {
 		user = {};
 	}
 
-	// Section for testing outputs with console.log 
+	// setting the id of the host
 	useEffect(() => {
-		console.log("users Presentations:", usersPresentations);
-		console.log("local presentations", presentations);
-	}, [usersPresentations]);
-
+		getUserId().then((id) => {
+			setPresentationHost(id);
+		});
+	}, []);
 
 	// checks against the localstorage of presentations if there is a valid presentation corresponding to the name
 	const validPresentationId = () => {
 		let validCode = false;
-		presentations.forEach(presentation => {
-			if (presentationID === presentation.presentationId) {
+		databasePresentations.forEach((presentation) => {
+			if (presentationID == presentation.presentation_instance_id) {
 				validCode = true;
 				joinPresentation();
 			}
 		});
 		if (validCode === false) {
-		alert("Not a valid room code");
+			alert("Not a valid room code");
 		}
-	}
+	};
 
 	// sends userData to the server so that a person can join a room and sends the user to that room
 	const joinPresentation = () => {
 		const userData = {
 			room: presentationID,
 			name: user.name,
-		  };
-	socket.emit("join_room", userData);
-	navigate("/room/" + presentationID);
-	}
+		};
+		socket.emit("join_room", userData);
+		navigate("/room/" + presentationID);
+	};
 
-	// only display the users presentations
+	// Database Presentations
 	useEffect(() => {
-		presentations.forEach(presentation => {
-			if (user.name === presentation.presentationHost) {
-				setusersPresentations([...usersPresentations, presentation]);
-			}
+		getPresentations().then((presentation) => {
+			setDatabasePresentations(presentation);
 		});
 	}, []);
+
+	useEffect(() => {
+		databasePresentations.forEach((presentation) => {
+			if (presentationHost === presentation.presenter_id) {
+				setuserPresentations((usersPresentations2) => [
+					...usersPresentations2,
+					presentation,
+				]);
+			}
+		});
+	}, [databasePresentations]);
 
 	return (
 		<Container>
 			<Button href="/schedulepresentation" variant="contained">
-			Schedule Presentation
+				Schedule Presentation
 			</Button>
 			<DashboardButton />
-			<h1>Join a Presentation</h1><h3>Your name for joining this session is {user.name}</h3>
+			<h1>Join a Presentation</h1>
+			<h3>Your name for joining this session is {user.name}</h3>
 			<TextField
 				variant="outlined"
 				id="PresentationID"
@@ -88,19 +93,43 @@ export default function Presentations() {
 				}}
 			/>
 			<Button href="" variant="contained" onClick={validPresentationId}>
-			Join Presentation
-			</Button>	
+				Join Presentation
+			</Button>
 			<div id="displayPresentations">
-				{usersPresentations.map(presentation => {
-			    return (
-					<Container>
-					<li>{presentation.title}</li>
-					<li>Host: {presentation.presentationHost}</li>
-					<li>Starts at: {presentation.date}</li>
-					<li>Join with: {presentation.presentationId}</li>
-					</Container>
-				)})}
-			</div>	
+				{userPresentations.map((presentation) => {
+					return (
+						<Container>
+							<li>{presentation.title}</li>
+							<li>Host: {presentation.presenter_id}</li>
+							<li>Starts at: {presentation.scheduled_date}</li>
+							<li>Join with: {presentation.presentation_instance_id}</li>
+						</Container>
+					);
+				})}
+			</div>
 		</Container>
 	);
+}
+
+async function getPresentations() {
+	try {
+		const result = await axios("/api/presentations");
+		console.log(result.data.presentations);
+		return result.data.presentations;
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+async function getUserId() {
+	try {
+		const result = await axios("/api/user_id", {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
+		});
+		return result.data.id;
+	} catch (err) {
+		console.log(err);
+	}
 }
