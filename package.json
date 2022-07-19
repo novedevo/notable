@@ -8,7 +8,7 @@
 		"heroku-postbuild": "cd client && GENERATE_SOURCEMAP=false npm run build && rm -rf node_modules",
 		"production": "node index.js",
 		"lint": "eslint .",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "jest"
 	},
 	"author": "",
 	"license": "ISC",
