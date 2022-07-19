@@ -6,8 +6,7 @@ import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
 
 // creates the socket endpoint so that we can emit messages to the server
-const ENDPOINT = "http://localhost:3001";
-const socket = io(ENDPOINT);
+const socket = io();
 socket.on("connect_error", (err: { message: any }) => {
 	console.log(`connect_error due to ${err.message}`);
 });
@@ -15,7 +14,7 @@ socket.on("connect_error", (err: { message: any }) => {
 export default function Presentations() {
 	const navigate = useNavigate();
 	const userJson = localStorage.getItem("user");
-	const [presentationID, setPresentationID] = useState("");
+	const [presentationId, setPresentationID] = useState("");
 	const [databasePresentations, setDatabasePresentations] = useState<any[]>([]);
 	const [userPresentations, setuserPresentations] = useState<any[]>([]);
 	const [presentationHost, setPresentationHost] = useState("");
@@ -28,9 +27,14 @@ export default function Presentations() {
 	}
 
 	// setting the id of the host
+	getUserId().then((id) => {
+		setPresentationHost(id);
+	});
+
+	// Database Presentations
 	useEffect(() => {
-		getUserId().then((id) => {
-			setPresentationHost(id);
+		getPresentations().then((presentations) => {
+			setDatabasePresentations(presentations);
 		});
 	}, []);
 
@@ -38,7 +42,7 @@ export default function Presentations() {
 	const validPresentationId = () => {
 		let validCode = false;
 		databasePresentations.forEach((presentation) => {
-			if (presentationID === presentation.presentation_instance_id) {
+			if (presentationId == presentation.presentation_instance_id) {
 				validCode = true;
 				joinPresentation();
 			}
@@ -51,19 +55,12 @@ export default function Presentations() {
 	// sends userData to the server so that a person can join a room and sends the user to that room
 	const joinPresentation = () => {
 		const userData = {
-			room: presentationID,
+			room: presentationId,
 			name: user.name,
 		};
 		socket.emit("join_room", userData);
-		navigate("/room/" + presentationID);
+		navigate("/room/" + presentationId);
 	};
-
-	// Database Presentations
-	useEffect(() => {
-		getPresentations().then((presentation) => {
-			setDatabasePresentations(presentation);
-		});
-	}, []);
 
 	useEffect(() => {
 		databasePresentations.forEach((presentation) => {
