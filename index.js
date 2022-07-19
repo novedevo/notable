@@ -40,9 +40,12 @@ function parseAuth(req) {
 	const authHeader = req.headers.authorization;
 	if (authHeader) {
 		const token = authHeader.split(" ")[1];
-		const decoded = jwt.verify(token, "notable-secret");
-		console.log(decoded);
-		return decoded;
+		try {
+			req.jwt = jwt.verify(token, "notable-secret");
+			return true;
+		} catch (err) {
+			console.error(err);
+		}
 	} else {
 		console.log("no authorization header");
 	}
@@ -56,12 +59,11 @@ function requiresLogin(req, res, next) {
 	}
 }
 function requiresAdmin(req, res, next) {
-	const decoded = parseAuth(req);
-	console.log(decoded);
-	if (decoded?.isAdmin) {
+	parseAuth(req);
+	if (req.jwt?.isAdmin) {
 		next();
 	} else {
-		console.log(decoded);
+		console.log(req.jwt);
 		res.status(401).send("Unauthorized");
 	}
 }
@@ -106,13 +108,13 @@ io.on("connection", (socket) => {
 
 	socket.on("get_users", (room) => {
 		let roomUsers = [];
-		users.forEach(user => {
+		users.forEach((user) => {
 			if (user.room == room) {
 				roomUsers.push(user);
 			}
 		});
 		socket.emit("user_list", roomUsers);
-	})
+	});
 
 	socket.on("disconnect", () => {
 		console.log("User Disconnected", socket.id);
@@ -136,6 +138,7 @@ app.post("/api/login", async (req, res) => {
 		res.json({
 			token,
 			user: {
+				id: result.rows[0].id,
 				username,
 				isAdmin: result.rows[0].admin,
 				name: result.rows[0].name,
@@ -158,6 +161,7 @@ app.post("/api/register", async (req, res) => {
 	}
 });
 
+<<<<<<< HEAD
 /*
 
 			title: title,
@@ -174,6 +178,27 @@ app.post("/api/schedule",async(req,res) => {
 	
 });
 
+=======
+app.post("/api/presentation", async (req, res) => {
+	const { title, scheduled_date, youtube_url, pdf, presenter_id } = req.body;
+	const result = await pool.query(
+		"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
+		[title, scheduled_date, youtube_url, pdf, presenter_id]
+	);
+	if (result.rowCount === 0) {
+		// Duplicates should only be an issue if instance ID is not unique.
+		res.status(400).send("Cannot schedule duplicate presentation.");
+	} else {
+		res.send("Presentation has been scheduled.");
+	}
+});
+app.get("/api/presentations", async (req, res) => {
+	const result = await pool.query(
+		"SELECT presentation_instance_id, title, scheduled_date, youtube_url, pdf, presenter_id FROM presentations"
+	);
+	res.json({ presentations: result.rows });
+});
+>>>>>>> 703fd48c7ce0a406782d778616ec937a285aaad1
 app.get("/api/users", requiresAdmin, async (req, res) => {
 	const result = await pool.query(
 		"SELECT id, username, name, admin FROM users"
@@ -182,7 +207,13 @@ app.get("/api/users", requiresAdmin, async (req, res) => {
 });
 app.get("/api/user_info", requiresLogin, async (req, res) => {
 	const result = await pool.query("SELECT * FROM users WHERE username = $1", [
-		req.session.user,
+		req.jwt.username,
+	]);
+	res.json(result.rows?.[0]);
+});
+app.get("/api/user_id", requiresLogin, async (req, res) => {
+	const result = await pool.query("SELECT id FROM users WHERE username = $1", [
+		req.jwt.username,
 	]);
 	res.json(result.rows?.[0]);
 });

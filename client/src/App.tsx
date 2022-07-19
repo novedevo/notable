@@ -10,7 +10,6 @@ import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
 import PresentationRoom from "./routes/PresentationRoom";
 
-
 export default function App() {
 	return (
 		<BrowserRouter>
@@ -22,7 +21,10 @@ export default function App() {
 				<Route path="/edit" element={<VideoNotes />} />
 				<Route path="/pdf" element={<PdfNotes />} />
 				<Route path="/presentations" element={<Presentations />} />
-				<Route path="/schedulepresentation" element={<SchedulePresentation />} />
+				<Route
+					path="/schedulepresentation"
+					element={<SchedulePresentation />}
+				/>
 				<Route path="/room/:id" element={<PresentationRoom />} />
 			</Routes>
 		</BrowserRouter>
