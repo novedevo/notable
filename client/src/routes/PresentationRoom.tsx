@@ -61,7 +61,11 @@ function PresentationRoomTest() {
 
 async function getPresentations() {
 	try {
-		const result = await axios("/api/presentations");
+		const result = await axios("/api/presentations", {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
+		});
 		console.log(result.data.presentations);
 		return result.data.presentations;
 	} catch (err) {
