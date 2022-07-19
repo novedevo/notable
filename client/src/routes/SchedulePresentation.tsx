@@ -3,64 +3,42 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
+import axios from "axios";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
 export default function SchedulePresentation() {
 	const [title, setTitle] = useState("");
-	const [date, setDate] = useState(dayjs());
-	const [video, setVideo] = useState("");
-	const [presentationId, setPresentationId] = useState("");
+	const [scheduled_date, setscheduled_date] = useState(dayjs());
+	const [youtube_url, setyoutube_url] = useState("");
 	const [pdf, setPdf] = useState<File | null>(null);
-	const [presentationList, setPresentationList] = useState<any[]>([]);
-	const userJson = localStorage.getItem("user");
+	const [presenter_id, setpresenter_id] = useState("");
 
-	let user: { name?: any };
-	try {
-		user = JSON.parse(userJson!);
-	} catch (err) {
-		user = {};
-	}
-
-	// Called everytime a new PresentationId is set and adds all the user inputed info about a presentation to a array
+	// setting the id of the host
 	useEffect(() => {
-		let presentation = {
-			title: title,
-			date: date,
-			pdf: pdf,
-			video: video,
-			presentationId: presentationId,
-			presentationHost: user.name,
-		};
-		console.log(presentation);
-		setPresentationList([...presentationList, presentation]);
-	}, [presentationId]);
+		getUserId().then((id) => {
+			setpresenter_id(id);
+		});
+	}, []);
 
-	// called everytime a new element is added to the presentationList array and adds the current array to local storage
 	useEffect(() => {
-		localStorage.setItem(
-			"localpresentationList",
-			JSON.stringify(presentationList)
-		);
-	}, [presentationList]);
+		console.log(presenter_id);
+	}, [presenter_id]);
 
-	// returns a random string of numbers and letters
-	const generateId = () => {
-		return Math.random().toString(36);
-	};
-
-	// checks the randomly generated ID against the ones already in the array so there are no duplicates
-	const uniqueId = () => {
-		const tempId = generateId();
-		const isDuplicate = presentationList.some(
-			(presentation) => tempId === presentation.presentationId
-		);
-		if (isDuplicate) {
-			uniqueId();
-		} else {
-			setPresentationId(tempId);
-		}
+	const postPresentation = () => {
+		axios
+			.post("/api/presentation", {
+				title,
+				scheduled_date,
+				youtube_url,
+				pdf,
+				presenter_id,
+			})
+			.then((res) => {
+				console.log(res.data);
+			})
+			.catch((err) => alert("invalid presentation"));
 	};
 
 	return (
@@ -91,23 +69,39 @@ export default function SchedulePresentation() {
 				id="video"
 				label="Video"
 				onChange={(e) => {
-					setVideo(e.target.value);
+					setyoutube_url(e.target.value);
 				}}
 				required
 			/>
 			<TextField
 				label="Presentation Start Time"
 				type="datetime-local"
-				defaultValue={date.format("YYYY-MM-DDTHH:mm")}
+				defaultValue={scheduled_date.format("YYYY-MM-DDTHH:mm")}
 				onChange={(e) => {
-					setDate(dayjs(e.target.value));
+					setscheduled_date(dayjs(e.target.value));
 				}}
 			/>
-			<Button href="" variant="contained" onClick={uniqueId} id="generateId">
+			<Button
+				href=""
+				variant="contained"
+				onClick={postPresentation}
+				id="generateId"
+			>
 				Save and Generate Code
 			</Button>
-
-			<div>Your Presentation Code: {presentationId}</div>
 		</Container>
 	);
+}
+
+async function getUserId() {
+	try {
+		const result = await axios("/api/user_id", {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
+		});
+		return result.data.id;
+	} catch (err) {
+		console.log(err);
+	}
 }
