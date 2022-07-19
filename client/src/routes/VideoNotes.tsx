@@ -20,7 +20,8 @@ export default function VideoNotes() {
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	return (
-		<div id="container">
+		<Container>
+			<DashboardButton />
 			<TextField
 				variant="outlined"
 				id="video-form"
@@ -28,7 +29,6 @@ export default function VideoNotes() {
 				onChange={(event) => setVideoUrl(event.target.value)}
 			/>
 			<Button onClick={loadVideo}>Load Video</Button>
-			<DashboardButton />
 			<Container>
 				<YouTube
 					videoId={videoId}
@@ -57,7 +57,7 @@ export default function VideoNotes() {
 					/>
 				</div>
 			</Container>
-		</div>
+		</Container>
 	);
 }
 

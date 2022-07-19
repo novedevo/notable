@@ -3,8 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-const ENDPOINT = "http://localhost:3001";
-const socket = io(ENDPOINT);
+var socket = io();
 socket.on("connect_error", (err: { message: any }) => {
 	console.log(`connect_error due to ${err.message}`);
 });
