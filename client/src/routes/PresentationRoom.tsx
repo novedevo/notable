@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 const socket = io();
@@ -10,23 +10,30 @@ socket.on("connect_error", (err: { message: any }) => {
 function PresentationRoomTest() {
 	let currentURL = window.location.href;
 	const [userInfo, setUserInfo] = useState<string[]>([]);
-	const [databasePresentations, setDatabasePresentations] = useState<any[]>([]);
+	const [title, setTitle] = useState("");
+	const [date, setDate] = useState("");
+	let presentationId = currentURL.split("room/")[1];
 
+	getPresentations().then((presentations) => {
+		presentations.forEach(
+			(presentation: {
+				scheduled_date: SetStateAction<string>;
+				title: SetStateAction<string>;
+				presentation_instance_id: SetStateAction<string>;
+			}) => {
+				if (presentationId == presentation.presentation_instance_id) {
+					setTitle(presentation.title);
+					setDate(presentation.scheduled_date);
+				}
+			}
+		);
+	});
+
+	// Everytime a new user joins the room the socket is updated and this useEffect is called
+	// it calls "get_users" in index.js and sends the presentationId of the room the user joined
 	useEffect(() => {
-		getPresentations().then((presentation) => {
-			setDatabasePresentations(presentation);
-		});
+		socket.emit("get_users", presentationId);
 	}, []);
-
-	// gets the Presentation ID from the url and finds the corresponding presentation in the database
-	const presentationId = currentURL.split("room/")[1];
-	const currentPresentation = databasePresentations.find(
-		(presentation) => presentation.presentation_instance_id === presentationId
-	);
-
-	if (!currentPresentation) {
-		return <div>Loading...</div>;
-	}
 
 	// Recieves the call when "user_list" is sent in index.js, it names the usernames of all the users
 	// that have uniquely joined this room and adds it to an array locally
@@ -40,15 +47,9 @@ function PresentationRoomTest() {
 
 	return (
 		<div>
-			<h1>Welcome to Presentation Room {currentPresentation.title}</h1>
-			<h2>
-				The Presentation ID for this room is{" "}
-				{currentPresentation.presentation_instance_id}
-			</h2>
-			<h3>
-				This Presentation is scheduled to start on{" "}
-				{currentPresentation.scheduled_date}
-			</h3>
+			<h1>Welcome to Presentation Room {title}</h1>
+			<h2>The Presentation ID for this room is {presentationId}</h2>
+			<h3>This Presentation is scheduled to start on {date}</h3>
 			<div>
 				{userInfo.map((user) => {
 					return <li>{user}</li>;
