@@ -138,11 +138,10 @@ app.post("/api/login", async (req, res) => {
 
 // save user notes from PDFnotes to db
 app.post("/api/addNote", async (req, res) => {
-	const { note, timestamp, pageNumber } = req.body;
-	//	const fullnote = note + " " + timestamp + " " + pageNumber;
+	const { note, timestamp, pageNumber, notetakerId, presentationId } = req.body;
 	await pool.query(
-		"INSERT INTO notes (note, time_stamp, page_number) VALUES ($1, $2, $3)",
-		[note, timestamp, pageNumber]
+		"INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)",
+		[note, timestamp, pageNumber, notetakerId, presentationId]
 	);
 	res.send("Note saved to database");
 });
@@ -165,6 +164,13 @@ app.post("/api/register", async (req, res) => {
 		const token = generateAccessToken(username, result.rows[0].admin);
 		res.json({ token });
 	}
+});
+
+app.get("/api/presentation_id", async (req, res) => {
+	const result = await pool.query("SELECT id FROM users WHERE username = $1", [
+		req.jwt.username,
+	]);
+	res.json(result.rows?.[0]);
 });
 
 app.post("/api/presentation", async (req, res) => {
