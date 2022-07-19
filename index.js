@@ -106,12 +106,7 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("get_users", (room) => {
-		let roomUsers = [];
-		users.forEach((user) => {
-			if (user.room == room) {
-				roomUsers.push(user);
-			}
-		});
+		let roomUsers = users.filter((user) => user.room === room);
 		socket.emit("user_list", roomUsers);
 	});
 
