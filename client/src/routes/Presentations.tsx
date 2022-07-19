@@ -1,4 +1,4 @@
-import { Button, Container, TextField } from "@mui/material";
+import { Button, Card, Container, TextField } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,7 @@ import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
 
 // creates the socket endpoint so that we can emit messages to the server
-const ENDPOINT = "http://localhost:3001";
-const socket = io(ENDPOINT);
+const socket = io();
 socket.on("connect_error", (err: { message: any }) => {
 	console.log(`connect_error due to ${err.message}`);
 });
@@ -95,16 +94,16 @@ export default function Presentations() {
 			<Button href="" variant="contained" onClick={validPresentationId}>
 				Join Presentation
 			</Button>
-			<div id="displayPresentations">
+			<Container id="displayPresentations">
 				{userPresentations.map((presentation) => (
-					<Container>
+					<Card>
 						<li>{presentation.title}</li>
 						<li>Host: {presentation.presenter_id}</li>
 						<li>Starts at: {presentation.scheduled_date}</li>
 						<li>Join with: {presentation.presentation_instance_id}</li>
-					</Container>
+					</Card>
 				))}
-			</div>
+			</Container>
 		</Container>
 	);
 }

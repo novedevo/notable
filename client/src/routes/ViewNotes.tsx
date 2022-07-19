@@ -1,5 +1,4 @@
 import axios from "axios";
-import react from "react";
 import { useEffect, useState } from "react";
 
 const ViewNotes = () => {
@@ -24,6 +23,7 @@ const ViewNotes = () => {
 		<div>
 			<h1>View Notes</h1>
 			<div id="noteSets_container">
+				{notes.length === 0 && <h2>No Notes</h2>}
 				{notes.map((note) => (
 					<a id="noteSet" href="javascript:0">
 						<p>{note.title}</p>
