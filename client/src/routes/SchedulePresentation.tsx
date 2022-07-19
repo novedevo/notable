@@ -53,12 +53,14 @@ export default function SchedulePresentation() {
 	// checks the randomly generated ID against the ones already in the array so there are no duplicates
 	const uniqueId = () => {
 		const tempId = generateId();
-		presentationList.forEach((presentation) => {
-			if (tempId === presentation.presentationId) {
-				uniqueId();
-			}
-		});
-		setPresentationId(tempId);
+		const isDuplicate = presentationList.some(
+			(presentation) => tempId === presentation.presentationId
+		);
+		if (isDuplicate) {
+			uniqueId();
+		} else {
+			setPresentationId(tempId);
+		}
 	};
 
 	return (
