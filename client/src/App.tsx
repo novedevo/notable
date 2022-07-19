@@ -22,12 +22,12 @@ export default function App() {
 				<Route path="/edit" element={<VideoNotes />} />
 				<Route path="/pdf" element={<PdfNotes />} />
 				<Route path="/view" element={<ViewNotes />} />
-				{/* <Route path="/presentations" element={<Presentations />} />
+				<Route path="/presentations" element={<Presentations />} />
 				<Route
 					path="/schedulepresentation"
 					element={<SchedulePresentation />}
 				/>
-				<Route path="/room/:id" element={<PresentationRoom />} /> */}
+				<Route path="/room/:id" element={<PresentationRoom />} />
 			</Routes>
 		</BrowserRouter>
 	);
