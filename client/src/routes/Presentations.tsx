@@ -25,7 +25,7 @@ export default function Presentations() {
 		presentations = [];
 	}
 
-	let user: { name?: any };
+	let user: { name?: string };
 	try {
 		user = JSON.parse(userJson!);
 	} catch (err) {
@@ -40,14 +40,13 @@ export default function Presentations() {
 
 	// checks against the localstorage of presentations if there is a valid presentation corresponding to the name
 	const validPresentationId = () => {
-		let validCode = false;
-		presentations.forEach((presentation) => {
-			if (presentationID === presentation.presentationId) {
-				validCode = true;
-				joinPresentation();
-			}
-		});
-		if (validCode === false) {
+		if (
+			presentations.some(
+				(presentation) => presentation.presentationId === presentationID
+			)
+		) {
+			joinPresentation();
+		} else {
 			alert("Not a valid room code");
 		}
 	};
@@ -64,11 +63,12 @@ export default function Presentations() {
 
 	// only display the users presentations
 	useEffect(() => {
-		presentations.forEach((presentation) => {
-			if (user.name === presentation.presentationHost) {
-				setusersPresentations([...usersPresentations, presentation]);
-			}
-		});
+		setusersPresentations([
+			...usersPresentations,
+			...presentations.filter(
+				(presentation) => user.name === presentation.presentationHost
+			),
+		]);
 	}, []);
 
 	return (
