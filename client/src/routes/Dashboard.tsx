@@ -24,7 +24,7 @@ export default function Dashboard() {
 				</Button>
 			)}
 			<LogoutButton />
-			<Button href="/edit" variant="contained">
+			<Button href="/video" variant="contained">
 				Video Notes
 			</Button>
 			<Button href="/pdf" variant="contained">

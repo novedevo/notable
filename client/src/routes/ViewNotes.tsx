@@ -1,15 +1,15 @@
 import axios from "axios";
-import react from "react";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const ViewNotes = () => {
 
     const [notes, setNotes] = useState<any[]>([]);
     useEffect(() => {
-        fetchNotes();
+        fetchNotesSet();
     }, []);
 
-    const fetchNotes = () => {
+    const fetchNotesSet = () => {
         axios
         .get("/api/get_noteSet")
         .then((res) => {
@@ -26,9 +26,9 @@ const ViewNotes = () => {
             <h1>View Notes</h1>
             <div id="noteSets_container">
                 {notes.map((note) => (
-                    <a id="noteSet" href="javascript:0">
+                    <Link to="/pdf" state={{notes: "notes"}} id="noteSet">
                         <p>{note.title}</p>
-                    </a>
+                    </Link>
                 ))}
             </div>
         </div>
