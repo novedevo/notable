@@ -13,9 +13,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
-const EditNote = (props: any) => {
-	const location = useLocation();
-	const {presentations}:any = location.state;
+const EditNote = () => {
 	const [notes, setNotes] = useState<[string, number, number][]>([]);
 	const [date, setDate] = useState(dayjs());
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
@@ -42,6 +40,22 @@ const EditNote = (props: any) => {
 			setPageNumber(pageNumber - 1);
 		}
 	};
+
+	// being able to use presentations prop
+	const location = useLocation();
+	const { presentations }: any = location.state;
+
+	const [previousnotes, setPreviousnotes] = useState<any[]>([]);
+	useEffect(() => {
+		axios
+			.get(
+				`/api/get_userNotes?presentationId=${presentations.presentation_instance_id}`
+			)
+			.then((res) => {
+				console.log(res);
+				setPreviousnotes(res.data);
+			});
+	});
 
 	return (
 		<Container>
@@ -116,7 +130,7 @@ const EditNote = (props: any) => {
 			</div>
 		</Container>
 	);
-}
+};
 
 function generateNote(
 	[note, page, time]: [string, number, number],

@@ -156,7 +156,7 @@ app.get("/api/userNotes", async (req, res) => {
 		"SELECT * FROM notes WHERE presentation_id = $1",
 		[req.query.presentationId]
 	);
-	res.send(rows);
+	res.json(rows);
 });
 
 app.post("/api/register", async (req, res) => {
