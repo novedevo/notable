@@ -101,7 +101,7 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("get_users", (room) => {
-		let roomUsers = users.filter((user) => user.room === room);
+		let roomUsers = users.filter((user) => user.room == room);
 		socket.emit("user_list", roomUsers);
 	});
 
