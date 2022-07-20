@@ -32,7 +32,7 @@ export default function Presentations() {
 			setDbPresentations(presentations);
 			setUserPresentations(
 				presentations.filter(
-					(presentation) => presentation.presenter_id === user.id
+					(presentation) => presentation.presenter_id == user.id
 				)
 			);
 		});

@@ -29,6 +29,10 @@ function PresentationRoomTest() {
 		);
 	});
 
+	useEffect(() => {
+		console.log(date);
+	}, [date]);
+
 	// Everytime a new user joins the room the socket is updated and this useEffect is called
 	// it calls "get_users" in index.js and sends the presentationId of the room the user joined
 	useEffect(() => {
@@ -66,7 +70,6 @@ async function getPresentations() {
 				Authorization: `Bearer ${localStorage.getItem("token")}`,
 			},
 		});
-		console.log(result.data.presentations);
 		return result.data.presentations;
 	} catch (err) {
 		console.log(err);
