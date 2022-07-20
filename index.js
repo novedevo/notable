@@ -148,13 +148,13 @@ app.post("/api/addNote", async (req, res) => {
 // get sets of notes from database
 app.get("/api/get_presentations", async (req, res) => {
 	const { rows } = await pool.query("SELECT * FROM presentations");
-	res.send(rows);
+	res.json(rows);
 });
 
 app.get("/api/userNotes", async (req, res) => {
 	const {rows} = await pool.query(
-		"SELECT * FROM notes WHERE presentation_id = $1 AND notetaker_id = $2",
-		[req.query.presentationId, req.jwt.id]
+		"SELECT * FROM notes WHERE presentation_id = $1",
+		[req.query.presentationId]
 	);
 	res.send(rows);
 });

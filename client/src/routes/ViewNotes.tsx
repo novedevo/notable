@@ -16,16 +16,31 @@ const ViewNotes = () => {
 			});
 	}, []);
 
+	// const [notes, setNotes] = useState<any[]>([]);
+	// useEffect(() => {
+	// 	axios
+	// 		.get(
+	// 			`/api/userNotes?presentationId=${presentations[0].presentation_instance_id}`
+	// 		)
+	// 		.then((res) => {
+	// 			console.log(res);
+	// 			setNotes(res.data);
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// });
+
 	return (
 		<div>
 			<h1>View Notes</h1>
 			<div id="noteSets_container">
-				{presentations.map((presentation) => (
-					<Link to="/edit" state={{ notes: "notes" }} id="noteSet">
-						<p>{presentation.title}</p>
-						<p>{presentation.note}</p>
-					</Link>
-				))}
+{presentations.map((presentation) => (
+    <Link to="/edit" state={{ presentations: presentation }} id="noteSet">
+        <p>{presentation.title}</p>
+        <p>{presentation.presentation_instance_id}</p>
+    </Link>
+))}
 			</div>
 		</div>
 	);

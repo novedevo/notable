@@ -6,6 +6,7 @@ import axios from "axios";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
+import { useLocation } from "react-router-dom";
 import DashboardButton from "../components/DashboardButton";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -13,6 +14,8 @@ dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
 const EditNote = (props: any) => {
+	const location = useLocation();
+	const {presentations}:any = location.state;
 	const [notes, setNotes] = useState<[string, number, number][]>([]);
 	const [date, setDate] = useState(dayjs());
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
