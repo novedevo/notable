@@ -16,21 +16,6 @@ const ViewNotes = () => {
 			});
 	}, []);
 
-	// const [notes, setNotes] = useState<any[]>([]);
-	// useEffect(() => {
-	// 	axios
-	// 		.get(
-	// 			`/api/userNotes?presentationId=${presentations[0].presentation_instance_id}`
-	// 		)
-	// 		.then((res) => {
-	// 			console.log(res);
-	// 			setNotes(res.data);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// });
-
 	return (
 		<div>
 			<h1>View Notes</h1>

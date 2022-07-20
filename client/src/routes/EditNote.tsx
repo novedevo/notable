@@ -44,12 +44,14 @@ const EditNote = () => {
 	// being able to use presentations prop
 	const location = useLocation();
 	const { presentations }: any = location.state;
+	const oldPDF = presentations.pdf;
+	const oldVid = presentations.youtube_url;
 
 	const [previousnotes, setPreviousnotes] = useState<any[]>([]);
 	useEffect(() => {
 		axios
 			.get(
-				`/api/get_userNotes?presentationId=${presentations.presentation_instance_id}`
+				`/api/userNotes?presentationId=${presentations.presentation_instance_id}`
 			)
 			.then((res) => {
 				console.log(res);
