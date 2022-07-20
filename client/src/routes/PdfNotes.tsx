@@ -7,18 +7,27 @@ import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
 import DashboardButton from "../components/DashboardButton";
+import { PdfNote } from "../types";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
-export default function PdfNotes() {
-	const [notes, setNotes] = useState<[string, number, number][]>([]);
-	const [date, setDate] = useState(dayjs());
+export default function PdfNotes({
+	pdf,
+	startTime,
+	inputNotes,
+}: {
+	pdf: string;
+	startTime: string;
+	inputNotes: PdfNote[];
+}) {
+	const [notes, setNotes] = useState<PdfNote[]>(inputNotes);
+	const [date, setDate] = useState(dayjs(startTime));
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
 	useEffect(() => {
 		const interval = setInterval(() => {
-			let diff = date.diff(dayjs());
+			const diff = date.diff(dayjs());
 			setTime(dayjs.duration(diff, "millisecond").humanize(true));
 		}, 1000);
 
@@ -27,7 +36,6 @@ export default function PdfNotes() {
 
 	const [numPages, setNumPages] = useState(1);
 	const [pageNumber, setPageNumber] = useState(0);
-	const [file, setFile] = useState<File | null>(null);
 
 	const inc = () => {
 		if (pageNumber !== numPages) {
@@ -50,16 +58,9 @@ export default function PdfNotes() {
 				Next
 			</Button>
 			<span id="pagenum">{pageNumber}</span>
-			<input
-				type="file"
-				id="uploadPDF"
-				accept=".pdf,application/pdf"
-				required
-				onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-			/>
 			<div id="container">
 				<Document
-					file={file}
+					file={pdf}
 					onLoadSuccess={({ numPages }) => {
 						setNumPages(numPages);
 						setPageNumber(1);
@@ -88,7 +89,7 @@ export default function PdfNotes() {
 						post={(note) => {
 							const diff = dayjs().diff(date);
 							if (diff > 0 && pageNumber > 0) {
-								setNotes([...notes, [note, pageNumber, diff]]);
+								setNotes([...notes, { note, page_number: pageNumber, diff }]);
 								axios.post(
 									"/api/addNote",
 									{
@@ -102,6 +103,7 @@ export default function PdfNotes() {
 										},
 									}
 								);
+								//todo: add socket communication to update server notes
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");
 							} else {
@@ -115,17 +117,14 @@ export default function PdfNotes() {
 	);
 }
 
-function generateNote(
-	[note, page, time]: [string, number, number],
-	index: number
-) {
+function generateNote(note: PdfNote, index: number) {
 	return (
 		<Card key={index}>
-			<Typography>{note}</Typography>
+			<Typography>{note.note}</Typography>
 			<Typography>
-				{dayjs.duration(time, "milliseconds").format("HH:mm:ss")}
+				{dayjs.duration(note.diff, "milliseconds").format("HH:mm:ss")}
 			</Typography>
-			<Typography>Page {page}</Typography>
+			<Typography>Page {note.page_number}</Typography>
 		</Card>
 	);
 }

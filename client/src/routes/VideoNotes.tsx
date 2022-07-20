@@ -3,31 +3,22 @@ import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
 import DashboardButton from "../components/DashboardButton";
+import { VideoNote } from "../types";
 
-export default function VideoNotes() {
-	const [videoUrl, setVideoUrl] = useState("LEENEFaVUzU"); //kurzgesagt default
-	const [videoId, setVideoId] = useState(videoUrl);
-	const loadVideo = () => {
-		const id = parseId(videoUrl);
-		if (id) {
-			setVideoId(id);
-		} else {
-			alert("Invalid URL");
-		}
-	};
+export default function VideoNotes({
+	url,
+	inputNotes,
+}: {
+	url: string;
+	inputNotes: VideoNote[];
+}) {
+	const videoId = parseId(url);
 
-	const [notes, setNotes] = useState<[string, number][]>([]);
+	const [notes, setNotes] = useState<VideoNote[]>(inputNotes);
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	return (
 		<div id="container">
-			<TextField
-				variant="outlined"
-				id="video-form"
-				label="URL"
-				onChange={(event) => setVideoUrl(event.target.value)}
-			/>
-			<Button onClick={loadVideo}>Load Video</Button>
 			<DashboardButton />
 			<Container>
 				<YouTube
@@ -51,8 +42,13 @@ export default function VideoNotes() {
 						})}
 					</Container>
 					<InputNotes
-						post={(value) =>
-							setNotes([...notes, [value, player.getCurrentTime()]])
+						post={
+							(value) =>
+								setNotes([
+									...notes,
+									{ note: value, time_stamp: player.getCurrentTime() },
+								])
+							//todo: add socket communication to update server notes
 						}
 					/>
 				</div>
@@ -61,16 +57,14 @@ export default function VideoNotes() {
 	);
 }
 
-function generateNote(
-	[val, time]: [val: string, time: number],
-	player: YouTubePlayer,
-	index: number
-) {
+function generateNote(note: VideoNote, player: YouTubePlayer, index: number) {
 	return (
 		<li key={index}>
-			{val + "\t ".repeat(20)}
-			<Link onClick={() => player.seekTo(time)}>
-				{new Date(Math.floor(time) * 1000).toISOString().substring(11, 19)}
+			{note.note + "\t ".repeat(20)}
+			<Link onClick={() => player.seekTo(note.time_stamp)}>
+				{new Date(Math.floor(note.time_stamp) * 1000)
+					.toISOString()
+					.substring(11, 19)}
 			</Link>
 		</li>
 	);
@@ -84,6 +78,9 @@ function parseId(url: string) {
 	// Comparison between arg and the regular expression
 	const match = url.match(regExp)?.[2];
 
-	// Return the video ID by itself.
-	return match?.length === 11 ? match : null;
+	if (match?.length === 11) {
+		return match;
+	} else {
+		alert("invalid url");
+	}
 }

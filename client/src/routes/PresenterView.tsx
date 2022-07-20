@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { io } from "socket.io-client";
-import { Presentation, User } from "./Presentations";
+import { Presentation, User } from "../types";
 
 const socket = io();
 socket.on("connect_error", (err: { message: any }) => {
