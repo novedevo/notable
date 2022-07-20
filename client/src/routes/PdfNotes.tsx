@@ -100,7 +100,7 @@ export default function PdfNotes() {
 										timestamp: diff,
 										pageNumber: pageNumber,
 										notetakerId: id,
-										presentationId: 2,
+										presentationId: presentationId,
 									},
 									{
 										headers: {
