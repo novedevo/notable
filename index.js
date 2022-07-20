@@ -101,7 +101,7 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("get_users", (room) => {
-		let roomUsers = users.filter((user) => user.room === room);
+		let roomUsers = users.filter((user) => user.room == room);
 		socket.emit("user_list", roomUsers);
 	});
 
@@ -138,11 +138,16 @@ app.post("/api/login", async (req, res) => {
 
 // save user notes from PDFnotes to db
 app.post("/api/addNote", async (req, res) => {
-	const { note, timestamp, pageNumber } = req.body;
-	await pool.query( "INSERT INTO notes (note, time_stamp, page_number) VALUES ($1, $2, $3)",
-		[note, timestamp, pageNumber]
+	const { note, timestamp, pageNumber, notetakerId, presentationId } = req.body;
+	const result = await pool.query(
+		"INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)",
+		[note, timestamp, pageNumber, notetakerId, presentationId]
 	);
-	res.send("Note saved to database");
+	if (result.rowCount) {
+		res.send("Note saved to database");
+	} else {
+		res.status(400).send("invalid request");
+	}
 });
 
 // get sets of notes from database
@@ -152,7 +157,7 @@ app.get("/api/get_presentations", async (req, res) => {
 });
 
 app.get("/api/userNotes", async (req, res) => {
-	const {rows} = await pool.query(
+	const { rows } = await pool.query(
 		"SELECT * FROM notes WHERE presentation_id = $1",
 		[req.query.presentationId]
 	);
@@ -171,6 +176,13 @@ app.post("/api/register", async (req, res) => {
 		const token = generateAccessToken(username, result.rows[0].admin);
 		res.json({ token });
 	}
+});
+
+app.get("/api/presentation_id", async (req, res) => {
+	const result = await pool.query("SELECT id FROM users WHERE username = $1", [
+		req.jwt.username,
+	]);
+	res.json(result.rows?.[0]);
 });
 
 app.post("/api/presentation", async (req, res) => {
