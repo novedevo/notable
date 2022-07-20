@@ -98,11 +98,10 @@ io.on("connection", (socket) => {
 		};
 		users.push(user);
 		console.log("All users: ", users);
-	});
-
-	socket.on("get_users", (room) => {
-		let roomUsers = users.filter((user) => user.room == room);
-		socket.emit("user_list", roomUsers);
+		socket.broadcast.to(data.room).emit(
+			"user_list",
+			users.filter((user) => user.room === data.room)
+		);
 	});
 
 	socket.on("disconnect", () => {
