@@ -4,7 +4,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import DashboardButton from "../components/DashboardButton";
 
-// import { useNavigate } from "react-router-dom";
 export default function Console() {
 	const username = JSON.parse(localStorage.getItem("user")!).username;
 	const columns: GridColDef[] = [
@@ -24,8 +23,6 @@ export default function Console() {
 		{ id: 1, name: "userTest", username: "user", admin: false },
 		{ id: 2, name: "admin", username: "admin", admin: true },
 	]);
-
-	// const navigate = useNavigate();
 
 	useEffect(() => {
 		getList().then((items) => {
