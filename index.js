@@ -139,11 +139,15 @@ app.post("/api/login", async (req, res) => {
 // save user notes from PDFnotes to db
 app.post("/api/addNote", async (req, res) => {
 	const { note, timestamp, pageNumber, notetakerId, presentationId } = req.body;
-	await pool.query(
+	const result = await pool.query(
 		"INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)",
 		[note, timestamp, pageNumber, notetakerId, presentationId]
 	);
-	res.send("Note saved to database");
+	if (result.rowCount) {
+		res.send("Note saved to database");
+	} else {
+		res.status(400).send("invalid request");
+	}
 });
 
 // get sets of notes from database

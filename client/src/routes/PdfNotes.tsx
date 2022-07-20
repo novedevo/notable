@@ -87,6 +87,10 @@ export default function PdfNotes() {
 					<InputNotes
 						post={(note) => {
 							const diff = dayjs().diff(date);
+							const id = JSON.parse(localStorage.getItem("user")!).id;
+							const currentURL = window.location.href;
+							const presentationId = currentURL.split("room/")[1];
+							console.log(id);
 							if (diff > 0 && pageNumber > 0) {
 								setNotes([...notes, [note, pageNumber, diff]]);
 								axios.post(
@@ -95,7 +99,7 @@ export default function PdfNotes() {
 										note: note,
 										timestamp: diff,
 										pageNumber: pageNumber,
-										notetakerId: 1,
+										notetakerId: id,
 										presentationId: 2,
 									},
 									{
