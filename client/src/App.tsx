@@ -10,6 +10,7 @@ import ViewNotes from "./routes/ViewNotes";
 import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
 import PresentationRoom from "./routes/PresentationRoom";
+import EditNote from "./routes/EditNote";
 
 export default function App() {
 	return (
@@ -19,9 +20,10 @@ export default function App() {
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/console" element={<Console />} />
-				<Route path="/edit" element={<VideoNotes />} />
+				<Route path="/video" element={<VideoNotes />} />
 				<Route path="/pdf" element={<PdfNotes />} />
 				<Route path="/view" element={<ViewNotes />} />
+				<Route path="/edit" element={<EditNote />} />
 				<Route path="/presentations" element={<Presentations />} />
 				<Route
 					path="/schedulepresentation"

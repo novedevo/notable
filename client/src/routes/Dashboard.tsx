@@ -25,7 +25,7 @@ export default function Dashboard() {
 			)}
 			<LogoutButton />
 			<Button
-				href="/edit"
+				href="/video"
 				variant="contained"
 				sx={{
 					":hover": {

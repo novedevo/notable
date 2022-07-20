@@ -1,33 +1,31 @@
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const ViewNotes = () => {
-	const [notes, setNotes] = useState<any[]>([]);
+	const [presentations, setPresentations] = useState<any[]>([]);
 	useEffect(() => {
-		fetchNotes();
-	}, []);
-
-	const fetchNotes = () => {
 		axios
-			.get("/api/get_noteSet")
+			.get("/api/get_presentations")
 			.then((res) => {
 				console.log(res);
-				setNotes(res.data);
+				setPresentations(res.data);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	};
+	}, []);
 
 	return (
 		<div>
 			<h1>View Notes</h1>
 			<div id="noteSets_container">
-				{notes.length === 0 && <h2>No Notes</h2>}
-				{notes.map((note) => (
-					<a id="noteSet" href="javascript:0">
-						<p>{note.title}</p>
-					</a>
+				{presentations.length === 0 && <h2>No Presentations</h2>}
+				{presentations.map((presentation) => (
+					<Link to="/edit" state={{ presentations: presentation }} id="noteSet">
+						<p>{presentation.title}</p>
+						<p>{presentation.presentation_instance_id}</p>
+					</Link>
 				))}
 			</div>
 		</div>

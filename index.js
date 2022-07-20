@@ -117,9 +117,17 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 });
 
 // get sets of notes from database
-app.get("/api/get_noteSet", requiresLogin, async (req, res) => {
+app.get("/api/get_presentations", requiresLogin, async (req, res) => {
 	const { rows } = await pool.query("SELECT * FROM presentations");
-	res.send(rows);
+	res.json(rows);
+});
+
+app.get("/api/userNotes", async (req, res) => {
+	const { rows } = await pool.query(
+		"SELECT * FROM notes WHERE presentation_id = $1",
+		[req.query.presentationId]
+	);
+	res.json(rows);
 });
 
 app.post("/api/register", async (req, res) => {
