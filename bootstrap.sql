@@ -17,7 +17,8 @@ CREATE TABLE presentations (
     scheduled_date TIMESTAMP(0),
     youtube_url TEXT,
     pdf TEXT,
-    presenter_id integer REFERENCES users (id) NOT NULL
+    presenter_id integer REFERENCES users (id) NOT NULL,
+    check ((youtube_url IS NULL) != (pdf IS NULL))
 );
 INSERT INTO presentations (title, scheduled_date, youtube_url, presenter_id)
 VALUES (
