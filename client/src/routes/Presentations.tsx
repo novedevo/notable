@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
+import { User, Presentation } from "../types";
 
 const client = axios.create({
 	headers: {
@@ -99,17 +100,3 @@ async function getPresentations(): Promise<Presentation[]> {
 		return [];
 	}
 }
-
-export type Presentation = {
-	presentation_instance_id: number;
-	title: string;
-	presenter_id: number;
-	scheduled_date: string;
-};
-
-export type User = {
-	id: number;
-	username: string;
-	isAdmin: boolean;
-	name: string;
-};
