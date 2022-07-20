@@ -166,7 +166,7 @@ app.post("/api/register", async (req, res) => {
 	}
 });
 
-app.post("/api/presentation", async (req, res) => {
+app.post("/api/presentation/", async (req, res) => {
 	const { title, scheduled_date, youtube_url, pdf, presenter_id } = req.body;
 	const result = await pool.query(
 		"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
@@ -178,6 +178,21 @@ app.post("/api/presentation", async (req, res) => {
 	} else {
 		res.send("Presentation has been scheduled.");
 	}
+});
+app.get("/api/presentation/:id", async (req, res) => {
+	const { id } = req.params;
+	const result = await pool.query(
+		"SELECT * FROM presentations WHERE presentation_instance_id = $1",
+		[id]
+	);
+	const notes = await pool.query(
+		"SELECT * FROM notes WHERE presentation_id = $1",
+		[id]
+	);
+	if (result.rows.length === 0) {
+		res.status(400).send("Presentation does not exist.");
+	}
+	res.send({ ...result.rows[0], notes: notes.rows });
 });
 app.get("/api/presentations", async (req, res) => {
 	const result = await pool.query(
