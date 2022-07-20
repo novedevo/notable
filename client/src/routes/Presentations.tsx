@@ -32,7 +32,7 @@ export default function Presentations() {
 			setDbPresentations(presentations);
 			setUserPresentations(
 				presentations.filter(
-					(presentation) => presentation.presenter_id == user.id
+					(presentation) => presentation.presenter_id === user.id
 				)
 			);
 		});
@@ -100,16 +100,16 @@ async function getPresentations(): Promise<Presentation[]> {
 	}
 }
 
-type Presentation = {
+export type Presentation = {
 	presentation_instance_id: number;
 	title: string;
 	presenter_id: number;
 	scheduled_date: string;
 };
 
-type User = {
+export type User = {
 	id: number;
 	username: string;
 	isAdmin: boolean;
-	name: boolean;
+	name: string;
 };
