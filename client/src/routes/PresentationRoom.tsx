@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SetStateAction, useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import PdfNotes from "./PdfNotes";
 
 const socket = io();
 socket.on("connect_error", (err: { message: any }) => {
@@ -50,16 +51,17 @@ function PresentationRoomTest() {
 	});
 
 	return (
-		<div>
-			<h1>Welcome to Presentation Room {title}</h1>
-			<h2>The Presentation ID for this room is {presentationId}</h2>
-			<h3>This Presentation is scheduled to start on {date}</h3>
-			<div>
-				{userInfo.map((user) => {
-					return <li>{user}</li>;
-				})}
-			</div>
-		</div>
+		<PdfNotes></PdfNotes>
+		// <div>
+		// 	<h1>Welcome to Presentation Room {title}</h1>
+		// 	<h2>The Presentation ID for this room is {presentationId}</h2>
+		// 	<h3>This Presentation is scheduled to start on {date}</h3>
+		// 	<div>
+		// 		{userInfo.map((user) => {
+		// 			return <li>{user}</li>;
+		// 		})}
+		// 	</div>
+		// </div>
 	);
 }
 
