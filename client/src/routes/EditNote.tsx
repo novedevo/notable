@@ -6,28 +6,20 @@ import axios from "axios";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
+import { useLocation } from "react-router-dom";
 import DashboardButton from "../components/DashboardButton";
-import { PdfNote } from "../types";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
-export default function PdfNotes({
-	pdf,
-	startTime,
-	inputNotes,
-}: {
-	pdf: string;
-	startTime: string;
-	inputNotes: PdfNote[];
-}) {
-	const [notes, setNotes] = useState<PdfNote[]>(inputNotes);
-	const [date, setDate] = useState(dayjs(startTime));
+const EditNote = () => {
+	const [notes, setNotes] = useState<[string, number, number][]>([]);
+	const [date, setDate] = useState(dayjs());
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
 	useEffect(() => {
 		const interval = setInterval(() => {
-			const diff = date.diff(dayjs());
+			let diff = date.diff(dayjs());
 			setTime(dayjs.duration(diff, "millisecond").humanize(true));
 		}, 1000);
 
@@ -36,6 +28,7 @@ export default function PdfNotes({
 
 	const [numPages, setNumPages] = useState(1);
 	const [pageNumber, setPageNumber] = useState(0);
+	const [file, setFile] = useState<File | null>(null);
 
 	const inc = () => {
 		if (pageNumber !== numPages) {
@@ -48,6 +41,24 @@ export default function PdfNotes({
 		}
 	};
 
+	// being able to use presentations prop
+	const location = useLocation();
+	const { presentations }: any = location.state;
+	const oldPDF = presentations.pdf;
+	const oldVid = presentations.youtube_url;
+
+	const [previousnotes, setPreviousnotes] = useState<any[]>([]);
+	useEffect(() => {
+		axios
+			.get(
+				`/api/userNotes?presentationId=${presentations.presentation_instance_id}`
+			)
+			.then((res) => {
+				console.log(res);
+				setPreviousnotes(res.data);
+			});
+	});
+
 	return (
 		<Container>
 			<DashboardButton />
@@ -58,9 +69,16 @@ export default function PdfNotes({
 				Next
 			</Button>
 			<span id="pagenum">{pageNumber}</span>
+			<input
+				type="file"
+				id="uploadPDF"
+				accept=".pdf,application/pdf"
+				required
+				onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+			/>
 			<div id="container">
 				<Document
-					file={pdf}
+					file={file}
 					onLoadSuccess={({ numPages }) => {
 						setNumPages(numPages);
 						setPageNumber(1);
@@ -88,20 +106,14 @@ export default function PdfNotes({
 					<InputNotes
 						post={(note) => {
 							const diff = dayjs().diff(date);
-							const id = JSON.parse(localStorage.getItem("user")!).id;
-							const currentURL = window.location.href;
-							const presentationId = currentURL.split("room/")[1];
-							console.log(id);
 							if (diff > 0 && pageNumber > 0) {
-								setNotes([...notes, { note, page_number: pageNumber, diff }]);
+								setNotes([...notes, [note, pageNumber, diff]]);
 								axios.post(
 									"/api/addNote",
 									{
 										note: note,
 										timestamp: diff,
 										pageNumber: pageNumber,
-										notetakerId: id,
-										presentationId: presentationId,
 									},
 									{
 										headers: {
@@ -109,7 +121,6 @@ export default function PdfNotes({
 										},
 									}
 								);
-								//todo: add socket communication to update server notes
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");
 							} else {
@@ -121,16 +132,21 @@ export default function PdfNotes({
 			</div>
 		</Container>
 	);
-}
+};
 
-function generateNote(note: PdfNote, index: number) {
+function generateNote(
+	[note, page, time]: [string, number, number],
+	index: number
+) {
 	return (
 		<Card key={index}>
-			<Typography>{note.note}</Typography>
+			<Typography>{note}</Typography>
 			<Typography>
-				{dayjs.duration(note.diff, "milliseconds").format("HH:mm:ss")}
+				{dayjs.duration(time, "milliseconds").format("HH:mm:ss")}
 			</Typography>
-			<Typography>Page {note.page_number}</Typography>
+			<Typography>Page {page}</Typography>
 		</Card>
 	);
 }
+
+export default EditNote;
