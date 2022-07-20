@@ -2,8 +2,13 @@ import express from "express";
 import { createServer } from "http";
 import pg from "pg";
 import cors from "cors";
-import jwt from "jsonwebtoken";
 import { Server } from "socket.io";
+import {
+	requiresLogin,
+	requiresAdmin,
+	generateAccessToken,
+	getUserId,
+} from "./helpers";
 
 //initialize postgres connection
 const { Pool } = pg;
@@ -27,46 +32,6 @@ const __dirname = import.meta.url
 
 //initialize express
 const app = express();
-
-function generateAccessToken(username, isAdmin) {
-	const payload = {
-		username,
-		isAdmin,
-	};
-	return jwt.sign(payload, "notable-secret", { expiresIn: "30d" });
-}
-
-function parseAuth(req) {
-	const authHeader = req.headers.authorization;
-	if (authHeader) {
-		const token = authHeader.split(" ")[1];
-		try {
-			req.jwt = jwt.verify(token, "notable-secret");
-			return true;
-		} catch (err) {
-			console.error(err);
-		}
-	} else {
-		console.log("no authorization header");
-	}
-}
-
-function requiresLogin(req, res, next) {
-	if (parseAuth(req)) {
-		next();
-	} else {
-		res.status(401).send("Unauthorized");
-	}
-}
-function requiresAdmin(req, res, next) {
-	parseAuth(req);
-	if (req.jwt?.isAdmin) {
-		next();
-	} else {
-		console.log(req.jwt);
-		res.status(401).send("Unauthorized");
-	}
-}
 
 app.use(express.static("client/build"));
 app.use(express.json());
@@ -137,11 +102,12 @@ app.post("/api/login", async (req, res) => {
 });
 
 // save user notes from PDFnotes to db
-app.post("/api/addNote", async (req, res) => {
-	const { note, timestamp, pageNumber, notetakerId, presentationId } = req.body;
+app.post("/api/addNote", requiresLogin, async (req, res) => {
+	const { note, timestamp, pageNumber, presentationId } = req.body;
+	const id = await getUserId(req.jwt.username, pool);
 	const result = await pool.query(
 		"INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)",
-		[note, timestamp, pageNumber, notetakerId, presentationId]
+		[note, timestamp, pageNumber, id, presentationId]
 	);
 	if (result.rowCount) {
 		res.send("Note saved to database");
@@ -151,7 +117,7 @@ app.post("/api/addNote", async (req, res) => {
 });
 
 // get sets of notes from database
-app.get("/api/get_presentations", async (req, res) => {
+app.get("/api/get_presentations", requiresLogin, async (req, res) => {
 	const { rows } = await pool.query("SELECT * FROM presentations");
 	res.json(rows);
 });
@@ -178,14 +144,14 @@ app.post("/api/register", async (req, res) => {
 	}
 });
 
-app.get("/api/presentation_id", async (req, res) => {
+app.get("/api/presentation_id", requiresLogin, async (req, res) => {
 	const result = await pool.query("SELECT id FROM users WHERE username = $1", [
 		req.jwt.username,
 	]);
 	res.json(result.rows?.[0]);
 });
 
-app.post("/api/presentation", async (req, res) => {
+app.post("/api/presentation", requiresLogin, async (req, res) => {
 	const { title, scheduled_date, youtube_url, pdf, presenter_id } = req.body;
 	const result = await pool.query(
 		"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
@@ -198,7 +164,7 @@ app.post("/api/presentation", async (req, res) => {
 		res.send("Presentation has been scheduled.");
 	}
 });
-app.get("/api/presentations", async (req, res) => {
+app.get("/api/presentations", requiresLogin, async (req, res) => {
 	const result = await pool.query(
 		"SELECT presentation_instance_id, title, scheduled_date, youtube_url, pdf, presenter_id FROM presentations"
 	);
