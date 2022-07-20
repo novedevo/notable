@@ -1,13 +1,10 @@
+import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const ViewNotes = () => {
 	const [notes, setNotes] = useState<any[]>([]);
 	useEffect(() => {
-		fetchNotes();
-	}, []);
-
-	const fetchNotes = () => {
 		axios
 			.get("/api/get_noteSet")
 			.then((res) => {
@@ -17,7 +14,7 @@ const ViewNotes = () => {
 			.catch((err) => {
 				console.log(err);
 			});
-	};
+	}, []);
 
 	return (
 		<div>
@@ -25,9 +22,9 @@ const ViewNotes = () => {
 			<div id="noteSets_container">
 				{notes.length === 0 && <h2>No Notes</h2>}
 				{notes.map((note) => (
-					<a id="noteSet" href="javascript:0">
+					<Button id="noteSet">
 						<p>{note.title}</p>
-					</a>
+					</Button>
 				))}
 			</div>
 		</div>
