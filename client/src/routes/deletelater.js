@@ -28,8 +28,9 @@ const __dirname = import.meta.url
 //initialize express
 const app = express();
 
-function generateAccessToken(username, isAdmin) {
+function generateAccessToken(username, isAdmin, id) {
 	const payload = {
+		id,
 		username,
 		isAdmin,
 	};
@@ -123,7 +124,11 @@ app.post("/api/login", async (req, res) => {
 		console.log(req.body);
 		res.status(403).send("Invalid username or password");
 	} else {
-		const token = generateAccessToken(username, result.rows[0].admin);
+		const token = generateAccessToken(
+			username,
+			result.rows[0].admin,
+			result.rows[0].id
+		);
 		res.json({
 			token,
 			user: {
@@ -137,26 +142,21 @@ app.post("/api/login", async (req, res) => {
 });
 
 // save user notes from PDFnotes to db
-app.post("/api/addNote", async (req, res) => {
+app.post("/api/addNote", requiresLogin, async (req, res) => {
 	const { note, timestamp, pageNumber } = req.body;
-	await pool.query( "INSERT INTO notes (note, time_stamp, page_number) VALUES ($1, $2, $3)",
+	await pool.query(
+		"INSERT INTO notes (note, time_stamp, page_number) VALUES ($1, $2, $3)",
 		[note, timestamp, pageNumber]
 	);
 	res.send("Note saved to database");
 });
 
-// get sets of notes from database
-app.get("/api/get_presentations", async (req, res) => {
-	const { rows } = await pool.query("SELECT * FROM presentations");
-	res.send(rows);
-});
-
-app.get("/api/userNotes", async (req, res) => {
-	const {rows} = await pool.query(
+app.get("/api/userNotes", requiresLogin, async (req, res) => {
+	const result = await pool.query(
 		"SELECT * FROM notes WHERE presentation_id = $1 AND notetaker_id = $2",
 		[req.query.presentationId, req.jwt.id]
 	);
-	res.send(rows);
+	res.json(result.rows);
 });
 
 app.post("/api/register", async (req, res) => {
@@ -187,9 +187,7 @@ app.post("/api/presentation", async (req, res) => {
 	}
 });
 app.get("/api/presentations", async (req, res) => {
-	const result = await pool.query(
-		"SELECT presentation_instance_id, title, scheduled_date, youtube_url, pdf, presenter_id FROM presentations"
-	);
+	const result = await pool.query("SELECT * FROM presentations");
 	res.json({ presentations: result.rows });
 });
 app.get("/api/users", requiresAdmin, async (req, res) => {

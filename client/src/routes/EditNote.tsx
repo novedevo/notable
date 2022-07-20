@@ -12,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
-const EditNote = () => {
+const EditNote = (props: any) => {
 	const [notes, setNotes] = useState<[string, number, number][]>([]);
 	const [date, setDate] = useState(dayjs());
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
