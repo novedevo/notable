@@ -135,7 +135,7 @@ app.get("/api/userNotes", requiresLogin, async (req, res) => {
 	res.json(rows);
 });
 
-app.post("/api/register", requiresLogin, async (req, res) => {
+app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
 	const result = await pool.query(
 		"INSERT INTO users (username, password, name) VALUES ($1, $2, $3) RETURNING *",
