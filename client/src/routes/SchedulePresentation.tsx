@@ -5,11 +5,13 @@ import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "axios";
 import DashboardButton from "../components/DashboardButton";
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
 export default function SchedulePresentation() {
+	const navigate = useNavigate();
 	const [title, setTitle] = useState("");
 	const [scheduled_date, setscheduled_date] = useState(dayjs());
 	const [youtube_url, setyoutube_url] = useState("");
@@ -46,6 +48,7 @@ export default function SchedulePresentation() {
 			})
 			.then((res) => {
 				console.log(res.data);
+				navigate("/presentations");
 			})
 			.catch((err) => alert("invalid presentation"));
 	};
