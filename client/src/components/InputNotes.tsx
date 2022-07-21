@@ -11,6 +11,7 @@ export default function InputNotes({ post }: { post: (note: string) => void }) {
 				cols={20}
 				rows={5}
 				placeholder="Write notes here..."
+				value={latestNote}
 				onChange={(e) => setLatestNote(e.target.value.trim())}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
@@ -22,7 +23,14 @@ export default function InputNotes({ post }: { post: (note: string) => void }) {
 					}
 				}}
 			/>
-			<Button onClick={() => post(latestNote)}>Post Note</Button>
+			<Button
+				onClick={(e) => {
+					post(latestNote);
+					setLatestNote("");
+				}}
+			>
+				Post Note
+			</Button>
 		</>
 	);
 }
