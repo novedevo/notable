@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "axios";
+import DashboardButton from "../components/DashboardButton";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -50,12 +51,22 @@ export default function SchedulePresentation() {
 	};
 
 	return (
-		<Container>
-			<Button href="/presentations" variant="contained">
+		<div id="schedulepresentation">
+			<div id="presentationheader">
+				<DashboardButton />
+			</div>
+			<div id="presentationheader">
+			<h3>Schedule Presentation</h3>
+			<Button href="/presentations" variant="contained" id="presentationbutton">
 				View Presentations
 			</Button>
-			<h1>Schedule Presentation</h1>
+			</div>
+			<div id="presentationheader"></div>
+			<div id="presentationsidebar"></div>
+			<div id="presentationcreate">
 
+			<div id="presentationlabel"> Enter a Presentation Title (required):</div>
+			<div>
 			<TextField
 				variant="outlined"
 				id="title"
@@ -65,6 +76,10 @@ export default function SchedulePresentation() {
 				}}
 				required
 			/>
+			</div>
+			
+			<div id="presentationlabel"> Enter a PDF file:</div>
+			<div>
 			<input
 				type="file"
 				id="uploadPDF"
@@ -72,6 +87,10 @@ export default function SchedulePresentation() {
 				required
 				onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
 			/>
+			</div>
+
+			<div id="presentationlabel"> Enter a Video Link:</div>
+			<div>
 			<TextField
 				variant="outlined"
 				id="video"
@@ -79,8 +98,11 @@ export default function SchedulePresentation() {
 				onChange={(e) => {
 					setyoutube_url(e.target.value);
 				}}
-				required
 			/>
+			</div>
+
+			<div id="presentationlabel"> Enter the Start Time of the Presentation (required):</div>
+			<div>
 			<TextField
 				label="Presentation Start Time"
 				type="datetime-local"
@@ -89,15 +111,25 @@ export default function SchedulePresentation() {
 					setscheduled_date(dayjs(e.target.value));
 				}}
 			/>
+			</div>
+
+			<div id="presentationlabel">
 			<Button
 				href=""
 				variant="contained"
 				onClick={postPresentation}
-				id="generateId"
+				id="presentationbutton"
 			>
 				Save and Generate Code
 			</Button>
-		</Container>
+			</div>
+			</div>
+			<div id="presentationsidebar"></div>
+
+			<div id="presentationfooter"></div>
+			<div id="presentationfooter"></div>
+			<div id="presentationfooter"> notable™</div>
+		</div>
 	);
 }
 
