@@ -39,6 +39,7 @@ export default function Console() {
 					for (const id of selectionModel) {
 						if (rows.find((row) => row.id === id)!.admin) {
 							alert("You cannot delete an admin without first demoting them");
+							return;
 						}
 						axios
 							.delete(`/api/user/${id}`, {

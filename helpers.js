@@ -74,6 +74,10 @@ export function addAdminRoutes(app, pool) {
 		res.send("User updated");
 	});
 	app.delete("/api/user/:id", requiresAdmin, async (req, res) => {
+		const { id } = req.params;
+		if (!id) {
+			res.status(400).send("Missing id");
+		}
 		await pool.query("DELETE FROM notes WHERE notetaker_id = $1", [
 			req.params.id,
 		]);
