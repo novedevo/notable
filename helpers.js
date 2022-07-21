@@ -30,7 +30,7 @@ export function requiresLogin(req, res, next) {
 		res.status(401).send("Unauthorized");
 	}
 }
-export function requiresAdmin(req, res, next) {
+function requiresAdmin(req, res, next) {
 	parseAuth(req);
 	if (req.jwt?.isAdmin) {
 		next();
@@ -45,4 +45,40 @@ export async function getUserId(username, pool) {
 		username,
 	]);
 	return result.rows[0].id;
+}
+
+export function addAdminRoutes(app, pool) {
+	app.get("/api/users", requiresAdmin, async (req, res) => {
+		const result = await pool.query(
+			"SELECT id, username, name, admin FROM users"
+		);
+		res.json({ users: result.rows });
+	});
+	app.patch("/api/promote_user", requiresAdmin, async (req, res) => {
+		await pool.query("UPDATE users SET admin = true WHERE username = $1", [
+			req.query.username,
+		]);
+		res.send("User promoted");
+	});
+	app.patch("/api/demote_user", requiresAdmin, async (req, res) => {
+		await pool.query("UPDATE users SET admin = false WHERE username = $1", [
+			req.query.username,
+		]);
+		res.send("User demoted");
+	});
+	app.put("/api/update_user", requiresAdmin, async (req, res) => {
+		await pool.query(
+			"UPDATE users SET name = $1, admin = $2 WHERE username = $3",
+			[req.body.name, req.body.admin, req.body.username]
+		);
+		res.send("User updated");
+	});
+	app.delete("/api/delete_user", requiresAdmin, async (req, res) => {
+		const result = await pool.query("DELETE FROM users WHERE username = $1", [
+			req.query.username,
+		]);
+		if (result.rowCount) {
+			res.send("User deleted");
+		}
+	});
 }

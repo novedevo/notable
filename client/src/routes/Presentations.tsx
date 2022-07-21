@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
+import { User, Presentation } from "../types";
 
 const client = axios.create({
 	headers: {
@@ -32,7 +33,7 @@ export default function Presentations() {
 			setDbPresentations(presentations);
 			setUserPresentations(
 				presentations.filter(
-					(presentation) => presentation.presenter_id == user.id
+					(presentation) => presentation.presenter_id === user.id
 				)
 			);
 		});
@@ -68,6 +69,11 @@ export default function Presentations() {
 					href="/schedulepresentation"
 					variant="contained"
 					id="presentationbutton"
+					sx={{
+						":hover": {
+							color: "white",
+						},
+					}}
 				>
 					Schedule Presentation
 				</Button>
@@ -82,12 +88,7 @@ export default function Presentations() {
 					label="Presentation ID"
 					onChange={(event) => setPresentationID(parseInt(event.target.value))}
 				/>
-				<Button
-					href=""
-					variant="contained"
-					onClick={joinRoom}
-					id="presentationbutton"
-				>
+				<Button variant="contained" onClick={joinRoom} id="presentationbutton">
 					Join Presentation
 				</Button>
 			</div>
@@ -125,17 +126,3 @@ async function getPresentations(): Promise<Presentation[]> {
 		return [];
 	}
 }
-
-type Presentation = {
-	presentation_instance_id: number;
-	title: string;
-	presenter_id: number;
-	scheduled_date: string;
-};
-
-type User = {
-	id: number;
-	username: string;
-	isAdmin: boolean;
-	name: boolean;
-};

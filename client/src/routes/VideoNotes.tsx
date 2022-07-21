@@ -1,76 +1,89 @@
-import { Button, Container, Link, TextField, Typography } from "@mui/material";
+import { Container, Link, Typography } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
 import DashboardButton from "../components/DashboardButton";
+import { VideoNote } from "../types";
+import axios from "axios";
 
-export default function VideoNotes() {
-	const [videoUrl, setVideoUrl] = useState("LEENEFaVUzU"); //kurzgesagt default
-	const [videoId, setVideoId] = useState(videoUrl);
-	const loadVideo = () => {
-		const id = parseId(videoUrl);
-		if (id) {
-			setVideoId(id);
-		} else {
-			alert("Invalid URL");
-		}
-	};
+export default function VideoNotes({
+	url,
+	inputNotes,
+	presentationId,
+}: {
+	url: string;
+	inputNotes: VideoNote[];
+	presentationId: number;
+}) {
+	const videoId = parseId(url);
 
-	const [notes, setNotes] = useState<[string, number][]>([]);
+	const [notes, setNotes] = useState<VideoNote[]>(inputNotes);
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	return (
-		<div id="container">
-			<TextField
-				variant="outlined"
-				id="video-form"
-				label="URL"
-				onChange={(event) => setVideoUrl(event.target.value)}
-			/>
-			<Button onClick={loadVideo}>Load Video</Button>
+		<Container>
 			<DashboardButton />
-			<Container>
-				<YouTube
-					videoId={videoId}
-					opts={{
-						height: 800,
-						width: 1000,
-						playerVars: {
-							// autoplay: 1,
-							playsInline: 1,
-							modestBranding: 1,
-						},
-					}}
-					onReady={(event) => setPlayer(event.target)}
-				/>
-				<div className="right-side">
-					<Typography>Notes</Typography>
-					<Container>
-						{notes.map((note, i) => {
-							return generateNote(note, player, i);
-						})}
-					</Container>
-					<InputNotes
-						post={(value) =>
-							setNotes([...notes, [value, player.getCurrentTime()]])
-						}
+			<div id="container">
+				<Container>
+					<YouTube
+						videoId={videoId}
+						opts={{
+							height: 800,
+							width: 1000,
+							playerVars: {
+								// autoplay: 1,
+								playsInline: 1,
+								modestBranding: 1,
+							},
+						}}
+						onReady={(event) => setPlayer(event.target)}
 					/>
-				</div>
-			</Container>
-		</div>
+					<div className="right-side">
+						<Typography>Notes</Typography>
+						<Container>
+							{notes.map((note, i) => {
+								return generateNote(note, player, i);
+							})}
+						</Container>
+						<InputNotes
+							post={
+								(value) => {
+									const time = player.getCurrentTime();
+									setNotes([...notes, { note: value, time_stamp: time }]);
+									axios.post(
+										"/api/addNote",
+										{
+											note: value,
+											timestamp: time,
+											presentationId,
+										},
+										{
+											headers: {
+												Authorization: `Bearer ${localStorage.getItem(
+													"token"
+												)}`,
+											},
+										}
+									);
+								}
+								//todo: add socket communication to update server notes
+							}
+						/>
+					</div>
+				</Container>
+			</div>
+		</Container>
 	);
 }
 
-function generateNote(
-	[val, time]: [val: string, time: number],
-	player: YouTubePlayer,
-	index: number
-) {
+function generateNote(note: VideoNote, player: YouTubePlayer, index: number) {
 	return (
 		<li key={index}>
-			{val + "\t ".repeat(20)}
-			<Link onClick={() => player.seekTo(time)}>
-				{new Date(Math.floor(time) * 1000).toISOString().substring(11, 19)}
+			{note.note + "\t ".repeat(20)}
+			<Link onClick={() => player.seekTo(note.time_stamp)}>
+				{new Date(Math.floor(note.time_stamp) * 1000)
+					.toISOString()
+					.substring(11, 19)}
 			</Link>
 		</li>
 	);
@@ -84,6 +97,9 @@ function parseId(url: string) {
 	// Comparison between arg and the regular expression
 	const match = url.match(regExp)?.[2];
 
-	// Return the video ID by itself.
-	return match?.length === 11 ? match : null;
+	if (match?.length === 11) {
+		return match;
+	} else {
+		alert("invalid url");
+	}
 }

@@ -28,22 +28,22 @@ export default function SchedulePresentation() {
 	}, [presenter_id]);
 
 	const postPresentation = () => {
+		const formData = new FormData();
+		formData.append("title", title);
+		formData.append(
+			"scheduled_date",
+			scheduled_date.format("YYYY-MM-DD HH:mm:ss")
+		);
+		formData.append("youtube_url", youtube_url);
+		pdf && formData.append("pdf", pdf);
+		formData.append("presenter_id", presenter_id);
 		axios
-			.post(
-				"/api/presentation",
-				{
-					title,
-					scheduled_date,
-					youtube_url,
-					pdf,
-					presenter_id,
+			.post("/api/presentation", formData, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+					"Content-Type": "multipart/form-data",
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-			)
+			})
 			.then((res) => {
 				console.log(res.data);
 			})
@@ -58,12 +58,16 @@ export default function SchedulePresentation() {
 			<div id="presentationheader">
 				<h3>Schedule Presentation</h3>
 				<Button
-					href="/presentations"
-					variant="contained"
-					id="presentationbutton"
-				>
-					View Presentations
-				</Button>
+				href="/presentations"
+				variant="contained"
+				sx={{
+					":hover": {
+						color: "white",
+					},
+				}}
+			>
+				View Your Presentations
+			</Button>
 			</div>
 			<div id="presentationheader"></div>
 			<div id="presentationsidebar"></div>

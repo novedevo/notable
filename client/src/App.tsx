@@ -5,13 +5,10 @@ import Login from "./routes/Login";
 import Register from "./routes/Register";
 import Splash from "./routes/Splash";
 import Console from "./routes/Console";
-import VideoNotes from "./routes/VideoNotes";
-import PdfNotes from "./routes/PdfNotes";
 import ViewNotes from "./routes/ViewNotes";
 import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
-import PresentationRoom from "./routes/PresentationRoom";
-import EditNote from "./routes/EditNote";
+import Room from "./routes/Room";
 
 export default function App() {
 	return (
@@ -21,16 +18,13 @@ export default function App() {
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/console" element={<Console />} />
-				<Route path="/video" element={<VideoNotes />} />
-				<Route path="/pdf" element={<PdfNotes />} />
 				<Route path="/view" element={<ViewNotes />} />
-				<Route path="/edit" element={<EditNote />} />
 				<Route path="/presentations" element={<Presentations />} />
 				<Route
 					path="/schedulepresentation"
 					element={<SchedulePresentation />}
 				/>
-				<Route path="/room/:id" element={<PresentationRoom />} />
+				<Route path="/room/:id" element={<Room />} />
 			</Routes>
 		</BrowserRouter>
 	);
