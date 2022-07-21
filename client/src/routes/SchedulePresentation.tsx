@@ -6,6 +6,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "axios";
 import DashboardButton from "../components/DashboardButton";
 import { useNavigate } from "react-router-dom";
+import { User } from "../types";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -16,18 +17,12 @@ export default function SchedulePresentation() {
 	const [scheduled_date, setscheduled_date] = useState(dayjs());
 	const [youtube_url, setyoutube_url] = useState("");
 	const [pdf, setPdf] = useState<File | null>(null);
-	const [presenter_id, setpresenter_id] = useState("");
-
-	// setting the id of the host
-	useEffect(() => {
-		getUserId().then((id) => {
-			setpresenter_id(id);
-		});
-	}, []);
+	const user: User = JSON.parse(localStorage.getItem("user")!);
+	const stringId = "" + user.id;
 
 	useEffect(() => {
-		console.log(presenter_id);
-	}, [presenter_id]);
+		console.log(user.id);
+	}, [user.id]);
 
 	const postPresentation = () => {
 		const formData = new FormData();
@@ -38,7 +33,7 @@ export default function SchedulePresentation() {
 		);
 		formData.append("youtube_url", youtube_url);
 		pdf && formData.append("pdf", pdf);
-		formData.append("presenter_id", presenter_id);
+		formData.append("presenter_id", stringId);
 		axios
 			.post("/api/presentation", formData, {
 				headers: {
@@ -63,6 +58,7 @@ export default function SchedulePresentation() {
 				<Button
 					href="/presentations"
 					variant="contained"
+					id="presentationbutton"
 					sx={{
 						":hover": {
 							color: "white",
