@@ -151,15 +151,20 @@ app.post(
 			res.status(400).send("All fields must be specified");
 			return;
 		}
-		const result = await pool.query(
-			"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
-			[title, scheduled_date, youtube_url, pdf, parseInt(presenter_id)]
-		);
-		if (result.rowCount === 0) {
-			// Duplicates should only be an issue if instance ID is not unique.
-			res.status(400).send("Cannot schedule duplicate presentation.");
-		} else {
-			res.send("Presentation has been scheduled.");
+		try {
+			const result = await pool.query(
+				"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
+				[title, scheduled_date, youtube_url, pdf, parseInt(presenter_id)]
+			);
+
+			if (result.rowCount === 0) {
+				// Duplicates should only be an issue if instance ID is not unique.
+				res.status(400).send("Cannot schedule duplicate presentation.");
+			} else {
+				res.send("Presentation has been scheduled.");
+			}
+		} catch (err) {
+			res.status(400).send("Invalid request");
 		}
 	}
 );
