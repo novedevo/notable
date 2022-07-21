@@ -1,4 +1,4 @@
-import { Button, Card, Container, TextField, Typography } from "@mui/material";
+import { Button, Card, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import InputNotes from "../components/InputNotes";
 import dayjs from "dayjs";
@@ -23,7 +23,7 @@ export default function PdfNotes({
 	inputNotes: PdfNote[];
 }) {
 	const [notes, setNotes] = useState<PdfNote[]>(inputNotes);
-	const [date, setDate] = useState(dayjs(startTime));
+	const date = dayjs(startTime);
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -65,24 +65,18 @@ export default function PdfNotes({
 						setNumPages(numPages);
 						setPageNumber(1);
 					}}
+					renderMode="svg"
 				>
 					<Page
 						pageNumber={pageNumber || 1}
 						renderTextLayer={false} //https://github.com/wojtekmaj/react-pdf/issues/332
+						width={800}
 					/>
 				</Document>
 				<div className="right-side">
 					<Container>
-						<br />
-						<TextField
-							label="Beginning of Presentation"
-							type="datetime-local"
-							defaultValue={date.format("YYYY-MM-DDTHH:mm")}
-							onChange={(e) => {
-								setDate(dayjs(e.target.value));
-							}}
-						/>
-						{time}
+						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
+						{date.format("YYYY-MM-DDTHH:mm")}, {time}
 					</Container>
 					<Container id="notes-display">{notes.map(generateNote)}</Container>
 					<InputNotes
@@ -93,7 +87,10 @@ export default function PdfNotes({
 							const presentationId = currentURL.split("room/")[1];
 							console.log(id);
 							if (diff > 0 && pageNumber > 0) {
-								setNotes([...notes, { note, page_number: pageNumber, diff }]);
+								setNotes([
+									...notes,
+									{ note, page_number: pageNumber, time_stamp: diff },
+								]);
 								axios.post(
 									"/api/addNote",
 									{
@@ -128,7 +125,7 @@ function generateNote(note: PdfNote, index: number) {
 		<Card key={index}>
 			<Typography>{note.note}</Typography>
 			<Typography>
-				{dayjs.duration(note.diff, "milliseconds").format("HH:mm:ss")}
+				{dayjs.duration(note.time_stamp, "milliseconds").format("HH:mm:ss")}
 			</Typography>
 			<Typography>Page {note.page_number}</Typography>
 		</Card>

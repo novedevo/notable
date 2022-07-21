@@ -28,5 +28,5 @@ export interface VideoNote extends Note {
 
 export interface PdfNote extends Note {
 	page_number: number;
-	diff: number;
+	time_stamp: number;
 }
