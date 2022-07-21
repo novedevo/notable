@@ -1,10 +1,23 @@
 import { render, screen } from "@testing-library/react";
-import React from "react";
 import Login from "../routes/Login";
 
+import { BrowserRouter as Router } from "react-router-dom";
+
+test("renders without errors", () => {
+	render(
+		<Router>
+			<Login />
+		</Router>
+	);
+});
+
 test("renders username/password fields", () => {
-	render(<Login />);
-	const inputs = ["username, password"].map((label) =>
+	render(
+		<Router>
+			<Login />
+		</Router>
+	);
+	const inputs = ["username", "password"].map((label) =>
 		screen.getByLabelText(label)
 	);
 	for (const input of inputs) {
@@ -15,8 +28,12 @@ test("renders username/password fields", () => {
 	}
 });
 test("renders submit button", () => {
-	render(<Login />);
-	const submit = screen.getByText("Submit");
+	render(
+		<Router>
+			<Login />
+		</Router>
+	);
+	const submit = screen.getByText("Log In");
 	expect(submit).toBeInTheDocument();
 	expect(submit).toBeEnabled();
 	expect(submit).toBeVisible();

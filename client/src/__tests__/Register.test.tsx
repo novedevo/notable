@@ -1,10 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import Register from "../routes/Register";
 
 test("renders name/username/password fields", () => {
-	render(<Register />);
-	const inputs = ["name, username, password"].map((label) =>
+	render(
+		<Router>
+			<Register />
+		</Router>
+	);
+	const inputs = ["name", "username", "password"].map((label) =>
 		screen.getByLabelText(label)
 	);
 	for (const input of inputs) {
@@ -15,7 +20,18 @@ test("renders name/username/password fields", () => {
 	}
 });
 test("renders create account prompt", () => {
-	render(<Register />);
+	render(
+		<Router>
+			<Register />
+		</Router>
+	);
 	const header = screen.getByText("Create a new account");
 	expect(header).toBeInTheDocument();
+});
+test("renders without error", () => {
+	render(
+		<Router>
+			<Register />
+		</Router>
+	);
 });
