@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import Login from "../src/routes/Login";
+import Login from "../routes/Login";
 
 test("renders username/password fields", () => {
 	render(<Login />);

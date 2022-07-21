@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import Register from "../src/routes/Register";
+import Register from "../routes/Register";
 
 test("renders name/username/password fields", () => {
 	render(<Register />);
