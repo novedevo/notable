@@ -118,7 +118,7 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 
 app.get("/api/presentations", requiresLogin, async (req, res) => {
 	const result = await pool.query("SELECT * FROM presentations");
-	res.json({ presentations: result.rows });
+	res.json(result.rows);
 });
 
 app.post("/api/register", async (req, res) => {
