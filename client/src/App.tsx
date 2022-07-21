@@ -1,4 +1,5 @@
 import "./App.css";
+import "./Presentations.css";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Login from "./routes/Login";
 import Register from "./routes/Register";

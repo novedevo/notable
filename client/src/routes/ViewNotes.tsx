@@ -6,7 +6,11 @@ const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<any[]>([]);
 	useEffect(() => {
 		axios
-			.get("/api/get_presentations")
+			.get("/api/get_presentations", {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+				},
+			})
 			.then((res) => {
 				console.log(res);
 				setPresentations(res.data);

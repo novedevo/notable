@@ -28,13 +28,21 @@ export default function SchedulePresentation() {
 
 	const postPresentation = () => {
 		axios
-			.post("/api/presentation", {
-				title,
-				scheduled_date,
-				youtube_url,
-				pdf,
-				presenter_id,
-			})
+			.post(
+				"/api/presentation",
+				{
+					title,
+					scheduled_date,
+					youtube_url,
+					pdf,
+					presenter_id,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+			)
 			.then((res) => {
 				console.log(res.data);
 			})
