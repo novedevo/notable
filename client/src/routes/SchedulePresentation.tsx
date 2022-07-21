@@ -27,22 +27,22 @@ export default function SchedulePresentation() {
 	}, [presenter_id]);
 
 	const postPresentation = () => {
+		const formData = new FormData();
+		formData.append("title", title);
+		formData.append(
+			"scheduled_date",
+			scheduled_date.format("YYYY-MM-DD HH:mm:ss")
+		);
+		formData.append("youtube_url", youtube_url);
+		pdf && formData.append("pdf", pdf);
+		formData.append("presenter_id", presenter_id);
 		axios
-			.post(
-				"/api/presentation",
-				{
-					title,
-					scheduled_date,
-					youtube_url,
-					pdf,
-					presenter_id,
+			.post("/api/presentation", formData, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+					"Content-Type": "multipart/form-data",
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-				}
-			)
+			})
 			.then((res) => {
 				console.log(res.data);
 			})

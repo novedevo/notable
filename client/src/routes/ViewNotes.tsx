@@ -1,9 +1,10 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Presentation } from "../types";
 
 const ViewNotes = () => {
-	const [presentations, setPresentations] = useState<any[]>([]);
+	const [presentations, setPresentations] = useState<Presentation[]>([]);
 	useEffect(() => {
 		axios
 			.get("/api/get_presentations", {
@@ -26,7 +27,10 @@ const ViewNotes = () => {
 			<div id="noteSets_container">
 				{presentations.length === 0 && <h2>No Presentations</h2>}
 				{presentations.map((presentation) => (
-					<Link to="/edit" state={{ presentations: presentation }} id="noteSet">
+					<Link
+						to={`/room/${presentation.presentation_instance_id}`}
+						id="noteSet"
+					>
 						<p>{presentation.title}</p>
 						<p>{presentation.presentation_instance_id}</p>
 					</Link>
