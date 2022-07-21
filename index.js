@@ -164,7 +164,7 @@ app.post(
 				res.send("Presentation has been scheduled.");
 			}
 		} catch (err) {
-			res.status(400).send("Invalid request");
+			res.status(500).send("Postgres error");
 		}
 	}
 );
