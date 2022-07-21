@@ -29,7 +29,6 @@ const ViewNotes = () => {
 				{presentations.map((presentation) => (
 					<Link
 						to={`/room/${presentation.presentation_instance_id}`}
-						state={{ presentation: presentation }}
 						id="noteSet"
 					>
 						<p>{presentation.title}</p>

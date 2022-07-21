@@ -4,13 +4,16 @@ import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
 import DashboardButton from "../components/DashboardButton";
 import { VideoNote } from "../types";
+import axios from "axios";
 
 export default function VideoNotes({
 	url,
 	inputNotes,
+	presentationId,
 }: {
 	url: string;
 	inputNotes: VideoNote[];
+	presentationId: number;
 }) {
 	const videoId = parseId(url);
 
@@ -18,42 +21,58 @@ export default function VideoNotes({
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	return (
-		<div id="container">
+		<Container>
 			<DashboardButton />
-			<Container>
-				<YouTube
-					videoId={videoId}
-					opts={{
-						height: 800,
-						width: 1000,
-						playerVars: {
-							// autoplay: 1,
-							playsInline: 1,
-							modestBranding: 1,
-						},
-					}}
-					onReady={(event) => setPlayer(event.target)}
-				/>
-				<div className="right-side">
-					<Typography>Notes</Typography>
-					<Container>
-						{notes.map((note, i) => {
-							return generateNote(note, player, i);
-						})}
-					</Container>
-					<InputNotes
-						post={
-							(value) =>
-								setNotes([
-									...notes,
-									{ note: value, time_stamp: player.getCurrentTime() },
-								])
-							//todo: add socket communication to update server notes
-						}
+			<div id="container">
+				<Container>
+					<YouTube
+						videoId={videoId}
+						opts={{
+							height: 800,
+							width: 1000,
+							playerVars: {
+								// autoplay: 1,
+								playsInline: 1,
+								modestBranding: 1,
+							},
+						}}
+						onReady={(event) => setPlayer(event.target)}
 					/>
-				</div>
-			</Container>
-		</div>
+					<div className="right-side">
+						<Typography>Notes</Typography>
+						<Container>
+							{notes.map((note, i) => {
+								return generateNote(note, player, i);
+							})}
+						</Container>
+						<InputNotes
+							post={
+								(value) => {
+									const time = player.getCurrentTime();
+									setNotes([...notes, { note: value, time_stamp: time }]);
+									axios.post(
+										"/api/addNote",
+										{
+											note: value,
+											timestamp: time,
+											presentationId,
+										},
+										{
+											headers: {
+												Authorization: `Bearer ${localStorage.getItem(
+													"token"
+												)}`,
+											},
+										}
+									);
+								}
+								//todo: add socket communication to update server notes
+							}
+						/>
+					</div>
+				</Container>
+			</div>
+		</Container>
 	);
 }
 
