@@ -1,0 +1,61 @@
+#presentations {
+	height: 100vh;
+	display: grid;
+	grid-template-columns: 10% auto 10%;
+	grid-template-rows: 11% 11% auto 10%;
+	grid-template-areas:
+		"presentationsidebar presentationheader presentationsidebar"
+		"presentationsidebar presentationjoin presentationsidebar"
+		"presentationsidebar presentationlist presentationsidebar"
+		"presentationfooter presentationfooter presentationfooter";
+}
+#presentationsidebar {
+	grid-area: "presentationsidebar";
+	background-color: #6b75f5;
+}
+
+#presentationheader {
+	grid-area: "presentationheader";
+	background-color: #62bcfa;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+#presentationjoin {
+	grid-area: "presentationjoin";
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+#presentationlist {
+	grid-area: "presentationlist";
+}
+
+#presentationfooter {
+	grid-area: "presentationfooter";
+	background: #62bcfa;
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#presentation-title {
+	font-size: 30px;
+}
+
+#small-presentation-box {
+	border: 1px solid #7257de;
+}
+
+#big-presentation-box {
+	font-family: Arial, Helvetica, sans-serif;
+	color: black;
+}
+
+#presentationbutton {
+	background: #5783de;
+	padding: 15px;
+}
