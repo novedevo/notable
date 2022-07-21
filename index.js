@@ -116,23 +116,9 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 	}
 });
 
-// get sets of notes from database
-app.get("/api/get_presentations", requiresLogin, async (req, res) => {
-	const { rows } = await pool.query("SELECT * FROM presentations");
-	res.json(rows);
-});
-
 app.get("/api/presentations", requiresLogin, async (req, res) => {
 	const result = await pool.query("SELECT * FROM presentations");
 	res.json({ presentations: result.rows });
-});
-
-app.get("/api/userNotes", requiresLogin, async (req, res) => {
-	const { rows } = await pool.query(
-		"SELECT * FROM notes WHERE presentation_id = $1",
-		[req.query.presentationId]
-	);
-	res.json(rows);
 });
 
 app.post("/api/register", async (req, res) => {
@@ -147,13 +133,6 @@ app.post("/api/register", async (req, res) => {
 		const token = generateAccessToken(username, result.rows[0].admin);
 		res.json({ token });
 	}
-});
-
-app.get("/api/presentation_id", requiresLogin, async (req, res) => {
-	const result = await pool.query("SELECT id FROM users WHERE username = $1", [
-		req.jwt.username,
-	]);
-	res.json(result.rows?.[0]);
 });
 
 app.post(
@@ -194,18 +173,6 @@ app.get("/api/presentation/:id", async (req, res) => {
 		res.status(404).send("Presentation does not exist.");
 	}
 	res.send({ ...result.rows[0], notes: notes.rows });
-});
-app.get("/api/user_info", requiresLogin, async (req, res) => {
-	const result = await pool.query("SELECT * FROM users WHERE username = $1", [
-		req.jwt.username,
-	]);
-	res.json(result.rows?.[0]);
-});
-app.get("/api/user_id", requiresLogin, async (req, res) => {
-	const result = await pool.query("SELECT id FROM users WHERE username = $1", [
-		req.jwt.username,
-	]);
-	res.json(result.rows?.[0]);
 });
 
 addAdminRoutes(app, pool);

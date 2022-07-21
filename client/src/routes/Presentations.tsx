@@ -118,8 +118,8 @@ export default function Presentations() {
 async function getPresentations(): Promise<Presentation[]> {
 	try {
 		const result = await client("/api/presentations");
-		console.log(result.data.presentations);
-		return result.data.presentations;
+		console.log(result.data);
+		return result.data;
 	} catch (err) {
 		console.error("Error getting presentations");
 		console.error(err);
