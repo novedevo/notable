@@ -5,9 +5,9 @@ import cors from "cors";
 import { Server } from "socket.io";
 import {
 	requiresLogin,
-	requiresAdmin,
 	generateAccessToken,
 	getUserId,
+	addAdminRoutes,
 } from "./helpers.js";
 
 //initialize postgres connection
@@ -121,7 +121,12 @@ app.get("/api/get_presentations", requiresLogin, async (req, res) => {
 	res.json(rows);
 });
 
-app.get("/api/userNotes", async (req, res) => {
+app.get("/api/presentations", requiresLogin, async (req, res) => {
+	const result = await pool.query("SELECT * FROM presentations");
+	res.json({ presentations: result.rows });
+});
+
+app.get("/api/userNotes", requiresLogin, async (req, res) => {
 	const { rows } = await pool.query(
 		"SELECT * FROM notes WHERE presentation_id = $1",
 		[req.query.presentationId]
@@ -129,7 +134,7 @@ app.get("/api/userNotes", async (req, res) => {
 	res.json(rows);
 });
 
-app.post("/api/register", async (req, res) => {
+app.post("/api/register", requiresLogin, async (req, res) => {
 	const { username, password, name } = req.body;
 	const result = await pool.query(
 		"INSERT INTO users (username, password, name) VALUES ($1, $2, $3) RETURNING *",
@@ -170,25 +175,13 @@ app.get("/api/presentation/:id", async (req, res) => {
 		[id]
 	);
 	const notes = await pool.query(
-		"SELECT * FROM notes WHERE presentation_id = $1",
+		"SELECT * FROM notes WHERE presentation_id = $1 ORDER BY time_stamp ASC",
 		[id]
 	);
 	if (result.rows.length === 0) {
-		res.status(400).send("Presentation does not exist.");
+		res.status(404).send("Presentation does not exist.");
 	}
 	res.send({ ...result.rows[0], notes: notes.rows });
-});
-app.get("/api/presentations", async (req, res) => {
-	const result = await pool.query(
-		"SELECT presentation_instance_id, title, scheduled_date, youtube_url, pdf, presenter_id FROM presentations"
-	);
-	res.json({ presentations: result.rows });
-});
-app.get("/api/users", requiresAdmin, async (req, res) => {
-	const result = await pool.query(
-		"SELECT id, username, name, admin FROM users"
-	);
-	res.json({ users: result.rows });
 });
 app.get("/api/user_info", requiresLogin, async (req, res) => {
 	const result = await pool.query("SELECT * FROM users WHERE username = $1", [
@@ -202,33 +195,8 @@ app.get("/api/user_id", requiresLogin, async (req, res) => {
 	]);
 	res.json(result.rows?.[0]);
 });
-app.patch("/api/promote_user", requiresAdmin, async (req, res) => {
-	await pool.query("UPDATE users SET admin = true WHERE username = $1", [
-		req.query.username,
-	]);
-	res.send("User promoted");
-});
-app.patch("/api/demote_user", requiresAdmin, async (req, res) => {
-	await pool.query("UPDATE users SET admin = false WHERE username = $1", [
-		req.query.username,
-	]);
-	res.send("User demoted");
-});
-app.put("/api/update_user", requiresAdmin, async (req, res) => {
-	await pool.query(
-		"UPDATE users SET name = $1, admin = $2 WHERE username = $3",
-		[req.body.name, req.body.admin, req.body.username]
-	);
-	res.send("User updated");
-});
-app.delete("/api/delete_user", requiresAdmin, async (req, res) => {
-	const result = await pool.query("DELETE FROM users WHERE username = $1", [
-		req.query.username,
-	]);
-	if (result.rowCount) {
-		res.send("User deleted");
-	}
-});
+
+addAdminRoutes(app, pool);
 
 app.get("/*", (req, res) => {
 	res.sendFile(`${__dirname}/client/build/index.html`);
