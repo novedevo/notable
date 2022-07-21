@@ -1,5 +1,5 @@
-import { Container } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Button, Container } from "@mui/material";
+import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DashboardButton from "../components/DashboardButton";
@@ -30,8 +30,29 @@ export default function Console() {
 		});
 	}, []);
 
+	const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+
 	return (
 		<>
+			<Button
+				onClick={async () => {
+					for (const id of selectionModel) {
+						if (rows.find((row) => row.id === id)!.admin) {
+							alert("You cannot delete an admin without first demoting them");
+						}
+						axios
+							.delete(`/api/user/${id}`, {
+								headers: {
+									Authorization: `Bearer ${localStorage.getItem("token")}`,
+								},
+							})
+							.then(() => setRows(rows.filter((row) => row.id !== id)))
+							.catch((err) => console.error(err));
+					}
+				}}
+			>
+				Delete selected users
+			</Button>
 			<div style={{ display: "flex", height: "100%" }}>
 				<div style={{ flexGrow: 1 }}>
 					<DataGrid
@@ -57,6 +78,8 @@ export default function Console() {
 							);
 							return newRow;
 						}}
+						onSelectionModelChange={setSelectionModel}
+						selectionModel={selectionModel}
 					/>
 				</div>
 			</div>
