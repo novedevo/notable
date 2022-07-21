@@ -11,7 +11,7 @@ export default function Room() {
 	const state = useLocation().state as { presentation?: Presentation };
 	const { id } = useParams();
 	const [presentation, setPresentation] = useState<Presentation | null>(
-		state.presentation ?? null
+		state?.presentation ?? null
 	);
 
 	useEffect(() => {
