@@ -14,28 +14,6 @@ export default function Dashboard() {
 			)}
 			<LogoutButton />
 			<Button
-				href="/video"
-				variant="contained"
-				sx={{
-					":hover": {
-						color: "white",
-					},
-				}}
-			>
-				Video Notes
-			</Button>
-			<Button
-				href="/pdf"
-				variant="contained"
-				sx={{
-					":hover": {
-						color: "white",
-					},
-				}}
-			>
-				PDF Viewer
-			</Button>
-			<Button
 				href="/presentations"
 				variant="contained"
 				sx={{
