@@ -107,7 +107,7 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 	const id = await getUserId(req.jwt.username, pool);
 	const result = await pool.query(
 		"INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)",
-		[note, timestamp, pageNumber, id, presentationId]
+		[note, timestamp, pageNumber, id, parseInt(presentationId)]
 	);
 	if (result.rowCount) {
 		res.send("Note saved to database");
