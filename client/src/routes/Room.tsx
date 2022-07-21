@@ -1,16 +1,23 @@
 import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { Presentation, VideoNote, PdfNote } from "../types";
 import VideoNotes from "./VideoNotes";
 import PdfNotes from "./PdfNotes";
 
 export default function Room() {
+	// being able to use presentations prop
+	const state = useLocation().state as { presentation?: Presentation };
 	const { id } = useParams();
-	const [presentation, setPresentation] = useState<Presentation | null>(null);
+	const [presentation, setPresentation] = useState<Presentation | null>(
+		state.presentation ?? null
+	);
 
 	useEffect(() => {
+		if (!id) {
+			return;
+		}
 		getPresentationMetadata(parseInt(id!)).then((presentation) => {
 			if (presentation.youtube_url || presentation.pdf) {
 				setPresentation(presentation);

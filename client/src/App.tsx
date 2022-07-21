@@ -8,8 +8,6 @@ import ViewNotes from "./routes/ViewNotes";
 import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
 import Room from "./routes/Room";
-import PresentationRoom from "./routes/PresentationRoom";
-import EditNote from "./routes/EditNote";
 
 export default function App() {
 	return (
@@ -20,7 +18,6 @@ export default function App() {
 				<Route path="/register" element={<Register />} />
 				<Route path="/console" element={<Console />} />
 				<Route path="/view" element={<ViewNotes />} />
-				<Route path="/edit" element={<EditNote />} />
 				<Route path="/presentations" element={<Presentations />} />
 				<Route
 					path="/schedulepresentation"
