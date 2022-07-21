@@ -69,7 +69,15 @@ export default function Login() {
 				<Button variant="contained" onClick={submit}>
 					Log In
 				</Button>
-				<Button variant="contained" href="/register">
+				<Button
+					variant="contained"
+					href="/register"
+					sx={{
+						":hover": {
+							color: "white",
+						},
+					}}
+				>
 					Register a new account
 				</Button>
 			</div>

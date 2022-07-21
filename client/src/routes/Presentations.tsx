@@ -69,6 +69,11 @@ export default function Presentations() {
 					href="/schedulepresentation"
 					variant="contained"
 					id="presentationbutton"
+					sx={{
+						":hover": {
+							color: "white",
+						},
+					}}
 				>
 					Schedule Presentation
 				</Button>
@@ -83,12 +88,7 @@ export default function Presentations() {
 					label="Presentation ID"
 					onChange={(event) => setPresentationID(parseInt(event.target.value))}
 				/>
-				<Button
-					href=""
-					variant="contained"
-					onClick={joinRoom}
-					id="presentationbutton"
-				>
+				<Button variant="contained" onClick={joinRoom} id="presentationbutton">
 					Join Presentation
 				</Button>
 			</div>

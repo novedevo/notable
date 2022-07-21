@@ -51,8 +51,16 @@ export default function SchedulePresentation() {
 
 	return (
 		<Container>
-			<Button href="/presentations" variant="contained">
-				View Presentations
+			<Button
+				href="/presentations"
+				variant="contained"
+				sx={{
+					":hover": {
+						color: "white",
+					},
+				}}
+			>
+				View Your Presentations
 			</Button>
 			<h1>Schedule Presentation</h1>
 

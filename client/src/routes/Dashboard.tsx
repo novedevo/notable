@@ -8,7 +8,15 @@ export default function Dashboard() {
 		<Container>
 			<h1>Welcome, {user.name}!</h1>
 			{user.isAdmin && (
-				<Button href="/console" variant="contained">
+				<Button
+					href="/console"
+					variant="contained"
+					sx={{
+						":hover": {
+							color: "white",
+						},
+					}}
+				>
 					Admin Console
 				</Button>
 			)}
