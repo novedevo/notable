@@ -12,7 +12,7 @@ export default function InputNotes({ post }: { post: (note: string) => void }) {
 				rows={5}
 				placeholder="Write notes here..."
 				value={latestNote}
-				onChange={(e) => setLatestNote(e.target.value.trim())}
+				onChange={(e) => setLatestNote(e.target.value)}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
 						e.preventDefault();
