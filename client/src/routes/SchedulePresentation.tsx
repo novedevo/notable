@@ -58,16 +58,16 @@ export default function SchedulePresentation() {
 			<div id="presentationheader">
 				<h3>Schedule Presentation</h3>
 				<Button
-				href="/presentations"
-				variant="contained"
-				sx={{
-					":hover": {
-						color: "white",
-					},
-				}}
-			>
-				View Your Presentations
-			</Button>
+					href="/presentations"
+					variant="contained"
+					sx={{
+						":hover": {
+							color: "white",
+						},
+					}}
+				>
+					View Your Presentations
+				</Button>
 			</div>
 			<div id="presentationheader"></div>
 			<div id="presentationsidebar"></div>
