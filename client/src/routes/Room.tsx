@@ -39,9 +39,10 @@ export default function Room() {
 			/>
 		);
 	} else {
+		const pdf = `data:text/plain;base64,${presentation.pdf}`;
 		return (
 			<PdfNotes
-				pdf={presentation.pdf!}
+				pdf={pdf!}
 				startTime={presentation.scheduled_date}
 				inputNotes={presentation.notes as PdfNote[]}
 			/>

@@ -9,6 +9,7 @@ import {
 	getUserId,
 	addAdminRoutes,
 } from "./helpers.js";
+import fileupload from "express-fileupload";
 
 //initialize postgres connection
 const { Pool } = pg;
@@ -155,19 +156,30 @@ app.get("/api/presentation_id", requiresLogin, async (req, res) => {
 	res.json(result.rows?.[0]);
 });
 
-app.post("/api/presentation", requiresLogin, async (req, res) => {
-	const { title, scheduled_date, youtube_url, pdf, presenter_id } = req.body;
-	const result = await pool.query(
-		"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
-		[title, scheduled_date, youtube_url, pdf, presenter_id]
-	);
-	if (result.rowCount === 0) {
-		// Duplicates should only be an issue if instance ID is not unique.
-		res.status(400).send("Cannot schedule duplicate presentation.");
-	} else {
-		res.send("Presentation has been scheduled.");
+app.post(
+	"/api/presentation",
+	requiresLogin,
+	express.urlencoded({ extended: false }),
+	fileupload(),
+	async (req, res) => {
+		const { title, scheduled_date, youtube_url, presenter_id } = req.body;
+		const pdf = req.files.pdf?.data.toString("base64");
+		if (!(pdf || youtube_url)) {
+			res.status(400).send("Either pdf or youtube link must be specified");
+			return;
+		}
+		const result = await pool.query(
+			"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
+			[title, scheduled_date, youtube_url, pdf, presenter_id]
+		);
+		if (result.rowCount === 0) {
+			// Duplicates should only be an issue if instance ID is not unique.
+			res.status(400).send("Cannot schedule duplicate presentation.");
+		} else {
+			res.send("Presentation has been scheduled.");
+		}
 	}
-});
+);
 app.get("/api/presentation/:id", async (req, res) => {
 	const { id } = req.params;
 	const result = await pool.query(
