@@ -144,16 +144,3 @@ export default function SchedulePresentation() {
 		</div>
 	);
 }
-
-async function getUserId() {
-	try {
-		const result = await axios("/api/user_id", {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
-			},
-		});
-		return result.data.id;
-	} catch (err) {
-		console.log(err);
-	}
-}
