@@ -18,7 +18,7 @@ export default function SchedulePresentation() {
 	const [youtube_url, setyoutube_url] = useState("");
 	const [pdf, setPdf] = useState<File | null>(null);
 	const user: User = JSON.parse(localStorage.getItem("user")!);
-	const stringId = '' + user.id;
+	const stringId = "" + user.id;
 
 	useEffect(() => {
 		console.log(user.id);
