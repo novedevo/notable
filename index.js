@@ -147,6 +147,10 @@ app.post(
 			res.status(400).send("Either pdf or youtube link must be specified");
 			return;
 		}
+		if (!title || !scheduled_date || !presenter_id) {
+			res.status(400).send("All fields must be specified");
+			return;
+		}
 		const result = await pool.query(
 			"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
 			[title, scheduled_date, youtube_url, pdf, parseInt(presenter_id)]
