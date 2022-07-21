@@ -3,21 +3,20 @@
 	display: grid;
 	grid-template-columns: 10% auto 10%;
 	grid-template-rows: 11% 11% auto 10%;
-	grid-template-areas: 
-	"presentationsidebar presentationheader presentationsidebar"
-	"presentationsidebar presentationjoin presentationsidebar"
-	"presentationsidebar presentationlist presentationsidebar"
-	"presentationfooter presentationfooter presentationfooter";
-
+	grid-template-areas:
+		"presentationsidebar presentationheader presentationsidebar"
+		"presentationsidebar presentationjoin presentationsidebar"
+		"presentationsidebar presentationlist presentationsidebar"
+		"presentationfooter presentationfooter presentationfooter";
 }
 #presentationsidebar {
 	grid-area: "presentationsidebar";
-	background-color: #6B75F5;
+	background-color: #6b75f5;
 }
 
 #presentationheader {
 	grid-area: "presentationheader";
-	background-color: #62BCFA;
+	background-color: #62bcfa;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -36,7 +35,7 @@
 
 #presentationfooter {
 	grid-area: "presentationfooter";
-	background: #62BCFA;
+	background: #62bcfa;
 	color: white;
 	display: flex;
 	justify-content: center;
@@ -48,7 +47,7 @@
 }
 
 #small-presentation-box {
-	border: 1px solid #7257DE;
+	border: 1px solid #7257de;
 }
 
 #big-presentation-box {
@@ -57,6 +56,6 @@
 }
 
 #presentationbutton {
-	background: #5783DE;
+	background: #5783de;
 	padding: 15px;
 }

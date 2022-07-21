@@ -59,42 +59,51 @@ export default function Presentations() {
 
 	return (
 		<div id="presentations">
-			<div id="presentationheader"> 
-			<DashboardButton/> 
+			<div id="presentationheader">
+				<DashboardButton />
 			</div>
 			<div id="presentationheader">
 				<h3>Your name for joining presentations is {user.name}</h3>
-				<Button href="/schedulepresentation" variant="contained" id="presentationbutton">
+				<Button
+					href="/schedulepresentation"
+					variant="contained"
+					id="presentationbutton"
+				>
 					Schedule Presentation
-				</Button>	
+				</Button>
 			</div>
 			<div id="presentationheader"></div>
 			<div id="presentationsidebar"></div>
 			<div id="presentationjoin">
-			<h3>Join a Presentation </h3>
-			<TextField
-				variant="outlined"
-				id="PresentationID"
-				label="Presentation ID"
-				onChange={(event) => setPresentationID(parseInt(event.target.value))}
-			/>
-			<Button href="" variant="contained" onClick={joinRoom} id="presentationbutton">
-				Join Presentation
-			</Button>
+				<h3>Join a Presentation </h3>
+				<TextField
+					variant="outlined"
+					id="PresentationID"
+					label="Presentation ID"
+					onChange={(event) => setPresentationID(parseInt(event.target.value))}
+				/>
+				<Button
+					href=""
+					variant="contained"
+					onClick={joinRoom}
+					id="presentationbutton"
+				>
+					Join Presentation
+				</Button>
 			</div>
 			<div id="presentationsidebar"></div>
 			<div id="presentationsidebar"></div>
 			<div id="presentationlist">
-			<Container id="big-presentation-box">
-				{userPresentations.map((presentation) => (
-					<Card id="small-presentation-box">
-						<div id="presentation-title">{presentation.title}</div>
-						<div>Host ID: {presentation.presenter_id}</div>
-						<div>Starts at: {presentation.scheduled_date}</div>
-						<div>Join with code: {presentation.presentation_instance_id}</div>
-					</Card>
-				))}
-			</Container>
+				<Container id="big-presentation-box">
+					{userPresentations.map((presentation) => (
+						<Card id="small-presentation-box">
+							<div id="presentation-title">{presentation.title}</div>
+							<div>Host ID: {presentation.presenter_id}</div>
+							<div>Starts at: {presentation.scheduled_date}</div>
+							<div>Join with code: {presentation.presentation_instance_id}</div>
+						</Card>
+					))}
+				</Container>
 			</div>
 			<div id="presentationsidebar"></div>
 
