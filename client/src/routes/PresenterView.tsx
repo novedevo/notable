@@ -58,7 +58,7 @@ async function getPresentations(): Promise<Presentation[]> {
 				Authorization: `Bearer ${localStorage.getItem("token")}`,
 			},
 		});
-		return result.data.presentations;
+		return result.data;
 	} catch (err) {
 		console.log(err);
 		return [];
