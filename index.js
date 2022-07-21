@@ -170,7 +170,7 @@ app.post(
 		}
 		const result = await pool.query(
 			"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
-			[title, scheduled_date, youtube_url, pdf, presenter_id]
+			[title, scheduled_date, youtube_url, pdf, parseInt(presenter_id)]
 		);
 		if (result.rowCount === 0) {
 			// Duplicates should only be an issue if instance ID is not unique.
