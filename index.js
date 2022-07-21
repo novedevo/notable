@@ -8,7 +8,7 @@ import {
 	requiresAdmin,
 	generateAccessToken,
 	getUserId,
-} from "./helpers";
+} from "./helpers.js";
 
 //initialize postgres connection
 const { Pool } = pg;
