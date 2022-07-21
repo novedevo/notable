@@ -11,7 +11,7 @@ jobs:
           node-version: 18
           cache: "npm"
       - run: npm ci
-      - run: npm test
       - run: npx prettier . -c
       - run: npx eslint .
+      - run: npm test
       # - run: npm run test --workspace=client
