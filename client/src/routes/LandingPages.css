@@ -1,0 +1,60 @@
+body {
+  background-color: #7257de;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  z-index : 0;
+}
+
+#buttonPrimary{
+  width: 240px;
+}
+
+#buttonSecondary{
+  background-color: black;
+  width: 240px;
+}
+
+#textField{
+  width: 240px;
+  height: 10px;
+  margin-top: 10px;
+  line-height: 1px;
+}
+
+#background-gradient{
+  position: fixed;
+  background-size: cover;
+  opacity:0.5;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#62bcfa,#7257de);
+  z-index:5;
+}
+
+#background-image {
+  position: fixed;
+  background-size: cover;
+  opacity:0.5;
+  width: 1200px;
+  height: 100%;
+  background-image: url('100860.jpg');
+  z-index:10;
+}
+
+#inputSpace{
+ grid-area:"inputSpace";
+  color:black;
+	background-color: white;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+  border-radius: 1cm;
+  line-height: 60px;
+  width: 400px;
+  height: 450px;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}

@@ -45,7 +45,7 @@ export default function SchedulePresentation() {
 				console.log(res.data);
 				navigate("/presentations");
 			})
-			.catch((err) => alert("invalid presentation"));
+			.catch((err) => alert("invalid presentation: " + err.message));
 	};
 
 	return (
