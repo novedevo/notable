@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "(trap 'kill 0' INT; nodemon index.js & cd client && npm run start)",
 		"heroku-postbuild": "cd client && GENERATE_SOURCEMAP=false npm run build && rm -rf node_modules",
-		"production": "node index.js",
+		"production": "nodemon index.js",
 		"lint": "eslint .",
 		"test": "cd client && npm test"
 	},
