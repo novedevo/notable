@@ -26,44 +26,57 @@ export default function Register() {
 	};
 	return (
 		<Container>
-			<h1>Create a new account</h1>
-			<div
-				onKeyDown={(event) => {
-					if (event.key === "Enter") {
-						submit();
-					}
-				}}
-			>
-				<TextField
-					variant="outlined"
-					label="name"
-					onChange={(event) => setName(event.target.value)}
-				/>
-				<TextField
-					variant="outlined"
-					label="username"
-					onChange={(event) => setUsername(event.target.value)}
-				/>
-				<TextField
-					variant="outlined"
-					label="password"
-					type="password"
-					onChange={(event) => setPassword(event.target.value)}
-				/>
-				<Button variant="contained" onClick={submit}>
-					Register
-				</Button>
-				<Button
-					variant="contained"
-					href="/login"
-					sx={{
-						":hover": {
-							color: "white",
-						},
+			<div id="background-image"></div>
+			<div id="background-gradient"></div>
+			<div id = "inputSpace">
+				<h5><br></br></h5>
+				<h2>Create a New Account</h2>
+				<h4>Start using Notable today!</h4>
+				<div
+					onKeyDown={(event) => {
+						if (event.key === "Enter") {
+							submit();
+						}
 					}}
 				>
-					Log in with an existing account
-				</Button>
+					<TextField
+						id = "textField"
+						variant="outlined"
+						label="name"
+						onChange={(event) => setName(event.target.value)}
+					/>
+					<TextField
+						id = "textField"
+						variant="outlined"
+						label="username"
+						onChange={(event) => setUsername(event.target.value)}
+					/>
+					<TextField
+						id = "textField"
+						variant="outlined"
+						label="password"
+						type="password"
+						onChange={(event) => setPassword(event.target.value)}
+					/>
+					<Button 
+						id="buttonPrimary"
+						variant="contained" 
+						onClick={submit}>
+						Register
+					</Button>
+					<Button
+						id="buttonSecondary"
+						variant="contained"
+						href="/login"
+						sx={{
+							":hover": {
+								color: "white",
+							},
+						}}
+					>
+						Log in with existing account
+					</Button>
+				</div>
 			</div>
 		</Container>
 	);

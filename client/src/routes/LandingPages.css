@@ -5,11 +5,11 @@ body {
   z-index : 0;
 }
 
-#buttonLogin{
+#buttonPrimary{
   width: 240px;
 }
 
-#buttonReg{
+#buttonSecondary{
   background-color: black;
   width: 240px;
 }
@@ -41,8 +41,8 @@ body {
   z-index:10;
 }
 
-#loginSpace{
-  grid-area:"loginSpace";
+#inputSpace{
+ grid-area:"inputSpace";
   color:black;
 	background-color: white;
 	justify-content: center;
