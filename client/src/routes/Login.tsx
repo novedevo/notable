@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, TextField } from "@mui/material";
 import { useState } from "react";
 import jwtDecode from "jwt-decode";
+import './Login.css';
 
 export default function Login() {
 	const [username, setUsername] = useState("");
@@ -46,40 +47,56 @@ export default function Login() {
 
 	return (
 		<Container>
-			{expired && <h1>Your session has expired.</h1>}
-			<h1>Please log in</h1>
-			<div
-				onKeyDown={(event) => {
-					if (event.key === "Enter") {
-						submit();
-					}
-				}}
-			>
-				<TextField
-					variant="outlined"
-					label="username"
-					onChange={(event) => setUsername(event.target.value)}
-				/>
-				<TextField
-					variant="outlined"
-					label="password"
-					type="password"
-					onChange={(event) => setPassword(event.target.value)}
-				/>
-				<Button variant="contained" onClick={submit}>
-					Log In
-				</Button>
-				<Button
-					variant="contained"
-					href="/register"
-					sx={{
-						":hover": {
-							color: "white",
-						},
+			<div id="background-image"></div>
+			<div id="background-gradient"></div>
+			<div id = "loginSpace">
+				{expired && <h1>Your session has expired.</h1>}
+				<br></br>
+				<h1>Notable</h1>
+				<h4>LOGIN</h4>
+				<div
+					onKeyDown={(event) => {
+						if (event.key === "Enter") {
+							submit();
+						}
 					}}
 				>
-					Register a new account
-				</Button>
+					<TextField
+						id = "textField"
+						variant="outlined"
+						label="username"
+						onChange={(event) => setUsername(event.target.value)}
+					/>
+					<br></br>
+					<TextField
+						id = "textField"
+						variant="outlined"
+						label="password"
+						type="password"
+						onChange={(event) => setPassword(event.target.value)}
+					/>
+					<br></br>
+					<Button 
+						id = "buttonLogin"
+						variant="contained" 
+						onClick={submit}
+					>
+						LOGIN
+					</Button>
+					<br></br>
+					<Button
+						id = "buttonReg"
+						variant="contained"
+						href="/register"
+						sx={{
+							":hover": {
+								color: "white",
+							},
+						}}
+					>
+						Register a new account
+					</Button>
+				</div>
 			</div>
 		</Container>
 	);
