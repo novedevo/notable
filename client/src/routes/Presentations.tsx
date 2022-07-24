@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
 import { User, Presentation } from "../types";
+import dayjs from "dayjs";
 
 const client = axios.create({
 	headers: {
@@ -58,6 +59,15 @@ export default function Presentations() {
 		}
 	};
 
+	const dateFormat = (date: any) => {
+		let d = dayjs(date);
+		return d.format("ddd MMM DD YYYY H:mm");
+	}
+
+	const dateSort = () => {
+
+	}
+
 	return (
 		<div id="presentations">
 			<div id="presentationheader">
@@ -96,18 +106,17 @@ export default function Presentations() {
 			<div id="presentationsidebar"></div>
 			<div id="presentationlist">
 				<Container id="big-presentation-box">
-					{userPresentations.map((presentation) => (
+					{userPresentations.sort((a, b) => (dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date)) ? 1 : -1)).map((presentation) => (
 						<Card id="small-presentation-box">
 							<div id="presentation-title">{presentation.title}</div>
 							<div>Host ID: {presentation.presenter_id}</div>
-							<div>Starts at: {presentation.scheduled_date}</div>
+							<div>Starts at: {dateFormat(presentation.scheduled_date)}</div>
 							<div>Join with code: {presentation.presentation_instance_id}</div>
 						</Card>
 					))}
 				</Container>
 			</div>
 			<div id="presentationsidebar"></div>
-
 			<div id="presentationfooter"></div>
 			<div id="presentationfooter"></div>
 			<div id="presentationfooter"> notable™</div>
