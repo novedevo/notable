@@ -28,8 +28,10 @@ export default function Register() {
 		<Container>
 			<div id="background-image"></div>
 			<div id="background-gradient"></div>
-			<div id = "inputSpace">
-				<h5><br></br></h5>
+			<div id="inputSpace">
+				<h5>
+					<br></br>
+				</h5>
 				<h2>Create a New Account</h2>
 				<h4>Start using Notable today!</h4>
 				<div
@@ -40,28 +42,25 @@ export default function Register() {
 					}}
 				>
 					<TextField
-						id = "textField"
+						id="textField"
 						variant="outlined"
 						label="name"
 						onChange={(event) => setName(event.target.value)}
 					/>
 					<TextField
-						id = "textField"
+						id="textField"
 						variant="outlined"
 						label="username"
 						onChange={(event) => setUsername(event.target.value)}
 					/>
 					<TextField
-						id = "textField"
+						id="textField"
 						variant="outlined"
 						label="password"
 						type="password"
 						onChange={(event) => setPassword(event.target.value)}
 					/>
-					<Button 
-						id="buttonPrimary"
-						variant="contained" 
-						onClick={submit}>
+					<Button id="buttonPrimary" variant="contained" onClick={submit}>
 						Register
 					</Button>
 					<Button
