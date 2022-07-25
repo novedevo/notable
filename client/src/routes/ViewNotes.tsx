@@ -2,6 +2,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Presentation } from "../types";
+import DashboardButton from "../components/DashboardButton";
+import { Container } from "@mui/material";
 
 const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
@@ -22,10 +24,30 @@ const ViewNotes = () => {
 	}, []);
 
 	return (
-		<div>
-			<h1>View Notes</h1>
+		<Container>
+			<div id="background-image"></div>
+			<DashboardButton />
+
+			<div>
+				<div id="pageHead">
+					<h1>View Notes</h1>
+				</div>
+				{presentations.length === 0 && (
+					<div id="middlePanel">
+						<h2>
+							<br></br>
+							<br></br>
+							<br></br>
+							<br></br>
+							You have no notes
+							<br></br>
+							<br></br>
+						</h2>
+						<h5>Notes that you take in presentations will show up here!</h5>
+					</div>
+				)}
+			</div>
 			<div id="noteSets_container">
-				{presentations.length === 0 && <h2>No Presentations</h2>}
 				{presentations.map((presentation) => (
 					<Link
 						to={`/room/${presentation.presentation_instance_id}`}
@@ -36,7 +58,7 @@ const ViewNotes = () => {
 					</Link>
 				))}
 			</div>
-		</div>
+		</Container>
 	);
 };
 export default ViewNotes;

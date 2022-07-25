@@ -6,6 +6,7 @@ function DashboardButton() {
 			href="/"
 			variant="contained"
 			color="info"
+			style={{ zIndex: 10 }}
 			sx={{
 				":hover": {
 					color: "white",
