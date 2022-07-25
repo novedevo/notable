@@ -1,0 +1,72 @@
+body {
+	background: linear-gradient(#7257de, #62bcfa);
+	background-color: black;
+	background-attachment: fixed;
+	color: black;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#pageHead {
+	background-color: rgb(255, 255, 255);
+	box-shadow: 5px 10px #464a4b;
+	border-radius: 5px;
+	z-index: 30;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 600px;
+	height: 50px;
+	position: fixed;
+	top: 10%;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	z-index: 500;
+}
+
+#buttonPrimary {
+	width: 240px;
+}
+
+#buttonSecondary {
+	background-color: black;
+	width: 240px;
+}
+
+#textField {
+	width: 240px;
+	height: 10px;
+	margin-top: 10px;
+	line-height: 1px;
+}
+
+#background-image {
+	background-attachment: fixed;
+	background-image: url("background2.jpg");
+	position: fixed;
+	justify-content: center;
+	align-items: center;
+	background-position: center;
+	opacity: 0.5;
+	width: 1200px;
+	height: 100%;
+	z-index: 1;
+	color: black;
+}
+
+#middlePanel {
+	color: black;
+	background-color: white;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border-radius: 1cm;
+	line-height: 60px;
+	width: 400px;
+	height: 450px;
+	position: fixed;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 400;
+	box-shadow: 5px 10px #62bcfa;
+}

@@ -19,7 +19,7 @@ export default function InputNotes({ post }: { post: (note: string) => void }) {
 						if (latestNote !== "") {
 							post(latestNote);
 						}
-						e.target.value = "";
+						setLatestNote("");
 					}
 				}}
 			/>

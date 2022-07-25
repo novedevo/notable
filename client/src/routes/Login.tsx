@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, TextField } from "@mui/material";
 import { useState } from "react";
 import jwtDecode from "jwt-decode";
-import "./LandingPages.css";
+import "./AppExtras.css";
 
 export default function Login() {
 	const [username, setUsername] = useState("");
@@ -49,7 +49,7 @@ export default function Login() {
 		<Container>
 			<div id="background-image"></div>
 			<div id="background-gradient"></div>
-			<div id="inputSpace">
+			<div id="middlePanel">
 				{expired && <h2>Your session has expired.</h2>}
 				<br></br>
 				<h1>Notable</h1>
