@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, TextField } from "@mui/material";
 import { useState } from "react";
 import jwtDecode from "jwt-decode";
-import './LandingPages.css';
+import "./AppExtras.css";
 
 export default function Login() {
 	const [username, setUsername] = useState("");
@@ -49,7 +49,7 @@ export default function Login() {
 		<Container>
 			<div id="background-image"></div>
 			<div id="background-gradient"></div>
-			<div id = "inputSpace">
+			<div id="middlePanel">
 				{expired && <h2>Your session has expired.</h2>}
 				<br></br>
 				<h1>Notable</h1>
@@ -62,30 +62,26 @@ export default function Login() {
 					}}
 				>
 					<TextField
-						id = "textField"
+						id="textField"
 						variant="outlined"
 						label="username"
 						onChange={(event) => setUsername(event.target.value)}
 					/>
 					<br></br>
 					<TextField
-						id = "textField"
+						id="textField"
 						variant="outlined"
 						label="password"
 						type="password"
 						onChange={(event) => setPassword(event.target.value)}
 					/>
 					<br></br>
-					<Button 
-						id = "buttonPrimary"
-						variant="contained" 
-						onClick={submit}
-					>
+					<Button id="buttonPrimary" variant="contained" onClick={submit}>
 						LOGIN
 					</Button>
 					<br></br>
 					<Button
-						id = "buttonSecondary"
+						id="buttonSecondary"
 						variant="contained"
 						href="/register"
 						sx={{
