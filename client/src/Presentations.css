@@ -58,7 +58,7 @@
 
 #presentationlist {
 	grid-area: "presentationlist";
-	overflow: auto
+	overflow: auto;
 }
 
 #presentationfooter {
