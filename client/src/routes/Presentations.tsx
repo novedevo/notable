@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
 import { User, Presentation } from "../types";
 import dayjs from "dayjs";
+import { generateKey } from "crypto";
 
 const client = axios.create({
 	headers: {
@@ -27,6 +28,7 @@ export default function Presentations() {
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
+	const stringId = "" + user.id;
 
 	// Database Presentations
 	useEffect(() => {
@@ -57,6 +59,24 @@ export default function Presentations() {
 		} else {
 			alert("Not a valid room code");
 		}
+	};
+
+	const deletePresentation = (event: { currentTarget: { value: any; }; }) => {
+		const formData = new FormData();
+		formData.append("presentation_instance_id", event.currentTarget.value);
+		formData.append("user_id", stringId);
+		axios
+			.post("/api/deletepresentation", formData, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+					"Content-Type": "multipart/form-data",
+				},
+			})
+			.then((res) => {
+				console.log(res.data);
+				navigate("/presentations");
+			})
+			.catch((err) => alert("invalid presentation: " + err.message));
 	};
 
 	const dateFormat = (date: any) => {
@@ -107,14 +127,14 @@ export default function Presentations() {
 							dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date)) ? 1 : -1
 						)
 						.map((presentation) => (
-							<Card id="small-presentation-box">
+							<Card id="small-presentation-box" key={presentation.presentation_instance_id}>
 								<div id="presentation-title">{presentation.title}</div>
 								<div>Host ID: {presentation.presenter_id}</div>
 								<div>Starts at: {dateFormat(presentation.scheduled_date)}</div>
 								<div>
 									Join with code: {presentation.presentation_instance_id}
 								</div>
-								<Button id="deletebutton"></Button>
+								<Button id="deletebutton" value={presentation.presentation_instance_id} onClick={deletePresentation}></Button>
 							</Card>
 						))}
 				</Container>

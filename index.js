@@ -168,6 +168,24 @@ app.post(
 		}
 	}
 );
+app.post(
+	"/api/deletepresentation",
+	requiresLogin,
+	express.urlencoded({ extended: false }),
+	fileupload(),
+	async (req, res) => {
+	const { presentation_instance_id, user_id } = req.body;
+	const result = await pool.query(
+		"DELETE FROM presentations WHERE presentation_instance_id = $1 AND presenter_id = $2",
+		[parseInt(presentation_instance_id), parseInt(user_id)]
+	);
+	if (result.rows.length === 0) {
+		res.status(400).send("Presentation does not exist.");
+	} else {
+		res.send("Presentation has been deleted.");
+	}
+	}
+);
 app.get("/api/presentation/:id", async (req, res) => {
 	const { id } = req.params;
 	const result = await pool.query(
