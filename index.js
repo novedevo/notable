@@ -168,6 +168,20 @@ app.post(
 		}
 	}
 );
+app.post(
+	"/api/deletepresentation",
+	requiresLogin,
+	express.urlencoded({ extended: false }),
+	fileupload(),
+	async (req, res) => {
+		const { presentation_instance_id, user_id } = req.body;
+		await pool.query(
+			"DELETE FROM presentations WHERE presentation_instance_id = $1 AND presenter_id = $2",
+			[parseInt(presentation_instance_id), parseInt(user_id)]
+		);
+		res.send("Presentation has been deleted.");
+	}
+);
 app.get("/api/presentation/:id", async (req, res) => {
 	const { id } = req.params;
 	const result = await pool.query(

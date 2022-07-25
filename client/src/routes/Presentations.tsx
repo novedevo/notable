@@ -27,6 +27,7 @@ export default function Presentations() {
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
+	const stringId = "" + user.id;
 
 	// Database Presentations
 	useEffect(() => {
@@ -59,12 +60,38 @@ export default function Presentations() {
 		}
 	};
 
+	const deletePresentation = (event: {
+		currentTarget: {
+			name: any;
+			value: any;
+		};
+	}) => {
+		if (dayjs().isBefore(event.currentTarget.name)) {
+			const formData = new FormData();
+			formData.append("presentation_instance_id", event.currentTarget.value);
+			formData.append("user_id", stringId);
+			axios
+				.post("/api/deletepresentation", formData, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						"Content-Type": "multipart/form-data",
+					},
+				})
+				.then((res) => {
+					alert("Presentation Deleted!");
+					console.log(res.data);
+					navigate("/presentations");
+				})
+				.catch((err) => alert("invalid presentation: " + err.message));
+		} else {
+			alert("You cannot delete a presentation that has started");
+		}
+	};
+
 	const dateFormat = (date: any) => {
 		let d = dayjs(date);
 		return d.format("ddd MMM DD YYYY H:mm");
 	};
-
-	const dateSort = () => {};
 
 	return (
 		<div id="presentations">
@@ -109,13 +136,22 @@ export default function Presentations() {
 							dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date)) ? 1 : -1
 						)
 						.map((presentation) => (
-							<Card id="small-presentation-box">
+							<Card
+								id="small-presentation-box"
+								key={presentation.presentation_instance_id}
+							>
 								<div id="presentation-title">{presentation.title}</div>
 								<div>Host ID: {presentation.presenter_id}</div>
 								<div>Starts at: {dateFormat(presentation.scheduled_date)}</div>
 								<div>
 									Join with code: {presentation.presentation_instance_id}
 								</div>
+								<Button
+									id="deletebutton"
+									name={presentation.scheduled_date}
+									value={presentation.presentation_instance_id}
+									onClick={deletePresentation}
+								></Button>
 							</Card>
 						))}
 				</Container>
