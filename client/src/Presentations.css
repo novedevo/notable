@@ -58,7 +58,7 @@
 
 #presentationlist {
 	grid-area: "presentationlist";
-	overflow: auto
+	overflow: auto;
 }
 
 #presentationfooter {
@@ -93,6 +93,6 @@
 	background-size: cover;
 	border: none;
 	width: 70px;
-    height: 70px;
+	height: 70px;
 	float: right;
 }
