@@ -3,7 +3,6 @@ import LogoutButton from "../components/LogoutButton";
 
 export default function Dashboard() {
 	const user = JSON.parse(localStorage.getItem("user")!);
-	const user = "Hack1";
 
 	return (
 		<Container>
