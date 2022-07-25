@@ -168,6 +168,15 @@ app.post(
 		}
 	}
 );
+app.post("/api/updatepresentationend", requiresLogin, express.urlencoded({ extended: false }),
+fileupload(), async (req, res) => {
+	const { presentation_instance_id, user_id, presentation_end_date } = req.body;
+	await pool.query(
+		"UPDATE presentations SET presentation_end_date = $1 WHERE presentation_instance_id = $2 AND presenter_id = $3",
+		[presentation_end_date, parseInt(presentation_instance_id), parseInt(user_id)]
+	);
+	res.send("Presentation has been ended.");
+});
 app.post(
 	"/api/deletepresentation",
 	requiresLogin,
