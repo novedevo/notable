@@ -2,13 +2,13 @@ import { Button, Container } from "@mui/material";
 import LogoutButton from "../components/LogoutButton";
 
 export default function Dashboard() {
-	//const user = JSON.parse(localStorage.getItem("user")!);
+	const user = JSON.parse(localStorage.getItem("user")!);
 	const user = "Hack1";
 
 	return (
 		<Container>
-			<h1>Welcome, {user}!</h1>
-			{user && (
+			<h1>Welcome, {user.name}!</h1>
+			{user.isAdmin && (
 				<Button
 					href="/console"
 					variant="contained"
