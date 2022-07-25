@@ -6,7 +6,6 @@ import { io } from "socket.io-client";
 import DashboardButton from "../components/DashboardButton";
 import { User, Presentation } from "../types";
 import dayjs from "dayjs";
-import { generateKey } from "crypto";
 
 const client = axios.create({
 	headers: {

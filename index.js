@@ -175,7 +175,7 @@ app.post(
 	fileupload(),
 	async (req, res) => {
 		const { presentation_instance_id, user_id } = req.body;
-		const result = await pool.query(
+		await pool.query(
 			"DELETE FROM presentations WHERE presentation_instance_id = $1 AND presenter_id = $2",
 			[parseInt(presentation_instance_id), parseInt(user_id)]
 		);
