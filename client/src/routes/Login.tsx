@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Container, TextField } from "@mui/material";
 import { useState } from "react";
 import jwtDecode from "jwt-decode";
-<<<<<<< HEAD
-import "./LandingPages.css";
-=======
 import "./AppExtras.css";
->>>>>>> main
 
 export default function Login() {
 	const [username, setUsername] = useState("");

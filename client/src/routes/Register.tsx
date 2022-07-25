@@ -28,11 +28,7 @@ export default function Register() {
 		<Container>
 			<div id="background-image"></div>
 			<div id="background-gradient"></div>
-<<<<<<< HEAD
-			<div id="inputSpace">
-=======
 			<div id="middlePanel">
->>>>>>> main
 				<h5>
 					<br></br>
 				</h5>
