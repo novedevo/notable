@@ -87,3 +87,12 @@
 	background: #5783de;
 	padding: 15px;
 }
+
+#deletebutton {
+	background-image: url("delete.png");
+	background-size: cover;
+	border: none;
+	width: 70px;
+    height: 70px;
+	float: right;
+}

@@ -64,8 +64,6 @@ export default function Presentations() {
 		return d.format("ddd MMM DD YYYY H:mm");
 	};
 
-	const dateSort = () => {};
-
 	return (
 		<div id="presentations">
 			<div id="presentationheader">
@@ -116,6 +114,7 @@ export default function Presentations() {
 								<div>
 									Join with code: {presentation.presentation_instance_id}
 								</div>
+								<Button id="deletebutton"></Button>
 							</Card>
 						))}
 				</Container>
