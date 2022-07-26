@@ -1,6 +1,8 @@
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import axios from "axios";
+import dayjs from "dayjs";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { Presentation, User } from "../types";
 
@@ -32,11 +34,40 @@ function PresentationRoomTest() {
 		setUserInfo(data.map((user) => user.name));
 	});
 
+	const navigate = useNavigate();
+
+	const endPresentation = () => {
+		const formData = new FormData();
+		const currentURL = window.location.href;
+		formData.append("presentation_instance_id", currentURL.split("room/")[1]);
+		const id = JSON.parse(localStorage.getItem("user")!).id;
+		formData.append("user_id", id);
+		formData.append(
+			"presentation_end_date",
+			dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
+		);
+		axios
+			.post("/api/updatepresentationend", formData, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+					"Content-Type": "multipart/form-data",
+				},
+			})
+			.then((res) => {
+				alert("Presentation has been ended");
+				console.log(res.data);
+				navigate("/");
+			})
+			.catch((err) => alert("invalid presentation: " + err.message));
+	};
+
 	return (
 		<Container>
 			<h1>Welcome to Presentation Room {title}</h1>
 			<h2>The Presentation ID for this room is {presentationId}</h2>
-			<h3>This Presentation is scheduled to start on {date}</h3>
+			<Button variant="contained" onClick={endPresentation}>
+				End Presenation
+			</Button>
 			{userInfo.length ? (
 				<h3>The current users in this room are:</h3>
 			) : (

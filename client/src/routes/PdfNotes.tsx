@@ -49,33 +49,6 @@ export default function PdfNotes({
 		}
 	};
 
-	const navigate = useNavigate();
-
-	const endPresentation = () => {
-		const formData = new FormData();
-		const currentURL = window.location.href;
-		formData.append("presentation_instance_id", currentURL.split("room/")[1]);
-		const id = JSON.parse(localStorage.getItem("user")!).id;
-		formData.append("user_id", id);
-		formData.append(
-			"presentation_end_date",
-			dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
-		);
-		axios
-			.post("/api/updatepresentationend", formData, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-					"Content-Type": "multipart/form-data",
-				},
-			})
-			.then((res) => {
-				alert("Presentation has been ended");
-				console.log(res.data);
-				navigate("/");
-			})
-			.catch((err) => alert("invalid presentation: " + err.message));
-	};
-
 	return (
 		<Container>
 			<DashboardButton />
@@ -86,9 +59,6 @@ export default function PdfNotes({
 				Next
 			</Button>
 			<span id="pagenum">{pageNumber}</span>
-			<Button variant="contained" onClick={endPresentation}>
-				End Presenation
-			</Button>
 			<div id="container">
 				<Document
 					file={pdf}
