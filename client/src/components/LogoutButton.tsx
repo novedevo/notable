@@ -5,6 +5,9 @@ function LogoutButton() {
 		<Button
 			variant="contained"
 			color="error"
+			style={{
+				width: "240px",
+			}}
 			onClick={() => {
 				localStorage.clear();
 				console.log(localStorage.getItem("token"));
