@@ -6,7 +6,7 @@ function LogoutButton() {
 			variant="contained"
 			color="error"
 			style={{
-				width: "240px"
+				width: "240px",
 			}}
 			onClick={() => {
 				localStorage.clear();
