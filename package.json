@@ -5,8 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "(trap 'kill 0' INT; nodemon index.js & cd client && npm run start)",
-		"heroku-postbuild": "cd client && GENERATE_SOURCEMAP=false npm run build && rm -rf node_modules",
-		"production": "nodemon index.js",
+		"heroku-postbuild": "cd client && npm run build",
+		"production": "node index.js",
 		"lint": "eslint .",
 		"test": "cd client && npm test"
 	},
@@ -23,7 +23,6 @@
 		"socket.io": "^4.5.1"
 	},
 	"devDependencies": {
-		"@types/history": "^4.7.3",
 		"eslint": "^8.20.0",
 		"eslint-config-prettier": "^8.5.0",
 		"nodemon": "^2.0.19",
