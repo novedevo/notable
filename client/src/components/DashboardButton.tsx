@@ -8,7 +8,7 @@ function DashboardButton() {
 			variant="contained"
 			style={{
 				zIndex: 10,
-				position: "fixed"
+				position: "fixed",
 			}}
 			sx={{
 				":hover": {

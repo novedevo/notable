@@ -23,7 +23,7 @@ body {
 }
 
 #buttonPrimary {
-	background-color:#8400ff;
+	background-color: #8400ff;
 	width: 240px;
 }
 
@@ -40,7 +40,6 @@ body {
 	background-color: white;
 	border-radius: 1mm;
 }
-
 
 #background-image {
 	background-attachment: fixed;

@@ -26,9 +26,9 @@ const ViewNotes = () => {
 
 	return (
 		<div>
-			<Sidebar/>
+			<Sidebar />
 			<Container>
-			<DashboardButton/>
+				<DashboardButton />
 				<div id="background-image"></div>
 				<div>
 					<div id="pageHead">

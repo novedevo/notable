@@ -7,7 +7,7 @@ function LogoutButton() {
 			color="error"
 			style={{
 				width: "130px",
-				zIndex:999,
+				zIndex: 999,
 			}}
 			onClick={() => {
 				localStorage.clear();

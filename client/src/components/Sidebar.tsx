@@ -9,50 +9,50 @@ const user = JSON.parse(localStorage.getItem("user")!);
 
 function Sidebar() {
 	return (
-    <div
-      style={{
-      width: "140px",
-      height: "250px",
-      zIndex:10,
-      lineHeight: "50px",
-      top: "35%",
-      position:"fixed",
-      }}
-    >
-      <Button
-        href="/view"
-        variant="contained"
-        id="buttonPrimary"
-        style={{ 
-          width: "130px",
-          }}
-      >
-        Dashboard
-		  </Button>
-      <Button
-        href="/"
-        variant="contained"
-        id="buttonPrimary"
-        style={{ 
-          width: "130px",
-          }}
-      >
-			  Presentations
-		  </Button>
-      {user.name && (
-						<Button
-							href="/console"
-							variant="contained"
-              id="buttonSecondary"
-              style={{ 
-                width: "130px",
-                }}
-						>
-							Console
-						</Button>
-					)}
-      <LogoutButton/>
-    </div>
+		<div
+			style={{
+				width: "140px",
+				height: "250px",
+				zIndex: 10,
+				lineHeight: "50px",
+				top: "35%",
+				position: "fixed",
+			}}
+		>
+			<Button
+				href="/view"
+				variant="contained"
+				id="buttonPrimary"
+				style={{
+					width: "130px",
+				}}
+			>
+				Dashboard
+			</Button>
+			<Button
+				href="/"
+				variant="contained"
+				id="buttonPrimary"
+				style={{
+					width: "130px",
+				}}
+			>
+				Presentations
+			</Button>
+			{user.name && (
+				<Button
+					href="/console"
+					variant="contained"
+					id="buttonSecondary"
+					style={{
+						width: "130px",
+					}}
+				>
+					Console
+				</Button>
+			)}
+			<LogoutButton />
+		</div>
 	);
 }
 
