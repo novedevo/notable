@@ -8,6 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
 import DashboardButton from "../components/DashboardButton";
 import { PdfNote } from "../types";
+import { useNavigate } from "react-router-dom";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -48,26 +49,32 @@ export default function PdfNotes({
 		}
 	};
 
+	const navigate = useNavigate();
+
 	const endPresentation = () => {
 		const formData = new FormData();
 		const currentURL = window.location.href;
-			formData.append("presentation_instance_id", currentURL.split("room/")[1]);
-			const id = JSON.parse(localStorage.getItem("user")!).id;
-			formData.append("user_id", id);
-			formData.append("presentation_end_date", dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"));
-			axios
-				.post("/api/updatepresentationend", formData, {
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-						"Content-Type": "multipart/form-data",
-					},
-				})
-				.then((res) => {
-					alert("Presentation has been ended");
-					console.log(res.data);
-				})
-				.catch((err) => alert("invalid presentation: " + err.message));
-	}
+		formData.append("presentation_instance_id", currentURL.split("room/")[1]);
+		const id = JSON.parse(localStorage.getItem("user")!).id;
+		formData.append("user_id", id);
+		formData.append(
+			"presentation_end_date",
+			dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
+		);
+		axios
+			.post("/api/updatepresentationend", formData, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+					"Content-Type": "multipart/form-data",
+				},
+			})
+			.then((res) => {
+				alert("Presentation has been ended");
+				console.log(res.data);
+				navigate("/");
+			})
+			.catch((err) => alert("invalid presentation: " + err.message));
+	};
 
 	return (
 		<Container>

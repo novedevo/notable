@@ -166,7 +166,7 @@ export default function Presentations() {
 
 async function getPresentations(): Promise<Presentation[]> {
 	try {
-		const result = await client("/api/presentations");
+		const result = await client("/api/currentpresentations");
 		console.log(result.data);
 		return result.data;
 	} catch (err) {
