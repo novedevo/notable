@@ -164,9 +164,7 @@ export default function Presentations() {
 									id="editbutton"
 									value={presentation.presentation_instance_id}
 									onClick={editPresentation}
-								>
-									edit
-								</Button>
+								></Button>
 							</Card>
 						))}
 				</Container>

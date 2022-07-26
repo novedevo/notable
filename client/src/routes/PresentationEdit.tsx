@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Container, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
@@ -30,15 +30,24 @@ export default function PresentationEdit() {
 		}
 		getPresentationMetadata(parseInt(id)).then((presentation) => {
 			setPresentation(presentation);
+			setTitle(presentation.title);
+			setscheduled_date(dayjs(presentation.scheduled_date));
+			/*
+			if (presentation.pdf != null) {
+				setPdf(presentation.pdf);
+			}
+			*/
+			if (presentation.youtube_url != null) {
+				setyoutube_url(presentation.youtube_url);
+			}
 		});
 	}, [id]);
 
 	useEffect(() => {
-		console.log(presentation);
-	}, [presentation]);
+		console.log(title);
+	}, [title]);
 
-	const postPresentation = () => {
-		/*
+	const updatePresentation = () => {
 		const formData = new FormData();
         formData.append("presentation_instance_id", stringPresentationId);
 		formData.append("title", title);
@@ -50,7 +59,7 @@ export default function PresentationEdit() {
 		pdf && formData.append("pdf", pdf);
 		formData.append("presenter_id", stringId);
 		axios
-			.post("/api/presentation", formData, {
+			.post("/api/updatepresentation", formData, {
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem("token")}`,
 					"Content-Type": "multipart/form-data",
@@ -61,9 +70,16 @@ export default function PresentationEdit() {
 				navigate("/presentations");
 			})
 			.catch((err) => alert("invalid presentation: " + err.message));
-            */
+            
 	};
 
+	if (presentation === null) {
+		return (
+			<Container>
+				<h1>Loading...</h1>
+			</Container>
+		);
+	} else {	
 	return (
 		<div id="schedulepresentation">
 			<div id="presentationheader">
@@ -96,7 +112,7 @@ export default function PresentationEdit() {
 						variant="outlined"
 						id="title"
 						label="Title"
-						//value={presentation!.title}
+						defaultValue={presentation.title}
 						onChange={(e) => {
 							setTitle(e.target.value);
 						}}
@@ -110,7 +126,7 @@ export default function PresentationEdit() {
 						type="file"
 						id="uploadPDF"
 						accept=".pdf,application/pdf"
-						//value={`data:text/plain;base64,${presentation!.pdf}`}
+						//defaultValue={presentation!.pdf}
 						required
 						onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
 					/>
@@ -122,7 +138,7 @@ export default function PresentationEdit() {
 						variant="outlined"
 						id="video"
 						label="Video"
-						//value={presentation!.youtube_url}
+						defaultValue={presentation!.youtube_url}
 						onChange={(e) => {
 							setyoutube_url(e.target.value);
 						}}
@@ -137,8 +153,7 @@ export default function PresentationEdit() {
 					<TextField
 						label="Presentation Start Time"
 						type="datetime-local"
-						//value={presentation!.scheduled_date}
-						defaultValue={scheduled_date.format("YYYY-MM-DDTHH:mm")}
+						defaultValue={dayjs(presentation.scheduled_date).format("YYYY-MM-DDTHH:mm")}
 						onChange={(e) => {
 							setscheduled_date(dayjs(e.target.value));
 						}}
@@ -149,10 +164,10 @@ export default function PresentationEdit() {
 					<Button
 						href=""
 						variant="contained"
-						onClick={postPresentation}
+						onClick={updatePresentation}
 						id="presentationbutton"
 					>
-						Save and Generate Code
+						Save and Update Presentation
 					</Button>
 				</div>
 			</div>
@@ -163,6 +178,7 @@ export default function PresentationEdit() {
 			<div id="presentationfooter"> notable™</div>
 		</div>
 	);
+}
 }
 
 async function getPresentationMetadata(id: number): Promise<Presentation> {
