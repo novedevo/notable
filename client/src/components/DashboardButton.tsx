@@ -4,9 +4,12 @@ function DashboardButton() {
 	return (
 		<Button
 			href="/"
-			variant="contained"
 			color="info"
-			style={{ zIndex: 10 }}
+			variant="contained"
+			style={{
+				zIndex: 10,
+				position: "fixed",
+			}}
 			sx={{
 				":hover": {
 					color: "white",
