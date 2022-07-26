@@ -3,6 +3,7 @@ export type Presentation = {
 	title: string;
 	presenter_id: number;
 	scheduled_date: string;
+	presentation_end_date: string;
 	pdf?: string;
 	youtube_url?: string;
 	notes?: Note[];
