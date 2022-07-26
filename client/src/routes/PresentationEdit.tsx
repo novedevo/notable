@@ -49,7 +49,7 @@ export default function PresentationEdit() {
 
 	const updatePresentation = () => {
 		const formData = new FormData();
-        formData.append("presentation_instance_id", stringPresentationId);
+		formData.append("presentation_instance_id", stringPresentationId);
 		formData.append("title", title);
 		formData.append(
 			"scheduled_date",
@@ -70,7 +70,6 @@ export default function PresentationEdit() {
 				navigate("/presentations");
 			})
 			.catch((err) => alert("invalid presentation: " + err.message));
-            
 	};
 
 	if (presentation === null) {
@@ -79,106 +78,108 @@ export default function PresentationEdit() {
 				<h1>Loading...</h1>
 			</Container>
 		);
-	} else {	
-	return (
-		<div id="schedulepresentation">
-			<div id="presentationheader">
-				<DashboardButton />
-			</div>
-			<div id="presentationheader">
-				<h3>Schedule Presentation</h3>
-				<Button
-					href="/presentations"
-					variant="contained"
-					id="presentationbutton"
-					sx={{
-						":hover": {
-							color: "white",
-						},
-					}}
-				>
-					View Your Presentations
-				</Button>
-			</div>
-			<div id="presentationheader"></div>
-			<div id="presentationsidebar"></div>
-			<div id="presentationcreate">
-				<div id="presentationlabel">
-					{" "}
-					Enter a Presentation Title (required):
+	} else {
+		return (
+			<div id="schedulepresentation">
+				<div id="presentationheader">
+					<DashboardButton />
 				</div>
-				<div>
-					<TextField
-						variant="outlined"
-						id="title"
-						label="Title"
-						defaultValue={presentation.title}
-						onChange={(e) => {
-							setTitle(e.target.value);
-						}}
-						required
-					/>
-				</div>
-
-				<div id="presentationlabel"> Enter a PDF file:</div>
-				<div>
-					<input
-						type="file"
-						id="uploadPDF"
-						accept=".pdf,application/pdf"
-						//defaultValue={presentation!.pdf}
-						required
-						onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
-					/>
-				</div>
-
-				<div id="presentationlabel"> Enter a Video Link:</div>
-				<div>
-					<TextField
-						variant="outlined"
-						id="video"
-						label="Video"
-						defaultValue={presentation!.youtube_url}
-						onChange={(e) => {
-							setyoutube_url(e.target.value);
-						}}
-					/>
-				</div>
-
-				<div id="presentationlabel">
-					{" "}
-					Enter the Start Time of the Presentation (required):
-				</div>
-				<div>
-					<TextField
-						label="Presentation Start Time"
-						type="datetime-local"
-						defaultValue={dayjs(presentation.scheduled_date).format("YYYY-MM-DDTHH:mm")}
-						onChange={(e) => {
-							setscheduled_date(dayjs(e.target.value));
-						}}
-					/>
-				</div>
-
-				<div id="presentationlabel">
+				<div id="presentationheader">
+					<h3>Schedule Presentation</h3>
 					<Button
-						href=""
+						href="/presentations"
 						variant="contained"
-						onClick={updatePresentation}
 						id="presentationbutton"
+						sx={{
+							":hover": {
+								color: "white",
+							},
+						}}
 					>
-						Save and Update Presentation
+						View Your Presentations
 					</Button>
 				</div>
-			</div>
-			<div id="presentationsidebar"></div>
+				<div id="presentationheader"></div>
+				<div id="presentationsidebar"></div>
+				<div id="presentationcreate">
+					<div id="presentationlabel">
+						{" "}
+						Enter a Presentation Title (required):
+					</div>
+					<div>
+						<TextField
+							variant="outlined"
+							id="title"
+							label="Title"
+							defaultValue={presentation.title}
+							onChange={(e) => {
+								setTitle(e.target.value);
+							}}
+							required
+						/>
+					</div>
 
-			<div id="presentationfooter"></div>
-			<div id="presentationfooter"></div>
-			<div id="presentationfooter"> notable™</div>
-		</div>
-	);
-}
+					<div id="presentationlabel"> Enter a PDF file:</div>
+					<div>
+						<input
+							type="file"
+							id="uploadPDF"
+							accept=".pdf,application/pdf"
+							//defaultValue={presentation!.pdf}
+							required
+							onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
+						/>
+					</div>
+
+					<div id="presentationlabel"> Enter a Video Link:</div>
+					<div>
+						<TextField
+							variant="outlined"
+							id="video"
+							label="Video"
+							defaultValue={presentation!.youtube_url}
+							onChange={(e) => {
+								setyoutube_url(e.target.value);
+							}}
+						/>
+					</div>
+
+					<div id="presentationlabel">
+						{" "}
+						Enter the Start Time of the Presentation (required):
+					</div>
+					<div>
+						<TextField
+							label="Presentation Start Time"
+							type="datetime-local"
+							defaultValue={dayjs(presentation.scheduled_date).format(
+								"YYYY-MM-DDTHH:mm"
+							)}
+							onChange={(e) => {
+								setscheduled_date(dayjs(e.target.value));
+							}}
+						/>
+					</div>
+
+					<div id="presentationlabel">
+						<Button
+							href=""
+							variant="contained"
+							onClick={updatePresentation}
+							id="presentationbutton"
+						>
+							Save and Update Presentation
+						</Button>
+					</div>
+				</div>
+				<div id="presentationsidebar"></div>
+
+				<div id="presentationfooter"></div>
+				<div id="presentationfooter"></div>
+				<div id="presentationfooter"> notable™</div>
+			</div>
+		);
+	}
 }
 
 async function getPresentationMetadata(id: number): Promise<Presentation> {

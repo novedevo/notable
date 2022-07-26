@@ -181,8 +181,13 @@ app.post(
 	express.urlencoded({ extended: false }),
 	fileupload(),
 	async (req, res) => {
-		const { presentation_instance_id, title, scheduled_date, youtube_url, presenter_id } =
-			req.body;
+		const {
+			presentation_instance_id,
+			title,
+			scheduled_date,
+			youtube_url,
+			presenter_id,
+		} = req.body;
 		const pdf = req.files?.pdf?.data?.toString?.("base64");
 		if (!(pdf || youtube_url)) {
 			res.status(400).send("Either pdf or youtube link must be specified");
