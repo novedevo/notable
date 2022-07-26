@@ -15,14 +15,16 @@ CREATE TABLE presentations (
     presentation_instance_id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     scheduled_date TIMESTAMP(0),
+    presentation_end_date TIMESTAMP(0),
     youtube_url TEXT,
     pdf TEXT,
     presenter_id integer REFERENCES users (id) NOT NULL
 );
-INSERT INTO presentations (title, scheduled_date, youtube_url, presenter_id)
+INSERT INTO presentations (title, scheduled_date, presentation_end_date, youtube_url, presenter_id)
 VALUES (
         'Example Presentation',
         '2022-07-19 10:00:00',
+        null,
         'https://youtube.com/watch?v=LEENEFaVUzU',
         1
     );
