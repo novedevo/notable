@@ -93,6 +93,14 @@ export default function Presentations() {
 		return d.format("ddd MMM DD YYYY H:mm");
 	};
 
+	const editPresentation = (event: {
+		currentTarget: {
+			value: any;
+		};
+	}) => {
+		navigate("/edit/" + event.currentTarget.value);
+	};
+
 	return (
 		<div id="presentations">
 			<div id="presentationheader">
@@ -152,6 +160,13 @@ export default function Presentations() {
 									value={presentation.presentation_instance_id}
 									onClick={deletePresentation}
 								></Button>
+								<Button
+									id="editbutton"
+									value={presentation.presentation_instance_id}
+									onClick={editPresentation}
+								>
+									edit
+								</Button>
 							</Card>
 						))}
 				</Container>
