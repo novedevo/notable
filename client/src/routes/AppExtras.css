@@ -41,6 +41,7 @@ body {
 	border-radius: 1mm;
 }
 
+
 #background-image {
 	background-attachment: fixed;
 	background-image: url("background.jpg");
@@ -66,6 +67,24 @@ body {
 	line-height: 60px;
 	width: 400px;
 	height: 450px;
+	position: fixed;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 400;
+	box-shadow: 5px 10px #6638ac;
+}
+
+#middlePanelSmall {
+	color: white;
+	background-color: black;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border-radius: 1cm;
+	line-height: 60px;
+	width: 400px;
+	height: 200px;
 	position: fixed;
 	top: 45%;
 	left: 50%;
