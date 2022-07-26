@@ -9,6 +9,7 @@ import ViewNotes from "./routes/ViewNotes";
 import SchedulePresentation from "./routes/SchedulePresentation";
 import Presentations from "./routes/Presentations";
 import Room from "./routes/Room";
+import Edit from "./routes/PresentationEdit";
 
 export default function App() {
 	return (
@@ -25,6 +26,7 @@ export default function App() {
 					element={<SchedulePresentation />}
 				/>
 				<Route path="/room/:id" element={<Room />} />
+				<Route path="/edit/:id" element={<Edit />} />
 			</Routes>
 		</BrowserRouter>
 	);

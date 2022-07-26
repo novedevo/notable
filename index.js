@@ -176,6 +176,42 @@ app.post(
 	}
 );
 app.post(
+	"/api/updatepresentation",
+	requiresLogin,
+	express.urlencoded({ extended: false }),
+	fileupload(),
+	async (req, res) => {
+		const {
+			presentation_instance_id,
+			title,
+			scheduled_date,
+			youtube_url,
+			presenter_id,
+		} = req.body;
+		const pdf = req.files?.pdf?.data?.toString?.("base64");
+		if (!(pdf || youtube_url)) {
+			res.status(400).send("Either pdf or youtube link must be specified");
+			return;
+		}
+		if (!title || !scheduled_date || !presenter_id) {
+			res.status(400).send("All fields must be specified");
+			return;
+		}
+		await pool.query(
+			"UPDATE presentations SET title = $1, scheduled_date = $2, youtube_url = $3, pdf = $4 WHERE presentation_instance_id = $5 AND presenter_id = $6",
+			[
+				title,
+				scheduled_date,
+				youtube_url,
+				pdf,
+				parseInt(presentation_instance_id),
+				parseInt(presenter_id),
+			]
+		);
+		res.send("Presentation has been updated.");
+	}
+);
+app.post(
 	"/api/updatepresentationend",
 	requiresLogin,
 	express.urlencoded({ extended: false }),
