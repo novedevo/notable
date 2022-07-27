@@ -35,7 +35,7 @@ const ViewNotes = () => {
 	};
 
 	return (
-		<div>
+		<div data-testid="ViewNotes-component">
 			<Sidebar />
 			<Container>
 				<div id="background-image"></div>
