@@ -6,6 +6,12 @@ import DashboardButton from "../components/DashboardButton";
 import { VideoNote } from "../types";
 import axios from "axios";
 
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
+
 export default function VideoNotes({
 	url,
 	inputNotes,
@@ -50,21 +56,11 @@ export default function VideoNotes({
 								(value) => {
 									const time = player.getCurrentTime();
 									setNotes([...notes, { note: value, time_stamp: time }]);
-									axios.post(
-										"/api/addNote",
-										{
-											note: value,
-											timestamp: time,
-											presentationId,
-										},
-										{
-											headers: {
-												Authorization: `Bearer ${localStorage.getItem(
-													"token"
-												)}`,
-											},
-										}
-									);
+									client.post("/api/addNote", {
+										note: value,
+										timestamp: time,
+										presentationId,
+									});
 								}
 								//todo: add socket communication to update server notes
 							}

@@ -27,7 +27,6 @@ export default function Presentations() {
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
-	const stringId = "" + user.id;
 
 	// Database Presentations
 	useEffect(() => {
@@ -67,16 +66,8 @@ export default function Presentations() {
 		};
 	}) => {
 		if (dayjs().isBefore(event.currentTarget.name)) {
-			const formData = new FormData();
-			formData.append("presentation_instance_id", event.currentTarget.value);
-			formData.append("user_id", stringId);
-			axios
-				.post("/api/deletepresentation", formData, {
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-						"Content-Type": "multipart/form-data",
-					},
-				})
+			client
+				.delete(`/api/presentation/${event.currentTarget.value}`)
 				.then((res) => {
 					alert("Presentation Deleted!");
 					console.log(res.data);
@@ -208,7 +199,7 @@ export default function Presentations() {
 
 async function getPresentations(): Promise<Presentation[]> {
 	try {
-		const result = await client("/api/currentpresentations");
+		const result = await client("/api/currentPresentations");
 		console.log(result.data);
 		return result.data;
 	} catch (err) {

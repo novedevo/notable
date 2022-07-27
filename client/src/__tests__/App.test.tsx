@@ -3,6 +3,6 @@ import App from "../App";
 
 test("renders a login prompt", () => {
 	render(<App />);
-	const linkElement = screen.getByText("Please log in");
+	const linkElement = screen.getByText("Notable");
 	expect(linkElement).toBeInTheDocument();
 });

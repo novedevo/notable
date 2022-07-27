@@ -6,7 +6,12 @@ import { Presentation, VideoNote, PdfNote, User } from "../types";
 import VideoNotes from "./VideoNotes";
 import PdfNotes from "./PdfNotes";
 import PresenterView from "./PresenterView";
-import { userInfo } from "os";
+
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
 
 export default function Room() {
 	const [presentation, setPresentation] = useState<Presentation | null>(null);
@@ -68,10 +73,6 @@ export default function Room() {
 }
 
 async function getPresentationMetadata(id: number): Promise<Presentation> {
-	const response = await axios.get(`/api/presentation/${id}`, {
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem("token")}`,
-		},
-	});
+	const response = await client.get(`/api/presentation/${id}`);
 	return response.data;
 }

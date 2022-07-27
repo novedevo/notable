@@ -4,8 +4,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import DashboardButton from "../components/DashboardButton";
 
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
+
 export default function Console() {
-	const username = JSON.parse(localStorage.getItem("user")!).username;
+	const id = JSON.parse(localStorage.getItem("user")!).id;
 	const columns: GridColDef[] = [
 		{ field: "id", headerName: "ID", width: 100 },
 		{ field: "name", headerName: "Name", width: 100, editable: true },
@@ -41,12 +47,8 @@ export default function Console() {
 							alert("You cannot delete an admin without first demoting them");
 							return;
 						}
-						axios
-							.delete(`/api/user/${id}`, {
-								headers: {
-									Authorization: `Bearer ${localStorage.getItem("token")}`,
-								},
-							})
+						client
+							.delete(`/api/user/${id}`)
 							.then(() => setRows(rows.filter((row) => row.id !== id)))
 							.catch((err) => console.error(err));
 					}
@@ -67,18 +69,13 @@ export default function Console() {
 						disableSelectionOnClick
 						experimentalFeatures={{ newEditingApi: true }}
 						processRowUpdate={async (newRow, oldRow) => {
-							if (newRow.username === username && !newRow.admin) {
+							if (newRow.id === id && !newRow.admin) {
 								alert("You cannot remove your own admin status");
 								return oldRow;
 							}
-							await axios.put(
+							await client.put(
 								`/api/update_user?username=${newRow.username}`,
-								newRow,
-								{
-									headers: {
-										Authorization: `Bearer ${localStorage.getItem("token")}`,
-									},
-								}
+								newRow
 							);
 							return newRow;
 						}}
@@ -96,11 +93,7 @@ export default function Console() {
 
 async function getList() {
 	try {
-		const result = await axios("/api/users", {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
-			},
-		});
+		const result = await client("/api/users");
 		return result.data.users;
 	} catch (err) {
 		console.log(err);

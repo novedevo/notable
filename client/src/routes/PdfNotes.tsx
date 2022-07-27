@@ -8,11 +8,16 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
 import DashboardButton from "../components/DashboardButton";
 import { PdfNote } from "../types";
-import { useNavigate } from "react-router-dom";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
+
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
 
 export default function PdfNotes({
 	pdf,
@@ -92,21 +97,13 @@ export default function PdfNotes({
 									...notes,
 									{ note, page_number: pageNumber, time_stamp: diff },
 								]);
-								axios.post(
-									"/api/addNote",
-									{
-										note: note,
-										timestamp: diff,
-										pageNumber: pageNumber,
-										notetakerId: id,
-										presentationId: presentationId,
-									},
-									{
-										headers: {
-											Authorization: `Bearer ${localStorage.getItem("token")}`,
-										},
-									}
-								);
+								client.post("/api/addNote", {
+									note: note,
+									timestamp: diff,
+									pageNumber: pageNumber,
+									notetakerId: id,
+									presentationId: presentationId,
+								});
 								//todo: add socket communication to update server notes
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");
