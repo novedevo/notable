@@ -25,7 +25,7 @@ test("renders create account prompt", () => {
 			<Register />
 		</Router>
 	);
-	const header = screen.getByText("Create a new account");
+	const header = screen.getByText("Create a New Account");
 	expect(header).toBeInTheDocument();
 });
 test("renders without error", () => {
