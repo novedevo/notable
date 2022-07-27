@@ -67,9 +67,7 @@ export default function Presentations() {
 	}) => {
 		if (dayjs().isBefore(event.currentTarget.name)) {
 			client
-				.post("/api/deletepresentation", {
-					presentation_instance_id: event.currentTarget.value,
-				})
+				.delete(`/api/presentation/${event.currentTarget.value}`)
 				.then((res) => {
 					alert("Presentation Deleted!");
 					console.log(res.data);
@@ -198,7 +196,7 @@ export default function Presentations() {
 
 async function getPresentations(): Promise<Presentation[]> {
 	try {
-		const result = await client("/api/currentpresentations");
+		const result = await client("/api/currentPresentations");
 		console.log(result.data);
 		return result.data;
 	} catch (err) {

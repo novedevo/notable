@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
 
+export function sql(strings) {
+	return strings[0];
+}
 export function generateAccessToken(id, isAdmin) {
 	const payload = {
 		id,

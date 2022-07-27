@@ -7,6 +7,7 @@ import {
 	requiresLogin,
 	generateAccessToken,
 	addAdminRoutes,
+	sql,
 } from "./helpers.js";
 import fileupload from "express-fileupload";
 
@@ -105,7 +106,7 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 	const { note, timestamp, pageNumber, presentationId } = req.body;
 	const id = req.jwt.id;
 	const result = await pool.query(
-		"INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)",
+		sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)`,
 		[note, timestamp, pageNumber, id, parseInt(presentationId)]
 	);
 	if (result.rowCount) {
@@ -116,38 +117,24 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 });
 
 app.get("/api/presentations", requiresLogin, async (req, res) => {
-	const result = await pool.query("SELECT * FROM presentations");
+	const result = await pool.query(sql`SELECT * FROM presentations`);
 	res.json(result.rows);
 });
 
-app.get("/api/currentpresentations", requiresLogin, async (req, res) => {
+app.get("/api/currentPresentations", requiresLogin, async (req, res) => {
 	const result = await pool.query(
-		"SELECT * FROM presentations WHERE presentation_end_date IS NULL"
+		sql`SELECT * FROM presentations WHERE presentation_end_date IS NULL`
 	);
 	res.json(result.rows);
 });
-/*
-app.post("/api/notepresentations", requiresLogin, async (req, res) => {
-	const { notetaker_id } = req.body;
-	console.log(notetaker_id);
-	const result = await pool.query(
-		//"SELECT * FROM presentations WHERE presentation_instance_id IN (SELECT presentation_id FROM notes WHERE notetaker_id = $1)",
-		"SELECT presentation_id FROM notes WHERE notetaker_id = $1",
-		[parseInt(notetaker_id)]
-	);
-
-	console.log(result.rows);
-	res.json(result.rows);
-});
-*/
 
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
 	const result = await pool.query(
-		"INSERT INTO users (username, password, name) VALUES ($1, $2, $3) RETURNING *",
+		sql`INSERT INTO users (username, password, name) VALUES ($1, $2, $3)`,
 		[username, password, name]
 	);
-	if (result.rows.length === 0) {
+	if (result.rowCount === 0) {
 		res.status(400).send("Username already exists");
 	} else {
 		const token = generateAccessToken(result.rows[0].id, result.rows[0].admin);
@@ -173,7 +160,7 @@ app.post(
 		}
 		try {
 			const result = await pool.query(
-				"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
+				sql`INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)`,
 				[title, scheduled_date, youtube_url, pdf, req.jwt.id]
 			);
 
@@ -188,8 +175,8 @@ app.post(
 		}
 	}
 );
-app.post(
-	"/api/updatepresentation",
+app.put(
+	"/api/presentation",
 	requiresLogin,
 	express.urlencoded({ extended: false }),
 	fileupload(),
@@ -206,53 +193,52 @@ app.post(
 			return;
 		}
 		await pool.query(
-			"UPDATE presentations SET title = $1, scheduled_date = $2, youtube_url = $3, pdf = $4 WHERE presentation_instance_id = $5 AND presenter_id = $6",
+			sql`UPDATE presentations SET title = $1, scheduled_date = $2, youtube_url = $3, pdf = $4 WHERE presentation_instance_id = $5`,
 			[
 				title,
 				scheduled_date,
 				youtube_url,
 				pdf,
 				parseInt(presentation_instance_id),
-				req.jwt.id,
 			]
 		);
 		res.send("Presentation has been updated.");
 	}
 );
-app.post("/api/updatepresentationend", requiresLogin, async (req, res) => {
-	const { presentation_instance_id, presentation_end_date } = req.body;
+app.post("/api/endPresentation/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
 	await pool.query(
-		"UPDATE presentations SET presentation_end_date = $1 WHERE presentation_instance_id = $2 AND presenter_id = $3",
-		[presentation_end_date, parseInt(presentation_instance_id), req.jwt.id]
+		sql`UPDATE presentations SET presentation_end_date = $1 WHERE presentation_instance_id = $2`,
+		[new Date(), parseInt(id)]
 	);
 	res.send("Presentation has been ended.");
 });
-app.post("/api/deletepresentationnotes", requiresLogin, async (req, res) => {
-	const { presentation_id } = req.body;
-	console.log(presentation_id);
+app.delete("/api/presentationNotes/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	console.log(id);
 	console.log(req.jwt.id);
 	await pool.query(
-		"DELETE FROM notes WHERE presentation_id = $1 AND notetaker_id = $2",
-		[parseInt(presentation_id), parseInt(req.jwt.id)]
+		sql`DELETE FROM notes WHERE presentation_id = $1 AND notetaker_id = $2`,
+		[parseInt(id), req.jwt.id]
 	);
 	res.send("Presentation Notes has been deleted.");
 });
-app.post("/api/deletepresentation", requiresLogin, async (req, res) => {
-	const { presentation_instance_id } = req.body;
+app.delete("/api/presentation/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
 	await pool.query(
-		"DELETE FROM presentations WHERE presentation_instance_id = $1",
-		[parseInt(presentation_instance_id)]
+		sql`DELETE FROM presentations WHERE presentation_instance_id = $1`,
+		[parseInt(id)]
 	);
 	res.send("Presentation has been deleted.");
 });
 app.get("/api/presentation/:id", async (req, res) => {
 	const { id } = req.params;
 	const result = await pool.query(
-		"SELECT * FROM presentations WHERE presentation_instance_id = $1",
+		sql`SELECT * FROM presentations WHERE presentation_instance_id = $1`,
 		[id]
 	);
 	const notes = await pool.query(
-		"SELECT * FROM notes WHERE presentation_id = $1 ORDER BY time_stamp ASC",
+		sql`SELECT * FROM notes WHERE presentation_id = $1 ORDER BY time_stamp ASC`,
 		[id]
 	);
 	if (result.rows.length === 0) {
@@ -260,11 +246,10 @@ app.get("/api/presentation/:id", async (req, res) => {
 	}
 	res.send({ ...result.rows[0], notes: notes.rows });
 });
-app.get("/api/notepresentations/:id", async (req, res) => {
-	const { id } = req.params;
+app.get("/api/notePresentations/", async (req, res) => {
 	const result = await pool.query(
-		"SELECT * FROM presentations WHERE presentation_instance_id IN (SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)",
-		[id]
+		sql`SELECT * FROM presentations WHERE presentation_instance_id IN (SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)`,
+		[req.jwt.id]
 	);
 	res.send(result.rows);
 });

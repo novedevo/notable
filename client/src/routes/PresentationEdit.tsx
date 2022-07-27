@@ -62,7 +62,7 @@ export default function PresentationEdit() {
 		formData.append("youtube_url", youtube_url);
 		pdf && formData.append("pdf", pdf);
 		client
-			.post("/api/updatepresentation", formData)
+			.put("/api/presentation", formData)
 			.then((res) => {
 				console.log(res.data);
 				navigate("/presentations");

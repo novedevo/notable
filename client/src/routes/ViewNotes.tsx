@@ -27,9 +27,7 @@ const ViewNotes = () => {
 	}) => {
 		console.log(event.currentTarget.value);
 		client
-			.post("/api/deletepresentationnotes", {
-				presentation_id: event.currentTarget.value,
-			})
+			.delete(`/api/presentationNotes/${event.currentTarget.value}`)
 			.then((res) => {
 				alert("Presentation Note Deleted!");
 				console.log(res.data);
@@ -83,7 +81,7 @@ const ViewNotes = () => {
 };
 
 async function getPresentationWithNotes(): Promise<Presentation[]> {
-	const response = await client.get("/api/notepresentations/");
+	const response = await client.get("/api/notePresentations/");
 	return response.data;
 }
 export default ViewNotes;

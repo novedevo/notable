@@ -42,10 +42,7 @@ function PresentationRoomTest() {
 
 	const endPresentation = () => {
 		client
-			.post("/api/updatepresentationend", {
-				presentation_instance_id: presentationId,
-				presentation_end_date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-			})
+			.post(`/api/endPresentation/${presentationId}`)
 			.then((res) => {
 				alert("Presentation has been ended");
 				console.log(res.data);
