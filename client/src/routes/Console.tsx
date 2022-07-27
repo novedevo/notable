@@ -40,7 +40,7 @@ export default function Console() {
 
 	return (
 		<>
-			<Sidebar/>
+			<Sidebar />
 			<Button
 				onClick={async () => {
 					for (const id of selectionModel) {

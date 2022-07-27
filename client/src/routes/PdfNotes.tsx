@@ -56,7 +56,7 @@ export default function PdfNotes({
 
 	return (
 		<div>
-			<Sidebar/>
+			<Sidebar />
 			<Container>
 				<Button variant="contained" onClick={dec}>
 					Prev

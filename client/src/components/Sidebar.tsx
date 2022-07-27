@@ -16,13 +16,13 @@ function Sidebar() {
 				zIndex: 10,
 				lineHeight: "50px",
 				position: "fixed",
-				backgroundColor:"#1e2124",
+				backgroundColor: "#1e2124",
 			}}
 		>
 			<div
 				style={{
 					marginLeft: "22px",
-					marginTop:"22px",
+					marginTop: "22px",
 				}}
 			>
 				<h1>notable</h1>

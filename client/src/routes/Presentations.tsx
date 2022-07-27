@@ -114,7 +114,7 @@ export default function Presentations() {
 
 	return (
 		<div>
-			<Sidebar/>
+			<Sidebar />
 			<div id="presentations">
 				<div id="presentationheader">
 					<h3>Your name for joining presentations is {user.name}</h3>
@@ -140,9 +140,15 @@ export default function Presentations() {
 						variant="outlined"
 						id="PresentationID"
 						label="Presentation ID"
-						onChange={(event) => setPresentationID(parseInt(event.target.value))}
+						onChange={(event) =>
+							setPresentationID(parseInt(event.target.value))
+						}
 					/>
-					<Button variant="contained" onClick={joinRoom} id="presentationbutton">
+					<Button
+						variant="contained"
+						onClick={joinRoom}
+						id="presentationbutton"
+					>
 						Join Presentation
 					</Button>
 				</div>
@@ -150,7 +156,9 @@ export default function Presentations() {
 					<Container id="big-presentation-box">
 						{userPresentations
 							.sort((a, b) =>
-								dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date)) ? 1 : -1
+								dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date))
+									? 1
+									: -1
 							)
 							.map((presentation) => (
 								<Card
@@ -159,7 +167,9 @@ export default function Presentations() {
 								>
 									<div id="presentation-title">{presentation.title}</div>
 									<div>Host ID: {presentation.presenter_id}</div>
-									<div>Starts at: {dateFormat(presentation.scheduled_date)}</div>
+									<div>
+										Starts at: {dateFormat(presentation.scheduled_date)}
+									</div>
 									<div>
 										Join with code: {presentation.presentation_instance_id}
 									</div>

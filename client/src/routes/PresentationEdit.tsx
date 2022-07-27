@@ -73,7 +73,7 @@ export default function PresentationEdit() {
 	if (presentation === null) {
 		return (
 			<div>
-				<Sidebar/>
+				<Sidebar />
 				<Container>
 					<h1>Whoops! There's no presentation here!</h1>
 				</Container>

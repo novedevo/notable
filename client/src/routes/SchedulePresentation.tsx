@@ -43,10 +43,9 @@ export default function SchedulePresentation() {
 
 	return (
 		<div>
-			<Sidebar/>
+			<Sidebar />
 			<div id="schedulepresentation">
-				<div id="presentationheader">
-				</div>
+				<div id="presentationheader"></div>
 				<div id="presentationheader">
 					<h3>Schedule Presentation</h3>
 					<Button
@@ -64,7 +63,9 @@ export default function SchedulePresentation() {
 				</div>
 				<div id="presentationheader"></div>
 				<div id="presentationcreate">
-					<div id="presentationlabel">Enter a Presentation Title (required):</div>
+					<div id="presentationlabel">
+						Enter a Presentation Title (required):
+					</div>
 					<div>
 						<TextField
 							style={{
