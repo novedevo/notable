@@ -77,6 +77,9 @@ export default function SchedulePresentation() {
 				</div>
 				<div>
 					<TextField
+						style={{
+							backgroundColor: "white",
+						}}
 						variant="outlined"
 						id="title"
 						label="Title"
@@ -101,6 +104,9 @@ export default function SchedulePresentation() {
 				<div id="presentationlabel"> Enter a Video Link:</div>
 				<div>
 					<TextField
+						style={{
+							backgroundColor: "white",
+						}}
 						variant="outlined"
 						id="video"
 						label="Video"
@@ -116,6 +122,9 @@ export default function SchedulePresentation() {
 				</div>
 				<div>
 					<TextField
+						style={{
+							backgroundColor: "white",
+						}}
 						label="Presentation Start Time"
 						type="datetime-local"
 						defaultValue={scheduled_date.format("YYYY-MM-DDTHH:mm")}
