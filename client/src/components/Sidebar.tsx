@@ -18,6 +18,7 @@ function Sidebar() {
 				position: "fixed",
 				backgroundColor: "#1e2124",
 			}}
+			data-testid="sidebar"
 		>
 			<div
 				style={{
