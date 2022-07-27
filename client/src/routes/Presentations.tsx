@@ -27,7 +27,7 @@ export default function Presentations() {
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
-	const stringId = "" + user.id;
+	const stringId = user.id.toString();
 
 	// Database Presentations
 	useEffect(() => {

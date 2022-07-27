@@ -9,7 +9,7 @@ import Sidebar from "../components/Sidebar";
 const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
 	const user: User = JSON.parse(localStorage.getItem("user")!);
-	const stringId = "" + user.id;
+	const stringId = user.id.toString();
 	useEffect(() => {
 		getPresentationWithNotes(parseInt(stringId)).then((notepresentations) => {
 			setPresentations(notepresentations);

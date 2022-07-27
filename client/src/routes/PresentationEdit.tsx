@@ -19,9 +19,9 @@ export default function PresentationEdit() {
 	const [pdf, setPdf] = useState<File | null>(null);
 	const user: User = JSON.parse(localStorage.getItem("user")!);
 	const [presentation, setPresentation] = useState<Presentation | null>(null);
-	const stringId = "" + user.id;
+	const stringId = user.id.toString();
 	let { id } = useParams();
-	const stringPresentationId = "" + id;
+	const stringPresentationId = id?.toString() ?? "";
 
 	useEffect(() => {
 		if (!id) {
