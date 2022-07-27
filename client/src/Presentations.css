@@ -92,10 +92,10 @@
 	background-image: url("delete.png");
 	background-size: cover;
 	border: none;
-	width: 70px;
-	height: 70px;
+	width: 50px;
+	height: 50px;
 	float: right;
-	transform: translate(0%, -135%);
+	transform: translate(0%, -150%);
 }
 
 #editbutton {
