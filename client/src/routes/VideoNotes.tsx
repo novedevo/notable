@@ -32,7 +32,8 @@ export default function VideoNotes({
 			<Container>
 				<div id="container">
 					<div id="adjustableSize">
-						<YouTube id="YoutubeVideo"
+						<YouTube
+							id="YoutubeVideo"
 							videoId={videoId}
 							opts={{
 								height: 800,
@@ -46,28 +47,28 @@ export default function VideoNotes({
 							onReady={(event) => setPlayer(event.target)}
 						/>
 					</div>
-						<div className="right-side">
-							<Typography>Notes</Typography>
-							<Container id="notes-display">
-								{notes.map((note, i) => {
-									return generateNote(note, player, i);
-								})}
-							</Container>
-							<InputNotes
-								post={
-									(value) => {
-										const time = player.getCurrentTime();
-										setNotes([...notes, { note: value, time_stamp: time }]);
-										client.post("/api/addNote", {
-											note: value,
-											timestamp: time,
-											presentationId,
-										});
-									}
-									//todo: add socket communication to update server notes
+					<div className="right-side">
+						<Typography>Notes</Typography>
+						<Container id="notes-display">
+							{notes.map((note, i) => {
+								return generateNote(note, player, i);
+							})}
+						</Container>
+						<InputNotes
+							post={
+								(value) => {
+									const time = player.getCurrentTime();
+									setNotes([...notes, { note: value, time_stamp: time }]);
+									client.post("/api/addNote", {
+										note: value,
+										timestamp: time,
+										presentationId,
+									});
 								}
-							/>
-						</div>
+								//todo: add socket communication to update server notes
+							}
+						/>
+					</div>
 				</div>
 			</Container>
 		</div>
