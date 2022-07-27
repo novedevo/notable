@@ -108,6 +108,9 @@ export default function PresentationEdit() {
 					</div>
 					<div>
 						<TextField
+							style={{
+								backgroundColor: "white",
+							}}
 							variant="outlined"
 							id="title"
 							label="Title"
@@ -134,6 +137,9 @@ export default function PresentationEdit() {
 					<div id="presentationlabel"> Enter a Video Link:</div>
 					<div>
 						<TextField
+							style={{
+								backgroundColor: "white",
+							}}
 							variant="outlined"
 							id="video"
 							label="Video"
@@ -150,6 +156,9 @@ export default function PresentationEdit() {
 					</div>
 					<div>
 						<TextField
+							style={{
+								backgroundColor: "white",
+							}}
 							label="Presentation Start Time"
 							type="datetime-local"
 							defaultValue={dayjs(presentation.scheduled_date).format(

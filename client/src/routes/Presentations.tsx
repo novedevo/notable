@@ -146,6 +146,9 @@ export default function Presentations() {
 			<div id="presentationjoin">
 				<h3>Join a Presentation </h3>
 				<TextField
+					style={{
+						backgroundColor: "white",
+					}}
 					variant="outlined"
 					id="PresentationID"
 					label="Presentation ID"
