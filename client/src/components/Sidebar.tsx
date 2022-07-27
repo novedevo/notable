@@ -49,7 +49,7 @@ function Sidebar() {
 			>
 				Presentations
 			</Button>
-			{"user.isAdmin" && (
+			{user.isAdmin && (
 				<Button
 					href="/console"
 					variant="contained"
