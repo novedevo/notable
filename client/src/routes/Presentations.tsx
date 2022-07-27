@@ -3,9 +3,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
-import DashboardButton from "../components/DashboardButton";
 import { User, Presentation } from "../types";
 import dayjs from "dayjs";
+import Sidebar from "../components/Sidebar";
 
 const client = axios.create({
 	headers: {
@@ -113,86 +113,88 @@ export default function Presentations() {
 	};
 
 	return (
-		<div id="presentations">
-			<div id="presentationheader">
-				<DashboardButton />
+		<div>
+			<Sidebar />
+			<div id="presentations">
+				<div id="presentationheader">
+					<h3>Your name for joining presentations is {user.name}</h3>
+					<Button
+						href="/schedulepresentation"
+						variant="contained"
+						id="presentationbutton"
+						sx={{
+							":hover": {
+								color: "white",
+							},
+						}}
+					>
+						Schedule Presentation
+					</Button>
+				</div>
+				<div id="presentationjoin">
+					<h3>Join a Presentation </h3>
+					<TextField
+						style={{
+							backgroundColor: "white",
+						}}
+						variant="outlined"
+						id="PresentationID"
+						label="Presentation ID"
+						onChange={(event) =>
+							setPresentationID(parseInt(event.target.value))
+						}
+					/>
+					<Button
+						variant="contained"
+						onClick={joinRoom}
+						id="presentationbutton"
+					>
+						Join Presentation
+					</Button>
+				</div>
+				<div id="presentationlist">
+					<Container id="big-presentation-box">
+						{userPresentations
+							.sort((a, b) =>
+								dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date))
+									? 1
+									: -1
+							)
+							.map((presentation) => (
+								<Card
+									id="small-presentation-box"
+									key={presentation.presentation_instance_id}
+								>
+									<div id="presentation-title">{presentation.title}</div>
+									<div>Host ID: {presentation.presenter_id}</div>
+									<div>
+										Starts at: {dateFormat(presentation.scheduled_date)}
+									</div>
+									<div>
+										Join with code: {presentation.presentation_instance_id}
+									</div>
+									<Button
+										id="deletebutton"
+										name={presentation.scheduled_date}
+										value={presentation.presentation_instance_id}
+										onClick={deletePresentation}
+									></Button>
+									<Button
+										id="editbutton"
+										name={presentation.scheduled_date}
+										value={presentation.presentation_instance_id}
+										onClick={editPresentation}
+									></Button>
+									<Button
+										id="joinbutton"
+										value={presentation.presentation_instance_id}
+										onClick={joinPresentation}
+									></Button>
+								</Card>
+							))}
+					</Container>
+				</div>
 			</div>
-			<div id="presentationheader">
-				<h3>Your name for joining presentations is {user.name}</h3>
-				<Button
-					href="/schedulepresentation"
-					variant="contained"
-					id="presentationbutton"
-					sx={{
-						":hover": {
-							color: "white",
-						},
-					}}
-				>
-					Schedule Presentation
-				</Button>
-			</div>
-			<div id="presentationheader"></div>
-			<div id="presentationsidebar"></div>
-			<div id="presentationjoin">
-				<h3>Join a Presentation </h3>
-				<TextField
-					style={{
-						backgroundColor: "white",
-					}}
-					variant="outlined"
-					id="PresentationID"
-					label="Presentation ID"
-					onChange={(event) => setPresentationID(parseInt(event.target.value))}
-				/>
-				<Button variant="contained" onClick={joinRoom} id="presentationbutton">
-					Join Presentation
-				</Button>
-			</div>
-			<div id="presentationsidebar"></div>
-			<div id="presentationsidebar"></div>
-			<div id="presentationlist">
-				<Container id="big-presentation-box">
-					{userPresentations
-						.sort((a, b) =>
-							dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date)) ? 1 : -1
-						)
-						.map((presentation) => (
-							<Card
-								id="small-presentation-box"
-								key={presentation.presentation_instance_id}
-							>
-								<div id="presentation-title">{presentation.title}</div>
-								<div>Host ID: {presentation.presenter_id}</div>
-								<div>Starts at: {dateFormat(presentation.scheduled_date)}</div>
-								<div>
-									Join with code: {presentation.presentation_instance_id}
-								</div>
-								<Button
-									id="deletebutton"
-									name={presentation.scheduled_date}
-									value={presentation.presentation_instance_id}
-									onClick={deletePresentation}
-								></Button>
-								<Button
-									id="editbutton"
-									name={presentation.scheduled_date}
-									value={presentation.presentation_instance_id}
-									onClick={editPresentation}
-								></Button>
-								<Button
-									id="joinbutton"
-									value={presentation.presentation_instance_id}
-									onClick={joinPresentation}
-								></Button>
-							</Card>
-						))}
-				</Container>
-			</div>
-			<div id="presentationsidebar"></div>
-			<div id="presentationfooter"></div>
-			<div id="presentationfooter"></div>
-			<div id="presentationfooter"> notable™</div>
 		</div>
 	);
 }

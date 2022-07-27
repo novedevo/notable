@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { Presentation, User } from "../types";
+import Sidebar from "../components/Sidebar";
 
 const client = axios.create({
 	headers: {
@@ -52,23 +53,26 @@ function PresentationRoomTest() {
 	};
 
 	return (
-		<Container>
-			<h1>Welcome to Presentation Room {title}</h1>
-			<h2>The Presentation ID for this room is {presentationId}</h2>
-			<Button variant="contained" onClick={endPresentation}>
-				End Presenation
-			</Button>
-			{userInfo.length ? (
-				<h3>The current users in this room are:</h3>
-			) : (
-				<h3>No users in this room</h3>
-			)}
-			<ul>
-				{userInfo.map((user) => {
-					return <li>{user}</li>;
-				})}
-			</ul>
-		</Container>
+		<div>
+			<Sidebar />
+			<Container>
+				<h1>Welcome to Presentation Room {title}</h1>
+				<h2>The Presentation ID for this room is {presentationId}</h2>
+				<Button variant="contained" onClick={endPresentation}>
+					End Presenation
+				</Button>
+				{userInfo.length ? (
+					<h3>The current users in this room are:</h3>
+				) : (
+					<h3>No users in this room</h3>
+				)}
+				<ul>
+					{userInfo.map((user) => {
+						return <li>{user}</li>;
+					})}
+				</ul>
+			</Container>
+		</div>
 	);
 }
 

@@ -11,41 +11,52 @@ function Sidebar() {
 	return (
 		<div
 			style={{
-				width: "140px",
-				height: "250px",
+				width: "176px",
+				height: "100%",
 				zIndex: 10,
 				lineHeight: "50px",
-				top: "35%",
 				position: "fixed",
+				backgroundColor: "#1e2124",
 			}}
 		>
+			<div
+				style={{
+					marginLeft: "22px",
+					marginTop: "22px",
+				}}
+			>
+				<h1>notable</h1>
+			</div>
 			<Button
 				href="/view"
 				variant="contained"
-				id="buttonPrimary"
+				id="buttonSidebarExtra"
 				style={{
 					width: "130px",
+					marginLeft: "22px",
 				}}
 			>
-				Dashboard
+				My Notes
 			</Button>
 			<Button
 				href="/"
 				variant="contained"
-				id="buttonPrimary"
+				id="buttonSidebarExtra"
 				style={{
 					width: "130px",
+					marginLeft: "22px",
 				}}
 			>
 				Presentations
 			</Button>
-			{user.isAdmin && (
+			{"user.isAdmin" && (
 				<Button
 					href="/console"
 					variant="contained"
 					id="buttonSecondary"
 					style={{
 						width: "130px",
+						marginLeft: "22px",
 					}}
 				>
 					Console

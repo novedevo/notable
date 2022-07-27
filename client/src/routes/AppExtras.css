@@ -33,6 +33,11 @@ body {
 	width: 240px;
 }
 
+#buttonSidebarExtra {
+	background-color: #424549;
+	width: 240px;
+}
+
 #textField {
 	width: 240px;
 	height: 10px;

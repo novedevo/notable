@@ -2,7 +2,7 @@ import { Container, Link, Typography } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
-import DashboardButton from "../components/DashboardButton";
+import Sidebar from "../components/Sidebar";
 import { VideoNote } from "../types";
 import axios from "axios";
 
@@ -27,48 +27,50 @@ export default function VideoNotes({
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	return (
-		<Container>
-			<DashboardButton />
-			<div id="container">
-				<Container>
-					<YouTube
-						videoId={videoId}
-						opts={{
-							height: 800,
-							width: 1000,
-							playerVars: {
-								// autoplay: 1,
-								playsInline: 1,
-								modestBranding: 1,
-							},
-						}}
-						onReady={(event) => setPlayer(event.target)}
-					/>
-					<div className="right-side">
-						<Typography>Notes</Typography>
-						<Container>
-							{notes.map((note, i) => {
-								return generateNote(note, player, i);
-							})}
-						</Container>
-						<InputNotes
-							post={
-								(value) => {
-									const time = player.getCurrentTime();
-									setNotes([...notes, { note: value, time_stamp: time }]);
-									client.post("/api/addNote", {
-										note: value,
-										timestamp: time,
-										presentationId,
-									});
-								}
-								//todo: add socket communication to update server notes
-							}
+		<div>
+			<Sidebar />
+			<Container>
+				<div id="container">
+					<Container>
+						<YouTube
+							videoId={videoId}
+							opts={{
+								height: 800,
+								width: 1000,
+								playerVars: {
+									// autoplay: 1,
+									playsInline: 1,
+									modestBranding: 1,
+								},
+							}}
+							onReady={(event) => setPlayer(event.target)}
 						/>
-					</div>
-				</Container>
-			</div>
-		</Container>
+						<div className="right-side">
+							<Typography>Notes</Typography>
+							<Container>
+								{notes.map((note, i) => {
+									return generateNote(note, player, i);
+								})}
+							</Container>
+							<InputNotes
+								post={
+									(value) => {
+										const time = player.getCurrentTime();
+										setNotes([...notes, { note: value, time_stamp: time }]);
+										client.post("/api/addNote", {
+											note: value,
+											timestamp: time,
+											presentationId,
+										});
+									}
+									//todo: add socket communication to update server notes
+								}
+							/>
+						</div>
+					</Container>
+				</div>
+			</Container>
+		</div>
 	);
 }
 
