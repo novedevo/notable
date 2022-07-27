@@ -29,6 +29,7 @@ export default function Login() {
 			.then((res) => {
 				if (res.data.token) {
 					//set up axios to use authorization on all further requests
+					//todo: fix
 					axios.defaults.headers.common[
 						"Authorization"
 					] = `Bearer ${res.data.token}`;

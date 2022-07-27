@@ -6,10 +6,16 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "axios";
 import DashboardButton from "../components/DashboardButton";
 import { useNavigate, useParams } from "react-router-dom";
-import { Presentation, User } from "../types";
+import { Presentation } from "../types";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
+
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
 
 export default function PresentationEdit() {
 	const navigate = useNavigate();
@@ -17,9 +23,7 @@ export default function PresentationEdit() {
 	const [scheduled_date, setscheduled_date] = useState(dayjs());
 	const [youtube_url, setyoutube_url] = useState("");
 	const [pdf, setPdf] = useState<File | null>(null);
-	const user: User = JSON.parse(localStorage.getItem("user")!);
 	const [presentation, setPresentation] = useState<Presentation | null>(null);
-	const stringId = user.id.toString();
 	let { id } = useParams();
 	const stringPresentationId = id?.toString() ?? "";
 
@@ -57,14 +61,8 @@ export default function PresentationEdit() {
 		);
 		formData.append("youtube_url", youtube_url);
 		pdf && formData.append("pdf", pdf);
-		formData.append("presenter_id", stringId);
-		axios
-			.post("/api/updatepresentation", formData, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-					"Content-Type": "multipart/form-data",
-				},
-			})
+		client
+			.post("/api/updatepresentation", formData)
 			.then((res) => {
 				console.log(res.data);
 				navigate("/presentations");
@@ -183,10 +181,6 @@ export default function PresentationEdit() {
 }
 
 async function getPresentationMetadata(id: number): Promise<Presentation> {
-	const response = await axios.get(`/api/presentation/${id}`, {
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem("token")}`,
-		},
-	});
+	const response = await client.get(`/api/presentation/${id}`);
 	return response.data;
 }

@@ -27,7 +27,6 @@ export default function Presentations() {
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
-	const stringId = user.id.toString();
 
 	// Database Presentations
 	useEffect(() => {
@@ -67,15 +66,9 @@ export default function Presentations() {
 		};
 	}) => {
 		if (dayjs().isBefore(event.currentTarget.name)) {
-			const formData = new FormData();
-			formData.append("presentation_instance_id", event.currentTarget.value);
-			formData.append("user_id", stringId);
-			axios
-				.post("/api/deletepresentation", formData, {
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-						"Content-Type": "multipart/form-data",
-					},
+			client
+				.post("/api/deletepresentation", {
+					presentation_instance_id: event.currentTarget.value,
 				})
 				.then((res) => {
 					alert("Presentation Deleted!");

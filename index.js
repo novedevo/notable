@@ -6,7 +6,6 @@ import { Server } from "socket.io";
 import {
 	requiresLogin,
 	generateAccessToken,
-	getUserId,
 	addAdminRoutes,
 } from "./helpers.js";
 import fileupload from "express-fileupload";
@@ -88,7 +87,7 @@ app.post("/api/login", async (req, res) => {
 		console.log(req.body);
 		res.status(403).send("Invalid username or password");
 	} else {
-		const token = generateAccessToken(username, result.rows[0].admin);
+		const token = generateAccessToken(result.rows[0].id, result.rows[0].admin);
 		res.json({
 			token,
 			user: {
@@ -104,7 +103,7 @@ app.post("/api/login", async (req, res) => {
 // save user notes from PDFnotes to db
 app.post("/api/addNote", requiresLogin, async (req, res) => {
 	const { note, timestamp, pageNumber, presentationId } = req.body;
-	const id = await getUserId(req.jwt.username, pool);
+	const id = req.jwt.id;
 	const result = await pool.query(
 		"INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5)",
 		[note, timestamp, pageNumber, id, parseInt(presentationId)]
@@ -151,7 +150,7 @@ app.post("/api/register", async (req, res) => {
 	if (result.rows.length === 0) {
 		res.status(400).send("Username already exists");
 	} else {
-		const token = generateAccessToken(username, result.rows[0].admin);
+		const token = generateAccessToken(result.rows[0].id, result.rows[0].admin);
 		res.json({ token });
 	}
 });
@@ -162,20 +161,20 @@ app.post(
 	express.urlencoded({ extended: false }),
 	fileupload(),
 	async (req, res) => {
-		const { title, scheduled_date, youtube_url, presenter_id } = req.body;
+		const { title, scheduled_date, youtube_url } = req.body;
 		const pdf = req.files?.pdf?.data?.toString?.("base64");
 		if (!(pdf || youtube_url)) {
 			res.status(400).send("Either pdf or youtube link must be specified");
 			return;
 		}
-		if (!title || !scheduled_date || !presenter_id) {
+		if (!title || !scheduled_date) {
 			res.status(400).send("All fields must be specified");
 			return;
 		}
 		try {
 			const result = await pool.query(
 				"INSERT INTO presentations (title, scheduled_date, youtube_url, pdf, presenter_id) VALUES ($1, $2, $3, $4, $5)",
-				[title, scheduled_date, youtube_url, pdf, parseInt(presenter_id)]
+				[title, scheduled_date, youtube_url, pdf, req.jwt.id]
 			);
 
 			if (result.rowCount === 0) {
@@ -195,19 +194,14 @@ app.post(
 	express.urlencoded({ extended: false }),
 	fileupload(),
 	async (req, res) => {
-		const {
-			presentation_instance_id,
-			title,
-			scheduled_date,
-			youtube_url,
-			presenter_id,
-		} = req.body;
+		const { presentation_instance_id, title, scheduled_date, youtube_url } =
+			req.body;
 		const pdf = req.files?.pdf?.data?.toString?.("base64");
 		if (!(pdf || youtube_url)) {
 			res.status(400).send("Either pdf or youtube link must be specified");
 			return;
 		}
-		if (!title || !scheduled_date || !presenter_id) {
+		if (!title || !scheduled_date) {
 			res.status(400).send("All fields must be specified");
 			return;
 		}
@@ -219,61 +213,38 @@ app.post(
 				youtube_url,
 				pdf,
 				parseInt(presentation_instance_id),
-				parseInt(presenter_id),
+				req.jwt.id,
 			]
 		);
 		res.send("Presentation has been updated.");
 	}
 );
-app.post(
-	"/api/updatepresentationend",
-	requiresLogin,
-	express.urlencoded({ extended: false }),
-	fileupload(),
-	async (req, res) => {
-		const { presentation_instance_id, user_id, presentation_end_date } =
-			req.body;
-		await pool.query(
-			"UPDATE presentations SET presentation_end_date = $1 WHERE presentation_instance_id = $2 AND presenter_id = $3",
-			[
-				presentation_end_date,
-				parseInt(presentation_instance_id),
-				parseInt(user_id),
-			]
-		);
-		res.send("Presentation has been ended.");
-	}
-);
-app.post(
-	"/api/deletepresentationnotes",
-	requiresLogin,
-	express.urlencoded({ extended: false }),
-	fileupload(),
-	async (req, res) => {
-		const { presentation_id, notetaker_id } = req.body;
-		console.log(presentation_id);
-		console.log(notetaker_id);
-		await pool.query(
-			"DELETE FROM notes WHERE presentation_id = $1 AND notetaker_id = $2",
-			[parseInt(presentation_id), parseInt(notetaker_id)]
-		);
-		res.send("Presentation Notes has been deleted.");
-	}
-);
-app.post(
-	"/api/deletepresentation",
-	requiresLogin,
-	express.urlencoded({ extended: false }),
-	fileupload(),
-	async (req, res) => {
-		const { presentation_instance_id, user_id } = req.body;
-		await pool.query(
-			"DELETE FROM presentations WHERE presentation_instance_id = $1 AND presenter_id = $2",
-			[parseInt(presentation_instance_id), parseInt(user_id)]
-		);
-		res.send("Presentation has been deleted.");
-	}
-);
+app.post("/api/updatepresentationend", requiresLogin, async (req, res) => {
+	const { presentation_instance_id, presentation_end_date } = req.body;
+	await pool.query(
+		"UPDATE presentations SET presentation_end_date = $1 WHERE presentation_instance_id = $2 AND presenter_id = $3",
+		[presentation_end_date, parseInt(presentation_instance_id), req.jwt.id]
+	);
+	res.send("Presentation has been ended.");
+});
+app.post("/api/deletepresentationnotes", requiresLogin, async (req, res) => {
+	const { presentation_id } = req.body;
+	console.log(presentation_id);
+	console.log(req.jwt.id);
+	await pool.query(
+		"DELETE FROM notes WHERE presentation_id = $1 AND notetaker_id = $2",
+		[parseInt(presentation_id), parseInt(req.jwt.id)]
+	);
+	res.send("Presentation Notes has been deleted.");
+});
+app.post("/api/deletepresentation", requiresLogin, async (req, res) => {
+	const { presentation_instance_id } = req.body;
+	await pool.query(
+		"DELETE FROM presentations WHERE presentation_instance_id = $1",
+		[parseInt(presentation_instance_id)]
+	);
+	res.send("Presentation has been deleted.");
+});
 app.get("/api/presentation/:id", async (req, res) => {
 	const { id } = req.params;
 	const result = await pool.query(

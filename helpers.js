@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-export function generateAccessToken(username, isAdmin) {
+export function generateAccessToken(id, isAdmin) {
 	const payload = {
-		username,
+		id,
 		isAdmin,
 	};
 	return jwt.sign(payload, "notable-secret", { expiresIn: "30d" });
@@ -38,13 +38,6 @@ function requiresAdmin(req, res, next) {
 		console.log(req.jwt);
 		res.status(401).send("Unauthorized");
 	}
-}
-
-export async function getUserId(username, pool) {
-	const result = await pool.query("SELECT id FROM users WHERE username = $1", [
-		username,
-	]);
-	return result.rows[0].id;
 }
 
 export function addAdminRoutes(app, pool) {

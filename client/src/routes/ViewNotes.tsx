@@ -1,17 +1,21 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Presentation, User } from "../types";
+import { Presentation } from "../types";
 import DashboardButton from "../components/DashboardButton";
 import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
+
 const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
-	const user: User = JSON.parse(localStorage.getItem("user")!);
-	const stringId = user.id.toString();
 	useEffect(() => {
-		getPresentationWithNotes(parseInt(stringId)).then((notepresentations) => {
+		getPresentationWithNotes().then((notepresentations) => {
 			setPresentations(notepresentations);
 		});
 	}, []);
@@ -21,17 +25,10 @@ const ViewNotes = () => {
 			value: any;
 		};
 	}) => {
-		const formData = new FormData();
 		console.log(event.currentTarget.value);
-		console.log(stringId);
-		formData.append("presentation_id", event.currentTarget.value);
-		formData.append("notetaker_id", stringId);
-		axios
-			.post("/api/deletepresentationnotes", formData, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-					"Content-Type": "multipart/form-data",
-				},
+		client
+			.post("/api/deletepresentationnotes", {
+				presentation_id: event.currentTarget.value,
 			})
 			.then((res) => {
 				alert("Presentation Note Deleted!");
@@ -85,12 +82,8 @@ const ViewNotes = () => {
 	);
 };
 
-async function getPresentationWithNotes(id: number): Promise<Presentation[]> {
-	const response = await axios.get(`/api/notepresentations/${id}`, {
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem("token")}`,
-		},
-	});
+async function getPresentationWithNotes(): Promise<Presentation[]> {
+	const response = await client.get("/api/notepresentations/");
 	return response.data;
 }
 export default ViewNotes;
