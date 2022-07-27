@@ -2,12 +2,15 @@ import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Presentation, VideoNote, PdfNote } from "../types";
+import { Presentation, VideoNote, PdfNote, User } from "../types";
 import VideoNotes from "./VideoNotes";
 import PdfNotes from "./PdfNotes";
+import PresenterView from "./PresenterView";
+import { userInfo } from "os";
 
 export default function Room() {
 	const [presentation, setPresentation] = useState<Presentation | null>(null);
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 	// being able to use presentations prop
 	let { id } = useParams();
 	useEffect(() => {
@@ -32,20 +35,34 @@ export default function Room() {
 		);
 	} else if (presentation.youtube_url) {
 		return (
-			<VideoNotes
-				url={presentation.youtube_url!}
-				inputNotes={presentation.notes as VideoNote[]}
-				presentationId={presentation.presentation_instance_id}
-			/>
+			<div>
+				{user.id === presentation.presenter_id ? (
+					<PresenterView></PresenterView>
+				) : (
+					<div>Welcome Viewer</div>
+				)}
+				<VideoNotes
+					url={presentation.youtube_url!}
+					inputNotes={presentation.notes as VideoNote[]}
+					presentationId={presentation.presentation_instance_id}
+				/>
+			</div>
 		);
 	} else {
 		const pdf = `data:text/plain;base64,${presentation.pdf}`;
 		return (
-			<PdfNotes
-				pdf={pdf!}
-				startTime={presentation.scheduled_date}
-				inputNotes={presentation.notes as PdfNote[]}
-			/>
+			<div>
+				{user.id === presentation.presenter_id ? (
+					<PresenterView></PresenterView>
+				) : (
+					<div>Welcome Viewer</div>
+				)}
+				<PdfNotes
+					pdf={pdf!}
+					startTime={presentation.scheduled_date}
+					inputNotes={presentation.notes as PdfNote[]}
+				/>
+			</div>
 		);
 	}
 }

@@ -93,6 +93,34 @@ export default function Presentations() {
 		return d.format("ddd MMM DD YYYY H:mm");
 	};
 
+	const editPresentation = (event: {
+		currentTarget: {
+			name: any;
+			value: any;
+		};
+	}) => {
+		if (dayjs().isBefore(event.currentTarget.name)) {
+			navigate("/edit/" + event.currentTarget.value);
+		} else {
+			alert("You cannot edit a presentation that has started");
+		}
+	};
+
+	const joinPresentation = (event: {
+		currentTarget: {
+			value: any;
+		};
+	}) => {
+		const userData = {
+			room: event.currentTarget.value,
+			name: user.name,
+		};
+		// sends userData to the server so that a person can join a room
+		socket.emit("join_room", userData);
+		// sends the user to that room
+		navigate("/room/" + event.currentTarget.value);
+	};
+
 	return (
 		<div id="presentations">
 			<div id="presentationheader">
@@ -151,6 +179,17 @@ export default function Presentations() {
 									name={presentation.scheduled_date}
 									value={presentation.presentation_instance_id}
 									onClick={deletePresentation}
+								></Button>
+								<Button
+									id="editbutton"
+									name={presentation.scheduled_date}
+									value={presentation.presentation_instance_id}
+									onClick={editPresentation}
+								></Button>
+								<Button
+									id="joinbutton"
+									value={presentation.presentation_instance_id}
+									onClick={joinPresentation}
 								></Button>
 							</Card>
 						))}

@@ -1,28 +1,44 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Presentation } from "../types";
+import { Presentation, User } from "../types";
 import DashboardButton from "../components/DashboardButton";
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 
 const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
+	const user: User = JSON.parse(localStorage.getItem("user")!);
+	const stringId = "" + user.id;
 	useEffect(() => {
+		getPresentationWithNotes(parseInt(stringId)).then((notepresentations) => {
+			setPresentations(notepresentations);
+		});
+	}, []);
+
+	const deleteNote = (event: {
+		currentTarget: {
+			value: any;
+		};
+	}) => {
+		const formData = new FormData();
+		console.log(event.currentTarget.value);
+		console.log(stringId);
+		formData.append("presentation_id", event.currentTarget.value);
+		formData.append("notetaker_id", stringId);
 		axios
-			.get("/api/presentations", {
+			.post("/api/deletepresentationnotes", formData, {
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem("token")}`,
+					"Content-Type": "multipart/form-data",
 				},
 			})
 			.then((res) => {
-				console.log(res);
-				setPresentations(res.data);
+				alert("Presentation Note Deleted!");
+				console.log(res.data);
 			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, []);
+			.catch((err) => alert("invalid presentation: " + err.message));
+	};
 
 	return (
 		<div>
@@ -48,17 +64,33 @@ const ViewNotes = () => {
 				</div>
 				<div id="noteSets_container">
 					{presentations.map((presentation) => (
-						<Link
-							to={`/room/${presentation.presentation_instance_id}`}
-							id="noteSet"
-						>
-							<p>{presentation.title}</p>
-							<p>{presentation.presentation_instance_id}</p>
-						</Link>
+						<div>
+							<Link
+								to={`/room/${presentation.presentation_instance_id}`}
+								id="noteSet"
+							>
+								<p>{presentation.title}</p>
+								<p>{presentation.presentation_instance_id}</p>
+							</Link>
+							<Button
+								id="deletebutton"
+								value={presentation.presentation_instance_id}
+								onClick={deleteNote}
+							></Button>
+						</div>
 					))}
 				</div>
 			</Container>
 		</div>
 	);
 };
+
+async function getPresentationWithNotes(id: number): Promise<Presentation[]> {
+	const response = await axios.get(`/api/notepresentations/${id}`, {
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem("token")}`,
+		},
+	});
+	return response.data;
+}
 export default ViewNotes;

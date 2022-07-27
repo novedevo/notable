@@ -97,3 +97,23 @@
 	float: right;
 	transform: translate(0%, -135%);
 }
+
+#editbutton {
+	background-image: url("edit.png");
+	background-size: cover;
+	border: none;
+	width: 70px;
+	height: 70px;
+	float: right;
+	transform: translate(-50%, -135%);
+}
+
+#joinbutton {
+	background-image: url("join.png");
+	background-size: cover;
+	border: none;
+	width: 70px;
+	height: 70px;
+	float: right;
+	transform: translate(-100%, -135%);
+}
