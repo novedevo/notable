@@ -1,15 +1,20 @@
 import { Button, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "axios";
 import DashboardButton from "../components/DashboardButton";
 import { useNavigate } from "react-router-dom";
-import { User } from "../types";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
+
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
 
 export default function SchedulePresentation() {
 	const navigate = useNavigate();
@@ -17,12 +22,6 @@ export default function SchedulePresentation() {
 	const [scheduled_date, setscheduled_date] = useState(dayjs());
 	const [youtube_url, setyoutube_url] = useState("");
 	const [pdf, setPdf] = useState<File | null>(null);
-	const user: User = JSON.parse(localStorage.getItem("user")!);
-	const stringId = "" + user.id;
-
-	useEffect(() => {
-		console.log(user.id);
-	}, [user.id]);
 
 	const postPresentation = () => {
 		const formData = new FormData();
@@ -33,14 +32,8 @@ export default function SchedulePresentation() {
 		);
 		formData.append("youtube_url", youtube_url);
 		pdf && formData.append("pdf", pdf);
-		formData.append("presenter_id", stringId);
-		axios
-			.post("/api/presentation", formData, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-					"Content-Type": "multipart/form-data",
-				},
-			})
+		client
+			.post("/api/presentation", formData)
 			.then((res) => {
 				console.log(res.data);
 				navigate("/presentations");
@@ -71,10 +64,7 @@ export default function SchedulePresentation() {
 			<div id="presentationheader"></div>
 			<div id="presentationsidebar"></div>
 			<div id="presentationcreate">
-				<div id="presentationlabel">
-					{" "}
-					Enter a Presentation Title (required):
-				</div>
+				<div id="presentationlabel">Enter a Presentation Title (required):</div>
 				<div>
 					<TextField
 						style={{

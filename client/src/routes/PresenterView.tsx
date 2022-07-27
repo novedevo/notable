@@ -6,6 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { Presentation, User } from "../types";
 
+const client = axios.create({
+	headers: {
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
+	},
+});
+
 const socket = io();
 socket.on("connect_error", (err: { message: any }) => {
 	console.log(`connect_error due to ${err.message}`);
@@ -15,7 +21,6 @@ function PresentationRoomTest() {
 	let currentURL = window.location.href;
 	const [userInfo, setUserInfo] = useState<string[]>([]);
 	const [title, setTitle] = useState("");
-	const [date, setDate] = useState("");
 	const presentationId = parseInt(currentURL.split("room/")[1]);
 
 	getPresentations().then((presentations) => {
@@ -24,7 +29,6 @@ function PresentationRoomTest() {
 		);
 		if (presentation) {
 			setTitle(presentation.title);
-			setDate(presentation.scheduled_date);
 		}
 	});
 
@@ -37,22 +41,8 @@ function PresentationRoomTest() {
 	const navigate = useNavigate();
 
 	const endPresentation = () => {
-		const formData = new FormData();
-		const currentURL = window.location.href;
-		formData.append("presentation_instance_id", currentURL.split("room/")[1]);
-		const id = JSON.parse(localStorage.getItem("user")!).id;
-		formData.append("user_id", id);
-		formData.append(
-			"presentation_end_date",
-			dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
-		);
-		axios
-			.post("/api/updatepresentationend", formData, {
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-					"Content-Type": "multipart/form-data",
-				},
-			})
+		client
+			.post(`/api/endPresentation/${presentationId}`)
 			.then((res) => {
 				alert("Presentation has been ended");
 				console.log(res.data);
@@ -84,11 +74,7 @@ function PresentationRoomTest() {
 
 async function getPresentations(): Promise<Presentation[]> {
 	try {
-		const result = await axios("/api/presentations", {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
-			},
-		});
+		const result = await client("/api/presentations");
 		return result.data;
 	} catch (err) {
 		console.log(err);

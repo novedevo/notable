@@ -33,7 +33,7 @@ test("renders submit button", () => {
 			<Login />
 		</Router>
 	);
-	const submit = screen.getByText("Log In");
+	const submit = screen.queryAllByText("LOGIN")[1];
 	expect(submit).toBeInTheDocument();
 	expect(submit).toBeEnabled();
 	expect(submit).toBeVisible();

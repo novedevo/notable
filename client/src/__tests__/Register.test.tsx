@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Register from "../routes/Register";
 
@@ -25,7 +24,7 @@ test("renders create account prompt", () => {
 			<Register />
 		</Router>
 	);
-	const header = screen.getByText("Create a new account");
+	const header = screen.getByText("Create a New Account");
 	expect(header).toBeInTheDocument();
 });
 test("renders without error", () => {
