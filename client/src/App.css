@@ -82,3 +82,17 @@
 .display-time {
 	font-size: larger;
 }
+
+#adjustableSize {
+	height: 0;
+	padding-bottom: 56.25%;
+	position: relative;
+}
+
+#YoutubeVideo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
