@@ -39,7 +39,7 @@ function Sidebar() {
 				My Notes
 			</Button>
 			<Button
-				href="/"
+				href="/presentations"
 				variant="contained"
 				id="buttonSidebarExtra"
 				style={{
@@ -49,7 +49,7 @@ function Sidebar() {
 			>
 				Presentations
 			</Button>
-			{"user.isAdmin" && (
+			{user.isAdmin && (
 				<Button
 					href="/console"
 					variant="contained"
