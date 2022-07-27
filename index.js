@@ -127,6 +127,20 @@ app.get("/api/currentpresentations", requiresLogin, async (req, res) => {
 	);
 	res.json(result.rows);
 });
+/*
+app.post("/api/notepresentations", requiresLogin, async (req, res) => {
+	const { notetaker_id } = req.body;
+	console.log(notetaker_id);
+	const result = await pool.query(
+		//"SELECT * FROM presentations WHERE presentation_instance_id IN (SELECT presentation_id FROM notes WHERE notetaker_id = $1)",
+		"SELECT presentation_id FROM notes WHERE notetaker_id = $1",
+		[parseInt(notetaker_id)]
+	);
+
+	console.log(result.rows);
+	res.json(result.rows);
+});
+*/
 
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
@@ -231,6 +245,22 @@ app.post(
 	}
 );
 app.post(
+	"/api/deletepresentationnotes",
+	requiresLogin,
+	express.urlencoded({ extended: false }),
+	fileupload(),
+	async (req, res) => {
+		const { presentation_id, notetaker_id } = req.body;
+		console.log(presentation_id);
+		console.log(notetaker_id);
+		await pool.query(
+			"DELETE FROM notes WHERE presentation_id = $1 AND notetaker_id = $2",
+			[parseInt(presentation_id), parseInt(notetaker_id)]
+		);
+		res.send("Presentation Notes has been deleted.");
+	}
+);
+app.post(
 	"/api/deletepresentation",
 	requiresLogin,
 	express.urlencoded({ extended: false }),
@@ -258,6 +288,14 @@ app.get("/api/presentation/:id", async (req, res) => {
 		res.status(404).send("Presentation does not exist.");
 	}
 	res.send({ ...result.rows[0], notes: notes.rows });
+});
+app.get("/api/notepresentations/:id", async (req, res) => {
+	const { id } = req.params;
+	const result = await pool.query(
+		"SELECT * FROM presentations WHERE presentation_instance_id IN (SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)",
+		[id]
+	);
+	res.send(result.rows);
 });
 
 addAdminRoutes(app, pool);
