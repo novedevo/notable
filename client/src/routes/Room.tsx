@@ -6,6 +6,7 @@ import { Presentation, VideoNote, PdfNote, User } from "../types";
 import VideoNotes from "./VideoNotes";
 import PdfNotes from "./PdfNotes";
 import PresenterView from "./PresenterView";
+import Sidebar from "../components/Sidebar";
 
 const client = axios.create({
 	headers: {
@@ -34,13 +35,17 @@ export default function Room() {
 
 	if (presentation === null) {
 		return (
-			<Container>
-				<h1>Loading...</h1>
-			</Container>
+			<div>
+				<Sidebar/>
+				<Container>
+					<h1>Loading...</h1>
+				</Container>
+			</div>
 		);
 	} else if (presentation.youtube_url) {
 		return (
 			<div>
+				<Sidebar/>
 				{user.id === presentation.presenter_id ? (
 					<PresenterView></PresenterView>
 				) : (
@@ -57,6 +62,7 @@ export default function Room() {
 		const pdf = `data:text/plain;base64,${presentation.pdf}`;
 		return (
 			<div>
+				<Sidebar/>
 				{user.id === presentation.presenter_id ? (
 					<PresenterView></PresenterView>
 				) : (

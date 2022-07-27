@@ -2,7 +2,7 @@ import { Container, Link, Typography } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
-import DashboardButton from "../components/DashboardButton";
+import Sidebar from "../components/Sidebar";
 import { VideoNote } from "../types";
 import axios from "axios";
 
@@ -27,8 +27,9 @@ export default function VideoNotes({
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	return (
-		<Container>
-			<DashboardButton />
+		<div>
+			<Sidebar/>
+			<Container>
 			<div id="container">
 				<Container>
 					<YouTube
@@ -69,6 +70,8 @@ export default function VideoNotes({
 				</Container>
 			</div>
 		</Container>
+		</div>
+		
 	);
 }
 

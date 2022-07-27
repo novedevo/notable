@@ -2,7 +2,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Presentation } from "../types";
-import DashboardButton from "../components/DashboardButton";
 import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 
@@ -39,7 +38,6 @@ const ViewNotes = () => {
 		<div>
 			<Sidebar />
 			<Container>
-				<DashboardButton />
 				<div id="background-image"></div>
 				<div>
 					<div id="pageHead">

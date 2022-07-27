@@ -2,7 +2,7 @@ import { Button, Container } from "@mui/material";
 import { DataGrid, GridColDef, GridSelectionModel } from "@mui/x-data-grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import DashboardButton from "../components/DashboardButton";
+import Sidebar from "../components/Sidebar";
 
 const client = axios.create({
 	headers: {
@@ -40,6 +40,7 @@ export default function Console() {
 
 	return (
 		<>
+			<Sidebar/>
 			<Button
 				onClick={async () => {
 					for (const id of selectionModel) {
@@ -84,9 +85,6 @@ export default function Console() {
 					/>
 				</div>
 			</div>
-			<Container>
-				<DashboardButton />
-			</Container>
 		</>
 	);
 }

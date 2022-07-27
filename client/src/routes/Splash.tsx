@@ -1,4 +1,4 @@
-import Dashboard from "./Dashboard";
+import ViewNotes from "./ViewNotes";
 import Login from "./Login";
 import jwtDecode from "jwt-decode";
 
@@ -13,5 +13,5 @@ export default function Splash() {
 			isLoggedIn = true;
 		}
 	}
-	return isLoggedIn ? <Dashboard /> : <Login />;
+	return isLoggedIn ? <ViewNotes /> : <Login />;
 }
