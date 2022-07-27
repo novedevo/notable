@@ -23,7 +23,6 @@
 
 #presentationlabel {
 	font-family: Arial, Helvetica, sans-serif;
-	color: black;
 	font-size: 30px;
 	margin-bottom: 10px;
 	margin-top: 10px;
@@ -38,7 +37,7 @@
 
 #presentationsidebar {
 	grid-area: "presentationsidebar";
-	background-color: #6b75f5;
+	background-color: #1e2124;
 }
 
 #presentationheader {
@@ -80,7 +79,7 @@
 
 #big-presentation-box {
 	font-family: Arial, Helvetica, sans-serif;
-	color: black;
+	color: white;
 }
 
 #presentationbutton {

@@ -57,6 +57,9 @@ export default function Console() {
 			<div style={{ display: "flex", height: "100%" }}>
 				<div style={{ flexGrow: 1 }}>
 					<DataGrid
+						style={{
+							backgroundColor: "white",
+						}}
 						autoHeight
 						rows={rows}
 						columns={columns}

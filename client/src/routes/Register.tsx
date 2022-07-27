@@ -33,7 +33,7 @@ export default function Register() {
 					<br></br>
 				</h5>
 				<h2>Create a New Account</h2>
-				<h4>Start using Notable today!</h4>
+				<h4>Start using notable™ today!</h4>
 				<div
 					onKeyDown={(event) => {
 						if (event.key === "Enter") {
