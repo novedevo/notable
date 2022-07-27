@@ -246,7 +246,7 @@ app.get("/api/presentation/:id", async (req, res) => {
 	}
 	res.send({ ...result.rows[0], notes: notes.rows });
 });
-app.get("/api/notePresentations/", async (req, res) => {
+app.get("/api/notePresentations/", requiresLogin, async (req, res) => {
 	const result = await pool.query(
 		sql`SELECT * FROM presentations WHERE presentation_instance_id IN (SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)`,
 		[req.jwt.id]
