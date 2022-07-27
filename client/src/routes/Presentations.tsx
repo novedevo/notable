@@ -28,6 +28,12 @@ export default function Presentations() {
 		[]
 	);
 
+	useEffect(() => {
+		if (!user) {
+			navigate("/login");
+		}
+	});
+
 	// Database Presentations
 	useEffect(() => {
 		getPresentations().then((presentations) => {
