@@ -31,8 +31,8 @@ export default function VideoNotes({
 			<Sidebar />
 			<Container>
 				<div id="container">
-					<Container>
-						<YouTube
+					<div id="adjustableSize">
+						<YouTube id="YoutubeVideo"
 							videoId={videoId}
 							opts={{
 								height: 800,
@@ -45,9 +45,10 @@ export default function VideoNotes({
 							}}
 							onReady={(event) => setPlayer(event.target)}
 						/>
+					</div>
 						<div className="right-side">
 							<Typography>Notes</Typography>
-							<Container>
+							<Container id="notes-display">
 								{notes.map((note, i) => {
 									return generateNote(note, player, i);
 								})}
@@ -67,7 +68,6 @@ export default function VideoNotes({
 								}
 							/>
 						</div>
-					</Container>
 				</div>
 			</Container>
 		</div>
