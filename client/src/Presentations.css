@@ -37,12 +37,12 @@
 
 #presentationsidebar {
 	grid-area: "presentationsidebar";
-	background-color: #1e2124;
+	background-color: #282b30;
 }
 
 #presentationheader {
 	grid-area: "presentationheader";
-	background-color: #62bcfa;
+	background-color: #1e2124;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -62,7 +62,7 @@
 
 #presentationfooter {
 	grid-area: "presentationfooter";
-	background: #62bcfa;
+	background: #1e2124;
 	color: white;
 	display: flex;
 	justify-content: center;
