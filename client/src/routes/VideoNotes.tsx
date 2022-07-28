@@ -1,9 +1,10 @@
-import { Button, Card, Container, Link, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Container, Typography } from "@mui/material";
+import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
 import Sidebar from "../components/Sidebar";
 import { VideoNote } from "../types";
+import { VideoNoteComponent } from "../components/Note";
 import axios from "axios";
 
 const client = axios.create({
@@ -28,6 +29,7 @@ export default function VideoNotes({
 
 	return (
 		<div>
+			<Sidebar />
 			<Container>
 				<div id="containerIfSidebar">
 					<div id="adjustableSize">
@@ -49,9 +51,9 @@ export default function VideoNotes({
 					<div className="right-side">
 						<Typography>Notes</Typography>
 						<Container id="notes-display">
-							{notes.map((note, i) => {
-								return generateNote(note, player, i);
-							})}
+							{notes.map((note, i) => (
+								<VideoNoteComponent {...note} key={i} player={player} />
+							))}
 						</Container>
 						<InputNotes
 							post={
@@ -79,38 +81,6 @@ export default function VideoNotes({
 			</Container>
 		</div>
 	);
-}
-
-function generateNote(note: VideoNote, player: YouTubePlayer, index: number) {
-	return (
-		<Card key={index}>
-			<Typography>{note.note + "\t ".repeat(20)}</Typography>
-			<Typography>
-				<Link onClick={() => player.seekTo(note.time_stamp)}>
-					{new Date(Math.floor(note.time_stamp) * 1000)
-						.toISOString()
-						.substring(11, 19)}
-				</Link>
-				<Button value={note.note_id} onClick={deleteNote}>
-					delete
-				</Button>
-			</Typography>
-		</Card>
-	);
-}
-
-function deleteNote(event: {
-	currentTarget: {
-		value: any;
-	};
-}) {
-	console.log("Note Deleted ", event.currentTarget.value);
-	client
-		.delete(`/api/note/${event.currentTarget.value}`)
-		.then((res) => {
-			console.log(res.data);
-		})
-		.catch((err) => alert("invalid note: " + err.message));
 }
 
 // Method, YT Parser. Very specific, just one way of doing this.
