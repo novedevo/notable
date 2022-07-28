@@ -115,7 +115,7 @@ export default function Presentations() {
 	return (
 		<div>
 			<Sidebar />
-			<Container>
+			<div id="containerIfSidebar">
 				<div id="presentations">
 					<div id="presentationheader">
 						<h3>Your name for joining presentations is {user.name}</h3>
@@ -196,7 +196,7 @@ export default function Presentations() {
 						</Container>
 					</div>
 				</div>
-			</Container>
+			</div>
 		</div>
 	);
 }
