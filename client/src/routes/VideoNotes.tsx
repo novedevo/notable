@@ -30,7 +30,7 @@ export default function VideoNotes({
 		<div>
 			<Sidebar />
 			<Container>
-				<div id="container">
+				<div id="containerIfSidebar">
 					<div id="adjustableSize">
 						<YouTube
 							id="YoutubeVideo"

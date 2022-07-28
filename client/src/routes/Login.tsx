@@ -4,6 +4,7 @@ import { Button, Container, TextField } from "@mui/material";
 import { useState } from "react";
 import jwtDecode from "jwt-decode";
 import "./AppExtras.css";
+import Sidebar from "../components/Sidebar";
 
 export default function Login() {
 	const [username, setUsername] = useState("");
@@ -47,54 +48,56 @@ export default function Login() {
 	};
 
 	return (
-		<Container>
-			<div id="background-image"></div>
-			<div id="background-gradient"></div>
-			<div id="middlePanel">
-				{expired && <h2>Your session has expired.</h2>}
-				<br></br>
-				<h1>notable™</h1>
-				<h4>LOGIN</h4>
-				<div
-					onKeyDown={(event) => {
-						if (event.key === "Enter") {
-							submit();
-						}
-					}}
-				>
-					<TextField
-						id="textField"
-						variant="outlined"
-						label="username"
-						onChange={(event) => setUsername(event.target.value)}
-					/>
+		<>
+			<Container>
+				<div id="background-image"></div>
+				<div id="background-gradient"></div>
+				<div id="middlePanel">
+					{expired && <h2>Your session has expired.</h2>}
 					<br></br>
-					<TextField
-						id="textField"
-						variant="outlined"
-						label="password"
-						type="password"
-						onChange={(event) => setPassword(event.target.value)}
-					/>
-					<br></br>
-					<Button id="buttonPrimary" variant="contained" onClick={submit}>
-						LOGIN
-					</Button>
-					<br></br>
-					<Button
-						id="buttonSecondary"
-						variant="contained"
-						href="/register"
-						sx={{
-							":hover": {
-								color: "white",
-							},
+					<h1>notable™</h1>
+					<h4>LOGIN</h4>
+					<div
+						onKeyDown={(event) => {
+							if (event.key === "Enter") {
+								submit();
+							}
 						}}
 					>
-						Register a new account
-					</Button>
+						<TextField
+							id="textField"
+							variant="outlined"
+							label="username"
+							onChange={(event) => setUsername(event.target.value)}
+						/>
+						<br></br>
+						<TextField
+							id="textField"
+							variant="outlined"
+							label="password"
+							type="password"
+							onChange={(event) => setPassword(event.target.value)}
+						/>
+						<br></br>
+						<Button id="buttonPrimary" variant="contained" onClick={submit}>
+							LOGIN
+						</Button>
+						<br></br>
+						<Button
+							id="buttonSecondary"
+							variant="contained"
+							href="/register"
+							sx={{
+								":hover": {
+									color: "white",
+								},
+							}}
+						>
+							Register a new account
+						</Button>
+					</div>
 				</div>
-			</div>
-		</Container>
+			</Container>
+		</>
 	);
 }

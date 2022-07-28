@@ -8,10 +8,30 @@
 	height: 100vh;
 }
 
+#containerIfSidebar {
+	align-content: center;
+	justify-content: center;
+	text-align: center;
+	height: 100vh;
+	width: 90vw;
+	float: right;
+}
+
+#loginContainer {
+	display: grid;
+	grid-template-columns: 70% 55%;
+	grid-template-rows: 95%;
+	align-content: center;
+	justify-content: center;
+	text-align: center;
+	height: 100vh;
+}
+
 #notes-display {
 	overflow-y: scroll;
 	overflow-x: hidden;
 	word-break: break-all;
+	color: black;
 }
 
 #noteSets_container {
@@ -49,6 +69,7 @@
 .left-side {
 	display: grid;
 	background-color: bisque;
+	color: black;
 	align-content: center;
 	justify-content: center;
 	outline: 2px black solid;
@@ -57,6 +78,7 @@
 .right-side {
 	display: grid;
 	background-color: aliceblue;
+	color: black;
 	grid-template-rows: 10% 70% 20%;
 	outline: 2px black solid;
 }
@@ -65,22 +87,26 @@
 	display: grid;
 	grid-template-columns: 40% 40%;
 	outline: 2px black solid;
+	color: black;
 	align-content: center;
 	justify-content: center;
 }
 
 .notes-box {
 	outline: 2px black solid;
+	color: black;
 }
 
 .input-box {
 	display: grid;
 	grid-template-columns: 80% 20%;
 	outline: 2px black solid;
+	color: black;
 }
 
 .display-time {
 	font-size: larger;
+	color: black;
 }
 
 #adjustableSize {

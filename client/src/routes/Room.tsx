@@ -37,25 +37,27 @@ export default function Room() {
 		return (
 			<div>
 				<Sidebar />
-				<Container>
+				<div id="containerIfSidebar">
 					<h1>Loading...</h1>
-				</Container>
+				</div>
 			</div>
 		);
 	} else if (presentation.youtube_url) {
 		return (
 			<div>
 				<Sidebar />
-				{user.id === presentation.presenter_id ? (
-					<PresenterView></PresenterView>
-				) : (
-					<div>Welcome Viewer</div>
-				)}
-				<VideoNotes
-					url={presentation.youtube_url!}
-					inputNotes={presentation.notes as VideoNote[]}
-					presentationId={presentation.presentation_instance_id}
-				/>
+				<div id="containerIfSidebar">
+					{user.id === presentation.presenter_id ? (
+						<PresenterView></PresenterView>
+					) : (
+						<div>Welcome Viewer</div>
+					)}
+					<VideoNotes
+						url={presentation.youtube_url!}
+						inputNotes={presentation.notes as VideoNote[]}
+						presentationId={presentation.presentation_instance_id}
+					/>
+				</div>
 			</div>
 		);
 	} else {
@@ -63,16 +65,18 @@ export default function Room() {
 		return (
 			<div>
 				<Sidebar />
-				{user.id === presentation.presenter_id ? (
-					<PresenterView></PresenterView>
-				) : (
-					<div>Welcome Viewer</div>
-				)}
-				<PdfNotes
-					pdf={pdf!}
-					startTime={presentation.scheduled_date}
-					inputNotes={presentation.notes as PdfNote[]}
-				/>
+				<div id="containerIfSidebar">
+					{user.id === presentation.presenter_id ? (
+						<PresenterView></PresenterView>
+					) : (
+						<div>Welcome Viewer</div>
+					)}
+					<PdfNotes
+						pdf={pdf!}
+						startTime={presentation.scheduled_date}
+						inputNotes={presentation.notes as PdfNote[]}
+					/>
+				</div>
 			</div>
 		);
 	}
