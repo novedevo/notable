@@ -37,7 +37,7 @@
 
 #presentationsidebar {
 	grid-area: "presentationsidebar";
-	background-color: #282b30;
+	background-color: #424549;
 }
 
 #presentationheader {
@@ -50,6 +50,7 @@
 
 #presentationjoin {
 	grid-area: "presentationjoin";
+	background-color: #1e2124;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -62,7 +63,7 @@
 
 #presentationfooter {
 	grid-area: "presentationfooter";
-	background: #1e2124;
+	background-color: #424549;
 	color: white;
 	display: flex;
 	justify-content: center;
