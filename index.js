@@ -100,7 +100,6 @@ app.post("/api/login", async (req, res) => {
 	}
 });
 
-<<<<<<< HEAD
 // save user notes from PDFnotes to db
 app.post("/api/addNote", requiresLogin, async (req, res) => {
 	const { note, timestamp, pageNumber, presentationId } = req.body;
@@ -128,8 +127,6 @@ app.get("/api/currentPresentations", requiresLogin, async (req, res) => {
 	res.json(result.rows);
 });
 
-=======
->>>>>>> origin
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
 	const result = await pool.query(
