@@ -15,15 +15,15 @@ export function addPresentationManagementRoutes(app, pool) {
 		);
 		res.send("Presentation has been deleted.");
 	});
-	app.get("/api/presentation/:id", async (req, res) => {
+	app.get("/api/presentation/:id", requiresLogin, async (req, res) => {
 		const { id } = req.params;
 		const result = await pool.query(
 			sql`SELECT * FROM presentations WHERE presentation_instance_id = $1`,
 			[id]
 		);
 		const notes = await pool.query(
-			sql`SELECT * FROM notes WHERE presentation_id = $1 ORDER BY time_stamp ASC`,
-			[id]
+			sql`SELECT * FROM notes WHERE presentation_id = $1 AND notetaker_id = $2 ORDER BY time_stamp ASC`,
+			[id, req.jwt.id]
 		);
 		if (result.rows.length === 0) {
 			res.status(404).send("Presentation does not exist.");
