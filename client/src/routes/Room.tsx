@@ -36,7 +36,7 @@ export default function Room() {
 	if (presentation === null) {
 		return (
 			<div>
-				<Sidebar/>
+				<Sidebar />
 				<div id="containerIfSidebar">
 					<h1>Loading...</h1>
 				</div>
@@ -45,7 +45,7 @@ export default function Room() {
 	} else if (presentation.youtube_url) {
 		return (
 			<div>
-				<Sidebar/>
+				<Sidebar />
 				<div id="containerIfSidebar">
 					{user.id === presentation.presenter_id ? (
 						<PresenterView></PresenterView>
@@ -64,7 +64,7 @@ export default function Room() {
 		const pdf = `data:text/plain;base64,${presentation.pdf}`;
 		return (
 			<div>
-				<Sidebar/>
+				<Sidebar />
 				<div id="containerIfSidebar">
 					{user.id === presentation.presenter_id ? (
 						<PresenterView></PresenterView>
