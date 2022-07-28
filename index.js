@@ -111,7 +111,6 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 	);
 	if (result.rowCount) {
 		res.json(result.rows);
-		res.send("Note saved to database");
 	} else {
 		res.status(400).send("invalid request");
 	}
@@ -231,6 +230,14 @@ app.delete("/api/presentation/:id", requiresLogin, async (req, res) => {
 		[parseInt(id)]
 	);
 	res.send("Presentation has been deleted.");
+});
+app.delete("/api/note/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	await pool.query(
+		sql`DELETE FROM notes WHERE note_id = $1`,
+		[parseInt(id)]
+	);
+	res.send("Note has been deleted.");
 });
 app.get("/api/presentation/:id", async (req, res) => {
 	const { id } = req.params;
