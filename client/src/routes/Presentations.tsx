@@ -119,6 +119,7 @@ export default function Presentations() {
 				<div id="presentations">
 					<div id="presentationheader">
 						<h3>Your name for joining presentations is {user.name}</h3>
+						<br></br>
 						<Button
 							href="/schedulepresentation"
 							variant="contained"
@@ -131,6 +132,7 @@ export default function Presentations() {
 						>
 							Schedule Presentation
 						</Button>
+						<br></br>
 					</div>
 					<div id="presentationheader"></div>
 					<div id="presentationsidebar"></div>
@@ -147,6 +149,7 @@ export default function Presentations() {
 								setPresentationID(parseInt(event.target.value))
 							}
 						/>
+						<br></br>
 						<Button
 							variant="contained"
 							onClick={joinRoom}
@@ -154,6 +157,7 @@ export default function Presentations() {
 						>
 							Join Presentation
 						</Button>
+						<br></br>
 					</div>
 					<div id="presentationlist">
 						<Container id="big-presentation-box">
