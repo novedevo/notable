@@ -58,32 +58,32 @@ export default function Console() {
 				>
 					Delete selected users
 				</Button>
-					<div style={{ flexGrow: 1 }}>
-						<DataGrid
-							style={{
-								backgroundColor: "white",
-							}}
-							autoHeight
-							rows={rows}
-							columns={columns}
-							checkboxSelection
-							disableSelectionOnClick
-							experimentalFeatures={{ newEditingApi: true }}
-							processRowUpdate={async (newRow, oldRow) => {
-								if (newRow.id === id && !newRow.admin) {
-									alert("You cannot remove your own admin status");
-									return oldRow;
-								}
-								await client.put(
-									`/api/update_user?username=${newRow.username}`,
-									newRow
-								);
-								return newRow;
-							}}
-							onSelectionModelChange={setSelectionModel}
-							selectionModel={selectionModel}
-						/>
-					</div>
+				<div style={{ flexGrow: 1 }}>
+					<DataGrid
+						style={{
+							backgroundColor: "white",
+						}}
+						autoHeight
+						rows={rows}
+						columns={columns}
+						checkboxSelection
+						disableSelectionOnClick
+						experimentalFeatures={{ newEditingApi: true }}
+						processRowUpdate={async (newRow, oldRow) => {
+							if (newRow.id === id && !newRow.admin) {
+								alert("You cannot remove your own admin status");
+								return oldRow;
+							}
+							await client.put(
+								`/api/update_user?username=${newRow.username}`,
+								newRow
+							);
+							return newRow;
+						}}
+						onSelectionModelChange={setSelectionModel}
+						selectionModel={selectionModel}
+					/>
+				</div>
 			</div>
 		</>
 	);
