@@ -63,7 +63,14 @@ export default function VideoNotes({
 										timestamp: time,
 										presentationId,
 									});
-									setNotes([...notes, { note: value, time_stamp: time, note_id: result.data[0].note_id}]);
+									setNotes([
+										...notes,
+										{
+											note: value,
+											time_stamp: time,
+											note_id: result.data[0].note_id,
+										},
+									]);
 								}
 								//todo: add socket communication to update server notes
 							}
@@ -80,15 +87,14 @@ function generateNote(note: VideoNote, player: YouTubePlayer, index: number) {
 		<Card key={index}>
 			<Typography>{note.note + "\t ".repeat(20)}</Typography>
 			<Typography>
-			<Link onClick={() => player.seekTo(note.time_stamp)}>
-				{new Date(Math.floor(note.time_stamp) * 1000)
-					.toISOString()
-					.substring(11, 19)}
-			</Link>
-			<Button
-				value={note.note_id}
-				onClick={deleteNote}
-			>delete</Button>
+				<Link onClick={() => player.seekTo(note.time_stamp)}>
+					{new Date(Math.floor(note.time_stamp) * 1000)
+						.toISOString()
+						.substring(11, 19)}
+				</Link>
+				<Button value={note.note_id} onClick={deleteNote}>
+					delete
+				</Button>
 			</Typography>
 		</Card>
 	);
@@ -122,4 +128,3 @@ function parseId(url: string) {
 		alert("invalid url");
 	}
 }
-

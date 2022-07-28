@@ -176,10 +176,7 @@ app.delete("/api/presentation/:id", requiresLogin, async (req, res) => {
 });
 app.delete("/api/note/:id", requiresLogin, async (req, res) => {
 	const { id } = req.params;
-	await pool.query(
-		sql`DELETE FROM notes WHERE note_id = $1`,
-		[parseInt(id)]
-	);
+	await pool.query(sql`DELETE FROM notes WHERE note_id = $1`, [parseInt(id)]);
 	res.send("Note has been deleted.");
 });
 app.get("/api/presentation/:id", async (req, res) => {
