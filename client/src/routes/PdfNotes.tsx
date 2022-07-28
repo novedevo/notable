@@ -8,6 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
 import Sidebar from "../components/Sidebar";
 import { PdfNote } from "../types";
+import { PdfNoteComponent } from "../components/Note";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -54,8 +55,11 @@ export default function PdfNotes({
 		}
 	};
 
+	const presentationId = parseInt(window.location.pathname.split("/").pop()!);
+
 	return (
 		<div>
+			<Sidebar />
 			<Container>
 				<Button variant="contained" onClick={dec}>
 					Prev
@@ -84,26 +88,31 @@ export default function PdfNotes({
 							Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
 							{date.format("YYYY-MM-DDTHH:mm")}, {time}
 						</Container>
-						<Container id="notes-display">{notes.map(generateNote)}</Container>
+						<Container id="notes-display">
+							{notes.map((note) => (
+								<PdfNoteComponent {...note} />
+							))}
+						</Container>
 						<InputNotes
-							post={(note) => {
+							post={async (note) => {
 								const diff = dayjs().diff(date);
-								const id = JSON.parse(localStorage.getItem("user")!).id;
-								const currentURL = window.location.href;
-								const presentationId = currentURL.split("room/")[1];
-								console.log(id);
 								if (diff > 0 && pageNumber > 0) {
-									setNotes([
-										...notes,
-										{ note, page_number: pageNumber, time_stamp: diff },
-									]);
-									client.post("/api/addNote", {
+									const result = await client.post("/api/addNote", {
 										note: note,
 										timestamp: diff,
-										pageNumber: pageNumber,
-										notetakerId: id,
-										presentationId: presentationId,
+										pageNumber,
+										presentationId,
 									});
+
+									setNotes([
+										...notes,
+										{
+											note,
+											page_number: pageNumber,
+											time_stamp: diff,
+											note_id: result.data[0].id,
+										},
+									]);
 									//todo: add socket communication to update server notes
 								} else if (pageNumber > 0) {
 									alert("You can't post notes until the presentation starts");
@@ -116,17 +125,5 @@ export default function PdfNotes({
 				</div>
 			</Container>
 		</div>
-	);
-}
-
-function generateNote(note: PdfNote, index: number) {
-	return (
-		<Card key={index}>
-			<Typography>{note.note}</Typography>
-			<Typography>
-				{dayjs.duration(note.time_stamp, "milliseconds").format("HH:mm:ss")}
-			</Typography>
-			<Typography>Page {note.page_number}</Typography>
-		</Card>
 	);
 }
