@@ -129,15 +129,27 @@ app.get("/api/currentPresentations", requiresLogin, async (req, res) => {
 
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
-	const result = await pool.query(
-		sql`INSERT INTO users (username, password, name) VALUES ($1, $2, $3)`,
-		[username, password, name]
-	);
-	if (result.rowCount === 0) {
-		res.status(400).send("Username already exists");
-	} else {
-		const token = generateAccessToken(result.rows[0].id, result.rows[0].admin);
-		res.json({ token });
+	try {
+		const result = await pool.query(
+			sql`INSERT INTO users (username, password, name) VALUES ($1, $2, $3) RETURNING *`,
+			[username, password, name]
+		);
+		if (result.rowCount === 0) {
+			res.status(400).send("Username already exists");
+		} else {
+			const token = generateAccessToken(
+				result.rows[0].id,
+				result.rows[0].admin
+			);
+			res.json({ token });
+		}
+	} catch (err) {
+		if (err.code === "23505") {
+			res.status(400).send("Username already exists");
+		} else {
+			console.error(err);
+			res.status(500).send("Internal server error");
+		}
 	}
 });
 

@@ -41,28 +41,27 @@ export default function Console() {
 	return (
 		<>
 			<Sidebar />
-			<Button
-				onClick={async () => {
-					for (const id of selectionModel) {
-						if (rows.find((row) => row.id === id)!.admin) {
-							alert("You cannot delete an admin without first demoting them");
-							return;
+			<div id="containerIfSidebar">
+				<Button
+					onClick={async () => {
+						for (const id of selectionModel) {
+							if (rows.find((row) => row.id === id)!.admin) {
+								alert("You cannot delete an admin without first demoting them");
+								return;
+							}
+							client
+								.delete(`/api/user/${id}`)
+								.then(() => setRows(rows.filter((row) => row.id !== id)))
+								.catch((err) => console.error(err));
 						}
-						client
-							.delete(`/api/user/${id}`)
-							.then(() => setRows(rows.filter((row) => row.id !== id)))
-							.catch((err) => console.error(err));
-					}
-				}}
-			>
-				Delete selected users
-			</Button>
-			<div style={{ display: "flex", width: "80%", height: "100%" }}>
+					}}
+				>
+					Delete selected users
+				</Button>
 				<div style={{ flexGrow: 1 }}>
 					<DataGrid
 						style={{
 							backgroundColor: "white",
-							float: "right",
 						}}
 						autoHeight
 						rows={rows}

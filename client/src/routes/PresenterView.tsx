@@ -53,8 +53,7 @@ function PresentationRoomTest() {
 	};
 
 	return (
-		<div>
-			<Sidebar />
+		<div id="containerIfSidebar">
 			<Container>
 				<h1>Welcome to Presentation Room {title}</h1>
 				<h2>The Presentation ID for this room is {presentationId}</h2>
