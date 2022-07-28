@@ -23,7 +23,7 @@
 
 #presentationlabel {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 30px;
+	font-size: 20px;
 	margin-bottom: 10px;
 	margin-top: 10px;
 }
@@ -32,7 +32,7 @@
 	grid-area: "presentationcreate";
 	justify-content: center;
 	align-items: center;
-	text-align: center;
+	text-align: left;
 }
 
 #presentationsidebar {
@@ -42,7 +42,7 @@
 
 #presentationheader {
 	grid-area: "presentationheader";
-	background-color: #1e2124;
+	background-color: #424549;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -50,7 +50,7 @@
 
 #presentationjoin {
 	grid-area: "presentationjoin";
-	background-color: #1e2124;
+	background-color: #424549;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -84,7 +84,7 @@
 }
 
 #presentationbutton {
-	background: #5783de;
+	background-color: #8400ff;
 	padding: 15px;
 }
 
