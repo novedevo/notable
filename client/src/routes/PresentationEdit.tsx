@@ -81,9 +81,9 @@ export default function PresentationEdit() {
 		);
 	} else {
 		return (
-			<div>
-				<Sidebar />
+			<div id="containerIfSidebar">
 				<div id="schedulepresentation">
+					<div id="presentationheader"></div>
 					<div id="presentationheader">
 						<h3>Schedule Presentation</h3>
 						<Button
@@ -99,6 +99,8 @@ export default function PresentationEdit() {
 							View Your Presentations
 						</Button>
 					</div>
+					<div id="presentationheader"></div>
+					<div id="presentationsidebar"></div>
 					<div id="presentationcreate">
 						<div id="presentationlabel">
 							{" "}
@@ -180,6 +182,11 @@ export default function PresentationEdit() {
 						</div>
 					</div>
 				</div>
+				<div id="presentationsidebar"></div>
+
+				<div id="presentationfooter"></div>
+				<div id="presentationfooter"></div>
+				<div id="presentationfooter"> notable™</div>
 			</div>
 		);
 	}
