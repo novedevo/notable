@@ -28,7 +28,6 @@ export default function VideoNotes({
 
 	return (
 		<div>
-			<Sidebar />
 			<Container>
 				<div id="containerIfSidebar">
 					<div id="adjustableSize">
@@ -88,7 +87,7 @@ function generateNote(note: VideoNote, player: YouTubePlayer, index: number) {
 	);
 }
 
-// Method, YT Parser. Not ours.
+// Method, YT Parser. Very specific, just one way of doing this.
 function parseId(url: string) {
 	// Regular expression, all possible combinations before YT unique ID.
 	const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
