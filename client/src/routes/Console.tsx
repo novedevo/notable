@@ -41,50 +41,49 @@ export default function Console() {
 	return (
 		<>
 			<Sidebar />
-			<Button
-				onClick={async () => {
-					for (const id of selectionModel) {
-						if (rows.find((row) => row.id === id)!.admin) {
-							alert("You cannot delete an admin without first demoting them");
-							return;
-						}
-						client
-							.delete(`/api/user/${id}`)
-							.then(() => setRows(rows.filter((row) => row.id !== id)))
-							.catch((err) => console.error(err));
-					}
-				}}
-			>
-				Delete selected users
-			</Button>
 			<div id="containerIfSidebar">
-				<div style={{ flexGrow: 1 }}>
-					<DataGrid
-						style={{
-							backgroundColor: "white",
-							float: "right",
-						}}
-						autoHeight
-						rows={rows}
-						columns={columns}
-						checkboxSelection
-						disableSelectionOnClick
-						experimentalFeatures={{ newEditingApi: true }}
-						processRowUpdate={async (newRow, oldRow) => {
-							if (newRow.id === id && !newRow.admin) {
-								alert("You cannot remove your own admin status");
-								return oldRow;
+				<Button
+					onClick={async () => {
+						for (const id of selectionModel) {
+							if (rows.find((row) => row.id === id)!.admin) {
+								alert("You cannot delete an admin without first demoting them");
+								return;
 							}
-							await client.put(
-								`/api/update_user?username=${newRow.username}`,
-								newRow
-							);
-							return newRow;
-						}}
-						onSelectionModelChange={setSelectionModel}
-						selectionModel={selectionModel}
-					/>
-				</div>
+							client
+								.delete(`/api/user/${id}`)
+								.then(() => setRows(rows.filter((row) => row.id !== id)))
+								.catch((err) => console.error(err));
+						}
+					}}
+				>
+					Delete selected users
+				</Button>
+					<div style={{ flexGrow: 1 }}>
+						<DataGrid
+							style={{
+								backgroundColor: "white",
+							}}
+							autoHeight
+							rows={rows}
+							columns={columns}
+							checkboxSelection
+							disableSelectionOnClick
+							experimentalFeatures={{ newEditingApi: true }}
+							processRowUpdate={async (newRow, oldRow) => {
+								if (newRow.id === id && !newRow.admin) {
+									alert("You cannot remove your own admin status");
+									return oldRow;
+								}
+								await client.put(
+									`/api/update_user?username=${newRow.username}`,
+									newRow
+								);
+								return newRow;
+							}}
+							onSelectionModelChange={setSelectionModel}
+							selectionModel={selectionModel}
+						/>
+					</div>
 			</div>
 		</>
 	);
