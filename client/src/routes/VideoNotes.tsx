@@ -2,7 +2,6 @@ import { Container, Typography } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
-import Sidebar from "../components/Sidebar";
 import { VideoNote } from "../types";
 import { VideoNoteComponent } from "../components/Note";
 import axios from "axios";
@@ -29,7 +28,6 @@ export default function VideoNotes({
 
 	return (
 		<div>
-			<Sidebar />
 			<Container>
 				<div id="containerIfSidebar">
 					<div id="adjustableSize">
