@@ -132,6 +132,8 @@ export default function Presentations() {
 							Schedule Presentation
 						</Button>
 					</div>
+					<div id="presentationheader"></div>
+					<div id="presentationsidebar"></div>
 					<div id="presentationjoin">
 						<h3>Join a Presentation </h3>
 						<TextField
@@ -195,6 +197,9 @@ export default function Presentations() {
 								))}
 						</Container>
 					</div>
+					<div id="presentationsidebar"></div>
+					<div id="presentationfooter"></div>
+					<div id="presentationfooter"></div>
 				</div>
 			</div>
 		</div>
