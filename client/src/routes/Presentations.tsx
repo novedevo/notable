@@ -119,7 +119,7 @@ export default function Presentations() {
 				<div id="presentations">
 					<div id="presentationheader"></div>
 					<div id="presentationheader">
-						<h3>Your name for joining presentations is {user.name}</h3>
+						<h3>Your displayed name is: {user.name}</h3>
 						<Button
 							href="/schedulepresentation"
 							variant="contained"
