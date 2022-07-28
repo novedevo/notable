@@ -48,7 +48,7 @@ export default function SchedulePresentation() {
 				<div id="schedulepresentation">
 					<div id="presentationheader"></div>
 					<div id="presentationheader">
-						<h3>Schedule Presentation</h3>
+						<h1>Schedule Presentation</h1>
 						<Button
 							href="/presentations"
 							variant="contained"
@@ -63,10 +63,9 @@ export default function SchedulePresentation() {
 						</Button>
 					</div>
 					<div id="presentationheader"></div>
+					<div id="presentationsidebar"></div>
 					<div id="presentationcreate">
-						<div id="presentationlabel">
-							Enter a Presentation Title (required):
-						</div>
+						<div id="presentationlabel">Presentation Title</div>
 						<div>
 							<TextField
 								style={{
@@ -82,7 +81,7 @@ export default function SchedulePresentation() {
 							/>
 						</div>
 
-						<div id="presentationlabel"> Enter a PDF file:</div>
+						<div id="presentationlabel"> Add PDF file:</div>
 						<div>
 							<input
 								type="file"
@@ -93,7 +92,7 @@ export default function SchedulePresentation() {
 							/>
 						</div>
 
-						<div id="presentationlabel"> Enter a Video Link:</div>
+						<div id="presentationlabel"> Add YouTube Link:</div>
 						<div>
 							<TextField
 								style={{
@@ -108,10 +107,7 @@ export default function SchedulePresentation() {
 							/>
 						</div>
 
-						<div id="presentationlabel">
-							{" "}
-							Enter the Start Time of the Presentation (required):
-						</div>
+						<div id="presentationlabel"> Presentation Start Time:</div>
 						<div>
 							<TextField
 								style={{
