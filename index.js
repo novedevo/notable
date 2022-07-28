@@ -100,6 +100,33 @@ app.post("/api/login", async (req, res) => {
 	}
 });
 
+// save user notes from PDFnotes to db
+app.post("/api/addNote", requiresLogin, async (req, res) => {
+	const { note, timestamp, pageNumber, presentationId } = req.body;
+	const id = req.jwt.id;
+	const result = await pool.query(
+		sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5) RETURNING note_id`,
+		[note, timestamp, pageNumber, id, parseInt(presentationId)]
+	);
+	if (result.rowCount) {
+		res.json(result.rows);
+	} else {
+		res.status(400).send("invalid request");
+	}
+});
+
+app.get("/api/presentations", requiresLogin, async (req, res) => {
+	const result = await pool.query(sql`SELECT * FROM presentations`);
+	res.json(result.rows);
+});
+
+app.get("/api/currentPresentations", requiresLogin, async (req, res) => {
+	const result = await pool.query(
+		sql`SELECT * FROM presentations WHERE presentation_end_date IS NULL`
+	);
+	res.json(result.rows);
+});
+
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
 	try {
@@ -149,7 +176,35 @@ app.delete("/api/presentationNotes/:id", requiresLogin, async (req, res) => {
 		sql`DELETE FROM notes WHERE presentation_id = $1 AND notetaker_id = $2`,
 		[parseInt(id), req.jwt.id]
 	);
+	res.send("Presentation Notes has been deleted.");
+});
+app.delete("/api/presentation/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	await pool.query(
+		sql`DELETE FROM presentations WHERE presentation_instance_id = $1`,
+		[parseInt(id)]
+	);
 	res.send("All notes for this presentation have been deleted.");
+});
+app.delete("/api/note/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	await pool.query(sql`DELETE FROM notes WHERE note_id = $1`, [parseInt(id)]);
+	res.send("Note has been deleted.");
+});
+app.get("/api/presentation/:id", async (req, res) => {
+	const { id } = req.params;
+	const result = await pool.query(
+		sql`SELECT * FROM presentations WHERE presentation_instance_id = $1`,
+		[id]
+	);
+	const notes = await pool.query(
+		sql`SELECT * FROM notes WHERE presentation_id = $1 ORDER BY time_stamp ASC`,
+		[id]
+	);
+	if (result.rows.length === 0) {
+		res.status(404).send("Presentation does not exist.");
+	}
+	res.send({ ...result.rows[0], notes: notes.rows });
 });
 app.get("/api/notePresentations/", requiresLogin, async (req, res) => {
 	const result = await pool.query(
