@@ -57,7 +57,7 @@ export default function Console() {
 			>
 				Delete selected users
 			</Button>
-			<div style={{ display: "flex", width: "80%", height: "100%" }}>
+			<div id="containerIfSidebar">
 				<div style={{ flexGrow: 1 }}>
 					<DataGrid
 						style={{
