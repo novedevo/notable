@@ -1,4 +1,4 @@
-import { Container, Link, Typography } from "@mui/material";
+import { Button, Card, Container, Link, Typography } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
@@ -25,6 +25,7 @@ export default function VideoNotes({
 
 	const [notes, setNotes] = useState<VideoNote[]>(inputNotes);
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
+	const [currentNoteId, setcurrentNoteId] = useState(Number);
 
 	return (
 		<div>
@@ -51,19 +52,18 @@ export default function VideoNotes({
 						<Typography>Notes</Typography>
 						<Container id="notes-display">
 							{notes.map((note, i) => {
-								return generateNote(note, player, i);
+								return generateNote(note, player, i, currentNoteId);
 							})}
 						</Container>
 						<InputNotes
 							post={
 								(value) => {
 									const time = player.getCurrentTime();
-									setNotes([...notes, { note: value, time_stamp: time }]);
-									client.post("/api/addNote", {
-										note: value,
-										timestamp: time,
-										presentationId,
+									postNote(value, time, presentationId).then((noteid) => {
+										console.log(noteid);
+										setcurrentNoteId(noteid);
 									});
+									setNotes([...notes, { note: value, time_stamp: time, note_id: currentNoteId}]);
 								}
 								//todo: add socket communication to update server notes
 							}
@@ -75,17 +75,40 @@ export default function VideoNotes({
 	);
 }
 
-function generateNote(note: VideoNote, player: YouTubePlayer, index: number) {
+function generateNote(note: VideoNote, player: YouTubePlayer, index: number, note_id: number) {
 	return (
-		<li key={index}>
-			{note.note + "\t ".repeat(20)}
+		<Card key={index}>
+			<Typography>{note.note + "\t ".repeat(20)}</Typography>
+			<Typography>
 			<Link onClick={() => player.seekTo(note.time_stamp)}>
 				{new Date(Math.floor(note.time_stamp) * 1000)
 					.toISOString()
 					.substring(11, 19)}
 			</Link>
-		</li>
+			<Button
+				value={note_id}
+				onClick={deleteNote}
+			>delete</Button>
+			</Typography>
+		</Card>
 	);
+}
+
+async function postNote(value: String, time: String, presentationId: number): Promise<number> {
+	const result = await client.post("/api/addNote", {
+		note: value,
+		timestamp: time,
+		presentationId,
+	});
+	return result.data[0].note_id;
+}
+
+function deleteNote(event: {
+	currentTarget: {
+		value: any;
+	};
+}) {
+	console.log("Note Deleted ", event.currentTarget.value);
 }
 
 // Method, YT Parser. Not ours.
@@ -102,3 +125,4 @@ function parseId(url: string) {
 		alert("invalid url");
 	}
 }
+
