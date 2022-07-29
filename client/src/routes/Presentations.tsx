@@ -182,9 +182,9 @@ export default function Presentations() {
 										{presentation.youtube_url ? (
 											<div></div>
 										) : (
-										<div>
-											Starts at: {dateFormat(presentation.scheduled_date)}
-										</div>
+											<div>
+												Starts at: {dateFormat(presentation.scheduled_date)}
+											</div>
 										)}
 										<div>
 											Join with code: {presentation.presentation_instance_id}
