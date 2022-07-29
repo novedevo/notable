@@ -83,6 +83,7 @@ export default function Console() {
 					}}
 					style={{
 						backgroundColor: "red",
+						color: "white",
 						float: "right",
 					}}
 				>

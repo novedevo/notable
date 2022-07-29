@@ -6,7 +6,7 @@ body {
 }
 
 #pageHead {
-	background-color: #424549;
+	background-color: #36393e;
 	color: white;
 	box-shadow: 5px 10px #6638ac;
 	border-radius: 0px;
@@ -58,6 +58,18 @@ body {
 	height: 100%;
 	z-index: 1;
 	transform: translate(-0.8cm);
+}
+
+#viewNotesWithBacking {
+	background-attachment: fixed;
+	background-image: url("./background.jpg");
+	object-fit: cover;
+	align-content: center;
+	justify-content: center;
+	text-align: center;
+	height: 100vh;
+	width: 90vw;
+	float: right;
 }
 
 #middlePanel {
