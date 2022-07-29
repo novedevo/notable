@@ -86,24 +86,29 @@ export default function PdfNotes({
 						</Container>
 						<Container id="notes-display">{notes.map(generateNote)}</Container>
 						<InputNotes
-							post={(note) => {
+							post={async (note) => {
 								const diff = dayjs().diff(date);
 								const id = JSON.parse(localStorage.getItem("user")!).id;
 								const currentURL = window.location.href;
 								const presentationId = currentURL.split("room/")[1];
 								console.log(id);
 								if (diff > 0 && pageNumber > 0) {
-									setNotes([
-										...notes,
-										{ note, page_number: pageNumber, time_stamp: diff },
-									]);
-									client.post("/api/addNote", {
+									const result = await client.post("/api/addNote", {
 										note: note,
 										timestamp: diff,
 										pageNumber: pageNumber,
 										notetakerId: id,
 										presentationId: presentationId,
 									});
+									setNotes([
+										...notes,
+										{
+											note,
+											page_number: pageNumber,
+											time_stamp: diff,
+											note_id: result.data[0].note_id,
+										},
+									]);
 									//todo: add socket communication to update server notes
 								} else if (pageNumber > 0) {
 									alert("You can't post notes until the presentation starts");
@@ -126,7 +131,28 @@ function generateNote(note: PdfNote, index: number) {
 			<Typography>
 				{dayjs.duration(note.time_stamp, "milliseconds").format("HH:mm:ss")}
 			</Typography>
-			<Typography>Page {note.page_number}</Typography>
+			<Typography>
+				Page {note.page_number}
+				<Button value={note.note_id} onClick={deleteNote}>
+					delete
+				</Button>
+			</Typography>
 		</Card>
 	);
+}
+
+function deleteNote(event: {
+	currentTarget: {
+		value: any;
+	};
+}) {
+	console.log("Note Deleted ", event.currentTarget.value);
+	client
+		.delete(`/api/note/${event.currentTarget.value}`)
+		.then((res) => {
+			console.log(res.data);
+		})
+		.catch((err) => alert("invalid note: " + err.message));
+
+	window.location.reload();
 }
