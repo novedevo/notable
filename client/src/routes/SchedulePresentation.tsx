@@ -88,7 +88,8 @@ export default function SchedulePresentation() {
 								id="uploadPDF"
 								accept=".pdf,application/pdf"
 								required
-								onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
+								onChange={(e) => {setPdf(e.target.files?.[0] ?? null)
+									}}
 							/>
 						</div>
 
@@ -108,6 +109,9 @@ export default function SchedulePresentation() {
 						</div>
 
 						<div id="presentationlabel"> Presentation Start Time:</div>
+						{!pdf ? (
+						<h3>No Date Needed for Video Presentations</h3>
+						) : (
 						<div>
 							<TextField
 								style={{
@@ -121,7 +125,7 @@ export default function SchedulePresentation() {
 								}}
 							/>
 						</div>
-
+						)}
 						<div id="presentationlabel">
 							<Button
 								href=""
