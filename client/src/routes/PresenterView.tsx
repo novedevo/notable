@@ -53,20 +53,18 @@ function PresentationRoomTest() {
 	};
 
 	return (
-		<div id="containerIfSidebar">
-			<Container>
-				<h5>Viewing "{title}"</h5>
-				<h5>Room ID: {presentationId}</h5>
-				<Button variant="contained" onClick={endPresentation}>
-					End Presenation
-				</Button>
-				{userInfo.length ? <h5>Viewers:</h5> : <h5>There are no viewers</h5>}
-				<ul>
-					{userInfo.map((user) => {
-						return <li>{user}</li>;
-					})}
-				</ul>
-			</Container>
+		<div>
+			<h5>Viewing "{title}"</h5>
+			<h5>Room ID: {presentationId}</h5>
+			<Button variant="contained" onClick={endPresentation}>
+				End Presenation
+			</Button>
+			{userInfo.length ? <h5>Viewers:</h5> : <h5>There are no viewers</h5>}
+			<ul>
+				{userInfo.map((user) => {
+					return <li>{user}</li>;
+				})}
+			</ul>
 		</div>
 	);
 }
