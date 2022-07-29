@@ -41,7 +41,6 @@ const ViewNotes = () => {
 		}
 	};
 
-
 	return (
 		<div>
 			<Sidebar />
