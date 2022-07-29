@@ -111,6 +111,8 @@ function deleteNote(event: {
 			console.log(res.data);
 		})
 		.catch((err) => alert("invalid note: " + err.message));
+
+	window.location.reload();
 }
 
 // Method, YT Parser. Very specific, just one way of doing this.
