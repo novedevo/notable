@@ -120,9 +120,7 @@ export default function PdfNotes({
 								if (diff > 0 && pageNumber > 0) {
 									const result = await client.post("/api/addNote", {
 										note: note,
-										timestamp: parseInt(
-											dayjs.duration(diff).asSeconds().toString()
-										),
+										timestamp: diff,
 										pageNumber: pageNumber,
 										notetakerId: id,
 										presentationId: presentationId,
@@ -132,15 +130,10 @@ export default function PdfNotes({
 										{
 											note,
 											page_number: pageNumber,
-											time_stamp: parseInt(
-												dayjs.duration(diff).asSeconds().toString()
-											),
+											time_stamp: diff,
 											note_id: result.data[0].note_id,
 										},
 									]);
-									console.log(
-										parseInt(dayjs.duration(diff).asSeconds().toString())
-									);
 									//todo: add socket communication to update server notes
 								} else if (pageNumber > 0) {
 									alert("You can't post notes until the presentation starts");
@@ -161,9 +154,7 @@ function generateNote(note: PdfNote, index: number) {
 		<Card key={index}>
 			<Typography>{note.note}</Typography>
 			<Typography>
-				{new Date(Math.floor(note.time_stamp) * 1000)
-					.toISOString()
-					.substring(11, 19)}
+				{dayjs.duration(note.time_stamp, "milliseconds").format("HH:mm:ss")}
 			</Typography>
 			<Typography>
 				Page {note.page_number}

@@ -84,7 +84,7 @@ export default function VideoNotes({
 									const time = player.getCurrentTime();
 									const result = await client.post("/api/addNote", {
 										note: value,
-										timestamp: parseInt(time),
+										timestamp: time,
 										presentationId,
 									});
 									setNotes([
@@ -95,7 +95,6 @@ export default function VideoNotes({
 											note_id: result.data[0].note_id,
 										},
 									]);
-									console.log(parseInt(time));
 								}
 								//todo: add socket communication to update server notes
 							}
