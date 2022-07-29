@@ -51,7 +51,7 @@ function PresentationRoomTest() {
 			})
 			.catch((err) => alert("invalid presentation: " + err.message));
 	};
-	
+
 	return (
 		<div id="containerIfSidebar">
 			<Container>
@@ -60,11 +60,7 @@ function PresentationRoomTest() {
 				<Button variant="contained" onClick={endPresentation}>
 					End Presenation
 				</Button>
-				{userInfo.length ? (
-					<h5>Viewers:</h5>
-				) : (
-					<h5>There are no viewers</h5>
-				)}
+				{userInfo.length ? <h5>Viewers:</h5> : <h5>There are no viewers</h5>}
 				<ul>
 					{userInfo.map((user) => {
 						return <li>{user}</li>;
