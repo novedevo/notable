@@ -44,7 +44,7 @@ const ViewNotes = () => {
 	return (
 		<div>
 			<Sidebar />
-			<div id="containerIfSidebar">
+			<Container>
 				<div id="background-image"></div>
 				<div>
 					<div id="pageHead">
@@ -80,7 +80,7 @@ const ViewNotes = () => {
 						</div>
 					))}
 				</div>
-			</div>
+			</Container>
 		</div>
 	);
 };
