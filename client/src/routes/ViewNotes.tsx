@@ -24,15 +24,23 @@ const ViewNotes = () => {
 			value: any;
 		};
 	}) => {
-		console.log(event.currentTarget.value);
-		client
-			.delete(`/api/presentationNotes/${event.currentTarget.value}`)
-			.then((res) => {
-				alert("Presentation Note Deleted!");
-				console.log(res.data);
-			})
-			.catch((err) => alert("invalid presentation: " + err.message));
+		var confirmed = window.confirm(
+			"Are you sure you want to delete this note?"
+		);
+
+		if (confirmed == true) {
+			console.log(event.currentTarget.value);
+			client
+				.delete(`/api/presentationNotes/${event.currentTarget.value}`)
+				.then((res) => {
+					alert("Presentation Note Deleted!");
+					console.log(res.data);
+					window.location.reload();
+				})
+				.catch((err) => alert("invalid presentation: " + err.message));
+		}
 	};
+
 
 	return (
 		<div>
