@@ -179,9 +179,13 @@ export default function Presentations() {
 									>
 										<div id="presentation-title">{presentation.title}</div>
 										<div>Host ID: {presentation.presenter_id}</div>
-										<div>
-											Starts at: {dateFormat(presentation.scheduled_date)}
-										</div>
+										{presentation.youtube_url ? (
+											<div></div>
+										) : (
+											<div>
+												Starts at: {dateFormat(presentation.scheduled_date)}
+											</div>
+										)}
 										<div>
 											Join with code: {presentation.presentation_instance_id}
 										</div>
