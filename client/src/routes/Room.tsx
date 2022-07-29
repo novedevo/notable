@@ -38,7 +38,8 @@ export default function Room() {
 			<div>
 				<Sidebar />
 				<div id="containerIfSidebar">
-					<h1>Loading...</h1>
+					<h1>Oops! Nothing very notable here!</h1>
+					<h5>Leave this page and try looking for a different presentation</h5>
 				</div>
 			</div>
 		);
@@ -50,7 +51,7 @@ export default function Room() {
 					{user.id === presentation.presenter_id ? (
 						<PresenterView></PresenterView>
 					) : (
-						<div>Welcome Viewer</div>
+						<div>Welcome Viewer!</div>
 					)}
 					<VideoNotes
 						url={presentation.youtube_url!}
@@ -69,7 +70,7 @@ export default function Room() {
 					{user.id === presentation.presenter_id ? (
 						<PresenterView></PresenterView>
 					) : (
-						<div>Welcome Viewer</div>
+						<div>Welcome Viewer!</div>
 					)}
 					<PdfNotes
 						pdf={pdf!}
