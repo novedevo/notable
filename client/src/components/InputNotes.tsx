@@ -3,6 +3,7 @@ import { useState } from "react";
 
 export default function InputNotes({ post }: { post: (note: string) => void }) {
 	const [latestNote, setLatestNote] = useState("");
+
 	return (
 		<>
 			<textarea

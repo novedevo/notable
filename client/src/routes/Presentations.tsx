@@ -28,6 +28,12 @@ export default function Presentations() {
 		[]
 	);
 
+	useEffect(() => {
+		if (!user) {
+			navigate("/login");
+		}
+	});
+
 	// Database Presentations
 	useEffect(() => {
 		getPresentations().then((presentations) => {
@@ -65,19 +71,28 @@ export default function Presentations() {
 			value: any;
 		};
 	}) => {
-		if (dayjs().isBefore(event.currentTarget.name)) {
-			client
-				.delete(`/api/presentation/${event.currentTarget.value}`)
-				.then((res) => {
-					alert("Presentation Deleted!");
-					console.log(res.data);
-					navigate("/presentations");
-				})
-				.catch((err) => alert("invalid presentation: " + err.message));
-		} else {
-			alert("You cannot delete a presentation that has started");
+		var confirmed = window.confirm(
+			"Are you sure you want to delete this presentation?"
+		);
+
+		if (confirmed == true) {
+			if (dayjs().isBefore(event.currentTarget.name)) {
+				client
+					.delete(`/api/presentation/${event.currentTarget.value}`)
+					.then((res) => {
+						alert("Presentation Deleted!");
+						console.log(res.data);
+						navigate("/presentations");
+						window.location.reload();
+					})
+					.catch((err) => alert("invalid presentation: " + err.message));
+			} else {
+				alert("You cannot delete a presentation that has started");
+			}
 		}
 	};
+
+
 
 	const dateFormat = (date: any) => {
 		let d = dayjs(date);
@@ -173,9 +188,13 @@ export default function Presentations() {
 									>
 										<div id="presentation-title">{presentation.title}</div>
 										<div>Host ID: {presentation.presenter_id}</div>
-										<div>
-											Starts at: {dateFormat(presentation.scheduled_date)}
-										</div>
+										{presentation.youtube_url ? (
+											<div></div>
+										) : (
+											<div>
+												Starts at: {dateFormat(presentation.scheduled_date)}
+											</div>
+										)}
 										<div>
 											Join with code: {presentation.presentation_instance_id}
 										</div>

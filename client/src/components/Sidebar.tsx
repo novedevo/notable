@@ -1,13 +1,20 @@
 import { Button } from "@mui/material";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
 
-// abandoned. console button conditional appearance does not work in here.
-const user = JSON.parse(localStorage.getItem("user")!);
-//const user = "test";
 // testing note: replace user.name with user
 // Drag side bar up and down by tweaking line 18 (top).
 
 function Sidebar() {
+	const user = JSON.parse(localStorage.getItem("user")!);
+	const navigate = useNavigate();
+	useEffect(() => {
+		console.log(user);
+		if (!user) {
+			navigate("/login");
+		}
+	});
 	return (
 		<div
 			style={{
@@ -49,7 +56,7 @@ function Sidebar() {
 			>
 				Presentations
 			</Button>
-			{user.isAdmin && (
+			{user?.isAdmin && (
 				<Button
 					href="/console"
 					variant="contained"

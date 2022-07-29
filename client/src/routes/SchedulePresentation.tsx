@@ -88,7 +88,9 @@ export default function SchedulePresentation() {
 								id="uploadPDF"
 								accept=".pdf,application/pdf"
 								required
-								onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
+								onChange={(e) => {
+									setPdf(e.target.files?.[0] ?? null);
+								}}
 							/>
 						</div>
 
@@ -108,20 +110,23 @@ export default function SchedulePresentation() {
 						</div>
 
 						<div id="presentationlabel"> Presentation Start Time:</div>
-						<div>
-							<TextField
-								style={{
-									backgroundColor: "white",
-								}}
-								label="Presentation Start Time"
-								type="datetime-local"
-								defaultValue={scheduled_date.format("YYYY-MM-DDTHH:mm")}
-								onChange={(e) => {
-									setscheduled_date(dayjs(e.target.value));
-								}}
-							/>
-						</div>
-
+						{!pdf ? (
+							<h3>No Date Needed for Video Presentations</h3>
+						) : (
+							<div>
+								<TextField
+									style={{
+										backgroundColor: "white",
+									}}
+									label="Presentation Start Time"
+									type="datetime-local"
+									defaultValue={scheduled_date.format("YYYY-MM-DDTHH:mm")}
+									onChange={(e) => {
+										setscheduled_date(dayjs(e.target.value));
+									}}
+								/>
+							</div>
+						)}
 						<div id="presentationlabel">
 							<Button
 								href=""

@@ -9,20 +9,30 @@ export default function Register() {
 	const [name, setName] = useState("");
 	const navigate = useNavigate();
 
-	const submit = () => {
-		axios
-			.post("/api/register", { username, password, name })
-			.then((res) => {
-				if (res.data.token) {
-					localStorage.setItem("token", res.data.token);
-					localStorage.setItem(
-						"user",
-						JSON.stringify({ name, username, admin: false })
-					);
-					navigate("/login");
-				}
-			})
-			.catch((err) => alert("invalid username or password"));
+	const submit = async () => {
+		try {
+			const res = await axios.post("/api/register", {
+				username,
+				password,
+				name,
+			});
+			if (res.data.token) {
+				localStorage.setItem("token", res.data.token);
+				localStorage.setItem(
+					"user",
+					JSON.stringify({ name, username, admin: false })
+				);
+				navigate("/login");
+			}
+		} catch (err: any) {
+			if (err.response.status === 400) {
+				alert("Username already exists");
+			} else if (err.response.status === 500) {
+				alert("Server error");
+			} else {
+				alert("Unknown error has occurred");
+			}
+		}
 	};
 	return (
 		<Container>

@@ -1,5 +1,5 @@
-import { Container, Link, Typography } from "@mui/material";
-import { useState } from "react";
+import { Button, Card, Container, Link, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
 import Sidebar from "../components/Sidebar";
@@ -55,14 +55,21 @@ export default function VideoNotes({
 						</Container>
 						<InputNotes
 							post={
-								(value) => {
+								async (value) => {
 									const time = player.getCurrentTime();
-									setNotes([...notes, { note: value, time_stamp: time }]);
-									client.post("/api/addNote", {
+									const result = await client.post("/api/addNote", {
 										note: value,
 										timestamp: time,
 										presentationId,
 									});
+									setNotes([
+										...notes,
+										{
+											note: value,
+											time_stamp: time,
+											note_id: result.data[0].note_id,
+										},
+									]);
 								}
 								//todo: add socket communication to update server notes
 							}
@@ -76,15 +83,36 @@ export default function VideoNotes({
 
 function generateNote(note: VideoNote, player: YouTubePlayer, index: number) {
 	return (
-		<li key={index}>
-			{note.note + "\t ".repeat(20)}
-			<Link onClick={() => player.seekTo(note.time_stamp)}>
-				{new Date(Math.floor(note.time_stamp) * 1000)
-					.toISOString()
-					.substring(11, 19)}
-			</Link>
-		</li>
+		<Card key={index}>
+			<Typography>{note.note + "\t ".repeat(20)}</Typography>
+			<Typography>
+				<Link onClick={() => player.seekTo(note.time_stamp)}>
+					{new Date(Math.floor(note.time_stamp) * 1000)
+						.toISOString()
+						.substring(11, 19)}
+				</Link>
+				<Button value={note.note_id} onClick={deleteNote}>
+					delete
+				</Button>
+			</Typography>
+		</Card>
 	);
+}
+
+function deleteNote(event: {
+	currentTarget: {
+		value: any;
+	};
+}) {
+	console.log("Note Deleted ", event.currentTarget.value);
+	client
+		.delete(`/api/note/${event.currentTarget.value}`)
+		.then((res) => {
+			console.log(res.data);
+		})
+		.catch((err) => alert("invalid note: " + err.message));
+
+	window.location.reload();
 }
 
 // Method, YT Parser. Very specific, just one way of doing this.
