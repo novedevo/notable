@@ -18,9 +18,8 @@ function Sidebar() {
 	return (
 		<div
 			style={{
-				width: "10vw",
-				minWidth: "176px",
-				height: "100vh",
+				width: "176px",
+				height: "100%",
 				zIndex: 10,
 				lineHeight: "50px",
 				position: "fixed",
