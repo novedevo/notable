@@ -54,7 +54,9 @@ function PresentationRoomTest() {
 
 	return (
 		<div>
-			<h5>Viewing Presentation "{title}" | Room ID: {presentationId}</h5>
+			<h5>
+				Viewing Presentation "{title}" | Room ID: {presentationId}
+			</h5>
 			{userInfo.length ? <h5>Viewers:</h5> : <h5>There are no viewers</h5>}
 			<ul>
 				{userInfo.map((user) => {
