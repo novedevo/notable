@@ -1,5 +1,5 @@
 import { Button, Card, Container, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import InputNotes from "../components/InputNotes";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -8,6 +8,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
 import Sidebar from "../components/Sidebar";
 import { PdfNote } from "../types";
+import Pagination from "react-bootstrap/Pagination";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -48,22 +50,45 @@ export default function PdfNotes({
 			setPageNumber(pageNumber + 1);
 		}
 	};
+	const last = () => {
+		setPageNumber(numPages);
+	};
+	const first = () => {
+		setPageNumber(1);
+	};
 	const dec = () => {
 		if (pageNumber !== 1) {
 			setPageNumber(pageNumber - 1);
+		}
+	};
+	const updatePage = (pageNum: number) => {
+		if (pageNum > numPages) {
+			return;
+		} else {
+			setPageNumber(pageNum);
 		}
 	};
 
 	return (
 		<div>
 			<Container>
-				<Button variant="contained" onClick={dec}>
-					Prev
-				</Button>
 				<Button variant="contained" onClick={inc}>
 					Next
 				</Button>
-				<span id="pagenum">{pageNumber}</span>
+				<div style={{ display: "block", width: 700, padding: 30 }}>
+					<Pagination size="lg">
+						<Pagination.First onClick={first} />
+						<Pagination.Prev onClick={dec} />
+						<input
+							style={{ width: 60, height: 57 }}
+							type="number"
+							value={pageNumber}
+							onChange={(e) => updatePage(parseInt(e.target.value))}
+						></input>
+						<Pagination.Next onClick={inc} />
+						<Pagination.Last onClick={last} />
+					</Pagination>
+				</div>
 				<div id="container">
 					<Document
 						file={pdf}
