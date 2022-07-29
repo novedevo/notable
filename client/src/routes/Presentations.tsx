@@ -92,8 +92,6 @@ export default function Presentations() {
 		}
 	};
 
-
-
 	const dateFormat = (date: any) => {
 		let d = dayjs(date);
 		return d.format("ddd MMM DD YYYY H:mm");
