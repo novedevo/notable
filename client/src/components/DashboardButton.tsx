@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 function DashboardButton() {
 	return (
 		<Button
+			data-testid="DashboardButton"
 			href="/"
 			color="info"
 			variant="contained"
