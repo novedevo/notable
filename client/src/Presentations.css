@@ -92,8 +92,10 @@
 	background-image: url("delete.png");
 	background-size: cover;
 	border: none;
-	width: 70px;
-	height: 70px;
+	width: 35px;
+	height: 35px;
+	background-size: 35px 35px;
+	background-repeat: no-repeat;
 	float: right;
 	transform: translate(0%, -135%);
 }
@@ -102,8 +104,10 @@
 	background-image: url("edit.png");
 	background-size: cover;
 	border: none;
-	width: 70px;
-	height: 70px;
+	width: 35px;
+	height: 35px;
+	background-size: 35px 35px;
+	background-repeat: no-repeat;
 	float: right;
 	transform: translate(-50%, -135%);
 }
@@ -112,8 +116,10 @@
 	background-image: url("join.png");
 	background-size: cover;
 	border: none;
-	width: 70px;
-	height: 70px;
+	width: 35px;
+	height: 35px;
+	background-size: 35px 35px;
+	background-repeat: no-repeat;
 	float: right;
 	transform: translate(-100%, -135%);
 }

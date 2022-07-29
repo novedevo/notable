@@ -28,19 +28,44 @@ export default function VideoNotes({
 
 	return (
 		<div>
-			<Container>
-				<div id="containerIfSidebar">
-					<div id="adjustableSize">
-						<YouTube
-							id="YoutubeVideo"
-							videoId={videoId}
-							opts={{
-								height: 800,
-								width: 1000,
-								playerVars: {
-									// autoplay: 1,
-									playsInline: 1,
-									modestBranding: 1,
+			<div id="adjustableSize">
+				<YouTube
+					id="YoutubeVideo"
+					videoId={videoId}
+					opts={{
+						height: 800,
+						width: 1000,
+						playerVars: {
+							// autoplay: 1,
+							playsInline: 1,
+							modestBranding: 1,
+						},
+					}}
+					onReady={(event) => setPlayer(event.target)}
+				/>
+			</div>
+			<div className="right-side">
+				<Typography>Notes</Typography>
+				<Container id="notes-display">
+					{notes.map((note, i) => {
+						return generateNote(note, player, i);
+					})}
+				</Container>
+				<InputNotes
+					post={
+						async (value) => {
+							const time = player.getCurrentTime();
+							const result = await client.post("/api/addNote", {
+								note: value,
+								timestamp: time,
+								presentationId,
+							});
+							setNotes([
+								...notes,
+								{
+									note: value,
+									time_stamp: time,
+									note_id: result.data[0].note_id,
 								},
 							}}
 							onReady={(event) => setPlayer(event.target)}

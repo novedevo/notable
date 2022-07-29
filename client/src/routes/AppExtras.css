@@ -6,8 +6,8 @@ body {
 }
 
 #pageHead {
-	background-color: rgb(255, 255, 255);
-	color: black;
+	background-color: #424549;
+	color: white;
 	box-shadow: 5px 10px #6638ac;
 	border-radius: 0px;
 	z-index: 30;
@@ -44,7 +44,6 @@ body {
 	margin-top: 0px;
 	line-height: 1px;
 	background-color: white;
-	border-radius: 1mm;
 }
 
 #background-image {
@@ -67,7 +66,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	border-radius: 0cm;
 	line-height: 60px;
 	width: 400px;
 	height: 450px;
@@ -85,7 +83,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	border-radius: 0cm;
 	line-height: 60px;
 	width: 400px;
 	height: 200px;
