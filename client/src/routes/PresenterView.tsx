@@ -54,17 +54,25 @@ function PresentationRoomTest() {
 
 	return (
 		<div>
-			<h5>Viewing "{title}"</h5>
-			<h5>Room ID: {presentationId}</h5>
-			<Button variant="contained" onClick={endPresentation}>
-				End Presenation
-			</Button>
+			<h5>
+				Viewing Presentation "{title}" | Room ID: {presentationId}
+			</h5>
 			{userInfo.length ? <h5>Viewers:</h5> : <h5>There are no viewers</h5>}
 			<ul>
 				{userInfo.map((user) => {
 					return <li>{user}</li>;
 				})}
 			</ul>
+			<Button
+				variant="contained"
+				onClick={endPresentation}
+				style={{
+					backgroundColor: "#1e2124",
+					color: "white",
+				}}
+			>
+				End Presentation
+			</Button>
 		</div>
 	);
 }
