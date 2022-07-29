@@ -25,11 +25,6 @@ export default function InputNotes({ post }: { post: (note: string) => void }) {
 				}}
 			/>
 			<Button
-				style={{
-					backgroundColor: "#8400ff",
-					color: "white",
-					top: "0.5rem",
-				}}
 				onClick={(e) => {
 					post(latestNote);
 					setLatestNote("");
