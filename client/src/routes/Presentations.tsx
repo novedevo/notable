@@ -71,12 +71,11 @@ export default function Presentations() {
 			value: any;
 		};
 	}) => {
-		var confirmed = window.confirm(
-			"Are you sure you want to delete this presentation?"
-		);
-
-		if (confirmed == true) {
-			if (dayjs().isBefore(event.currentTarget.name)) {
+		if (dayjs().isBefore(event.currentTarget.name)) {
+			var confirmed = window.confirm(
+				"Are you sure you want to delete this presentation?"
+			);
+			if (confirmed == true) {
 				client
 					.delete(`/api/presentation/${event.currentTarget.value}`)
 					.then((res) => {
@@ -86,9 +85,9 @@ export default function Presentations() {
 						window.location.reload();
 					})
 					.catch((err) => alert("invalid presentation: " + err.message));
-			} else {
-				alert("You cannot delete a presentation that has started");
 			}
+		} else {
+			alert("You cannot delete a presentation that has started");
 		}
 	};
 
