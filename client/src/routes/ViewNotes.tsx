@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { Presentation } from "../types";
 import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
@@ -13,11 +13,13 @@ const client = axios.create({
 
 const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
+	const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
+
 	useEffect(() => {
 		getPresentationWithNotes().then((notepresentations) => {
 			setPresentations(notepresentations);
 		});
-	}, []);
+	}, [reducerValue]);
 
 	const deleteNote = (event: {
 		currentTarget: {
@@ -35,7 +37,7 @@ const ViewNotes = () => {
 				.then((res) => {
 					alert("Presentation Note Deleted!");
 					console.log(res.data);
-					window.location.reload();
+					forceUpdate();
 				})
 				.catch((err) => alert("invalid presentation: " + err.message));
 		}

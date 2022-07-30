@@ -1,6 +1,6 @@
 import { Button, Card, Container, TextField } from "@mui/material";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { User, Presentation } from "../types";
@@ -24,6 +24,7 @@ export default function Presentations() {
 	const user: User = JSON.parse(localStorage.getItem("user")!);
 	const [presentationID, setPresentationID] = useState(0);
 	const [dbPresentations, setDbPresentations] = useState<Presentation[]>([]);
+	const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
@@ -44,7 +45,7 @@ export default function Presentations() {
 				)
 			);
 		});
-	}, [user.id]);
+	}, [user.id, reducerValue]);
 
 	const joinRoom = () => {
 		// checks against the database of presentations if there is a valid presentation corresponding to the id
@@ -82,7 +83,7 @@ export default function Presentations() {
 						alert("Presentation Deleted!");
 						console.log(res.data);
 						navigate("/presentations");
-						window.location.reload();
+						forceUpdate();
 					})
 					.catch((err) => alert("invalid presentation: " + err.message));
 			}
