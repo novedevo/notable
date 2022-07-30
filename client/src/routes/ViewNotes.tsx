@@ -46,7 +46,7 @@ const ViewNotes = () => {
 			<Sidebar />
 			<div id="containerIfSidebar">
 				<Container>
-					<div id="background-image"></div>
+					<div id="viewNotesWithBacking"></div>
 					<div>
 						<div id="pageHead">
 							<h1>View Notes</h1>

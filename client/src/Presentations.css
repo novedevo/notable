@@ -19,6 +19,8 @@
 		"presentationheader presentationheader presentationheader"
 		"presentationsidebar presentationcreate presentationsidebar"
 		"presentationfooter presentationfooter presentationfooter";
+
+	z-index: 50;
 }
 
 #presentationlabel {
@@ -37,12 +39,10 @@
 
 #presentationsidebar {
 	grid-area: "presentationsidebar";
-	background-color: #424549;
 }
 
 #presentationheader {
 	grid-area: "presentationheader";
-	background-color: #424549;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -50,7 +50,6 @@
 
 #presentationjoin {
 	grid-area: "presentationjoin";
-	background-color: #424549;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -63,7 +62,6 @@
 
 #presentationfooter {
 	grid-area: "presentationfooter";
-	background-color: #424549;
 	color: white;
 	display: flex;
 	justify-content: center;
@@ -122,4 +120,39 @@
 	background-repeat: no-repeat;
 	float: right;
 	transform: translate(-100%, -135%);
+}
+
+#scheduleHead {
+	background-color: #36393e;
+	color: white;
+	box-shadow: 5px 10px #6638ac;
+	border-radius: 0px;
+	z-index: 30;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 600px;
+	height: 50px;
+	position: fixed;
+	top: 10%;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	z-index: 500;
+}
+
+#schedulePanel {
+	color: white;
+	background-color: #1e2124;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 600px;
+	height: 500px;
+	padding-left: 10%;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 400;
+	box-shadow: 5px 10px #6638ac;
 }
