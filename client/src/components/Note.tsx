@@ -8,6 +8,7 @@ export function PdfNoteComponent(props: {
 	note: string;
 	time_stamp: number;
 	page_number: number;
+	onDelete?: () => void;
 }) {
 	return (
 		<Card>
@@ -16,7 +17,14 @@ export function PdfNoteComponent(props: {
 				{dayjs.duration(props.time_stamp, "milliseconds").format("HH:mm:ss")}
 			</Typography>
 			<Typography>Page {props.page_number}</Typography>
-			<Button value={props.note_id} onClick={() => deleteNote(props.note_id)}>
+			<Button
+				onClick={() => {
+					deleteNote(props.note_id);
+					if (props.onDelete) {
+						props.onDelete();
+					}
+				}}
+			>
 				delete
 			</Button>
 		</Card>
@@ -28,6 +36,7 @@ export function VideoNoteComponent(props: {
 	note_id: number;
 	note: string;
 	time_stamp: number;
+	onDelete?: () => void;
 }) {
 	return (
 		<Card>
@@ -40,7 +49,14 @@ export function VideoNoteComponent(props: {
 						.toISOString()
 						.substring(11, 19)}
 				</Link>
-				<Button value={props.note_id} onClick={() => deleteNote(props.note_id)}>
+				<Button
+					onClick={() => {
+						deleteNote(props.note_id);
+						if (props.onDelete) {
+							props.onDelete();
+						}
+					}}
+				>
 					delete
 				</Button>
 			</Typography>

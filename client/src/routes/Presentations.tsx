@@ -55,7 +55,7 @@ export default function Presentations() {
 		if (validCode) {
 			const userData = {
 				room: presentationID,
-				name: user.name,
+				name: user.username,
 			};
 			// sends userData to the server so that a person can join a room
 			socket.emit("join_room", userData);
@@ -92,17 +92,6 @@ export default function Presentations() {
 		} else {
 			alert("You cannot edit a presentation that has started");
 		}
-	};
-
-	const joinOwnPresentation = (room: number) => {
-		const userData = {
-			room,
-			name: user.name,
-		};
-		// sends userData to the server so that a person can join a room
-		socket.emit("join_room", userData);
-		// sends the user to that room
-		navigate("/room/" + room);
 	};
 	return (
 		<>
@@ -194,7 +183,7 @@ export default function Presentations() {
 									<Button
 										id="joinbutton"
 										onClick={() =>
-											joinOwnPresentation(presentation.presentation_instance_id)
+											navigate("/room/" + presentation.presentation_instance_id)
 										}
 									></Button>
 								</Card>

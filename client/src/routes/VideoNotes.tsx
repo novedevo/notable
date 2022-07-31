@@ -5,6 +5,7 @@ import InputNotes from "../components/InputNotes";
 import { VideoNote } from "../types";
 import { VideoNoteComponent } from "../components/Note";
 import axios from "axios";
+import { Socket } from "socket.io-client";
 
 const client = axios.create({
 	headers: {
@@ -12,19 +13,18 @@ const client = axios.create({
 	},
 });
 
-export default function VideoNotes({
-	url,
-	inputNotes,
-	presentationId,
-}: {
+export default function VideoNotes(props: {
 	url: string;
 	inputNotes: VideoNote[];
 	presentationId: number;
+	socket: Socket;
 }) {
-	const videoId = parseId(url);
+	const videoId = parseId(props.url);
 
-	const [notes, setNotes] = useState<VideoNote[]>(inputNotes);
+	const [notes, setNotes] = useState<VideoNote[]>(props.inputNotes);
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
+
+	const presentationId = parseInt(window.location.pathname.split("/").pop()!);
 
 	return (
 		<div>
@@ -65,6 +65,7 @@ export default function VideoNotes({
 									timestamp: parseInt(time),
 									presentationId,
 								});
+								props.socket.emit("add_note", { room: presentationId });
 								setNotes([
 									...notes,
 									{

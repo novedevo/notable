@@ -10,6 +10,7 @@ import { PdfNote } from "../types";
 import Pagination from "react-bootstrap/Pagination";
 
 import { PdfNoteComponent } from "../components/Note";
+import { Socket } from "socket.io-client";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -21,17 +22,14 @@ const client = axios.create({
 	},
 });
 
-export default function PdfNotes({
-	pdf,
-	startTime,
-	inputNotes,
-}: {
+export default function PdfNotes(props: {
 	pdf: string;
 	startTime: string;
 	inputNotes: PdfNote[];
+	socket: Socket;
 }) {
-	const [notes, setNotes] = useState<PdfNote[]>(inputNotes);
-	const date = dayjs(startTime);
+	const [notes, setNotes] = useState<PdfNote[]>(props.inputNotes);
+	const date = dayjs(props.startTime);
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -89,7 +87,7 @@ export default function PdfNotes({
 			</div>
 			<div id="container">
 				<Document
-					file={pdf}
+					file={props.pdf}
 					onLoadSuccess={({ numPages }) => {
 						setNumPages(numPages);
 						setPageNumber(1);
@@ -116,22 +114,27 @@ export default function PdfNotes({
 						post={async (note) => {
 							const diff = dayjs().diff(date);
 							if (diff > 0 && pageNumber > 0) {
-								const result = await client.post("/api/addNote", {
-									note: note,
-									timestamp: dayjs.duration(diff).asSeconds(),
-									pageNumber,
-									presentationId,
-								});
-								setNotes([
-									...notes,
-									{
-										note,
-										page_number: pageNumber,
-										time_stamp: dayjs.duration(diff).asSeconds(),
-										note_id: result.data[0].note_id,
-									},
-								]);
-								console.log(dayjs.duration(diff).asSeconds());
+								try {
+									const result = await client.post("/api/addNote", {
+										note: note,
+										timestamp: diff,
+										pageNumber,
+										presentationId,
+									});
+									props.socket.emit("add_note", { room: presentationId });
+									setNotes([
+										...notes,
+										{
+											note,
+											page_number: pageNumber,
+											time_stamp: diff,
+											note_id: result.data[0].note_id,
+										},
+									]);
+								} catch (err) {
+									console.error(err);
+									alert(err);
+								}
 								//todo: add socket communication to update server notes
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");

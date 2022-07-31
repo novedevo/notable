@@ -76,7 +76,6 @@ io.on("connection", (socket) => {
 
 	socket.on("delete_note", async (data) => {
 		console.log("note deleted");
-		await pool.query(sql`DELETE FROM notes WHERE id = ${data.id}`);
 		await updateNoteList(data.room, socket);
 	});
 
@@ -91,7 +90,7 @@ async function updateNoteList(room, socket) {
 		sql`SELECT * FROM notes WHERE presentation_id=$1`,
 		[room]
 	);
-	socket.emit(room).emit("note_list", response.rows);
+	socket.to(room).emit("note_list", response.rows);
 }
 
 // API section
@@ -124,14 +123,19 @@ app.post("/api/login", async (req, res) => {
 app.post("/api/addNote", requiresLogin, async (req, res) => {
 	const { note, timestamp, pageNumber, presentationId } = req.body;
 	const id = req.jwt.id;
-	const result = await pool.query(
-		sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5) RETURNING note_id`,
-		[note, timestamp, pageNumber, id, parseInt(presentationId)]
-	);
-	if (result.rowCount) {
-		res.json(result.rows);
-	} else {
-		res.status(400).send("invalid request");
+	try {
+		const result = await pool.query(
+			sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5) RETURNING note_id`,
+			[note, timestamp, pageNumber, id, parseInt(presentationId)]
+		);
+		if (result.rowCount) {
+			res.json(result.rows);
+		} else {
+			res.status(400).send("invalid request");
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("postgres error");
 	}
 });
 

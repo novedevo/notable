@@ -2,7 +2,7 @@ import { Button, Container } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import { Note, PdfNote, Presentation, User, VideoNote } from "../types";
 import { PdfNoteComponent, VideoNoteComponent } from "../components/Note";
 
@@ -12,12 +12,7 @@ const client = axios.create({
 	},
 });
 
-const socket = io();
-socket.on("connect_error", (err: { message: any }) => {
-	console.log(`connect_error due to ${err.message}`);
-});
-
-export default function PresenterView() {
+export default function PresenterView(props: { socket: Socket }) {
 	const [pdf, setPdf] = useState<boolean>(false);
 	const [userInfo, setUserInfo] = useState<User[]>([]);
 	const [notes, setNotes] = useState<Note[]>([]);
@@ -37,16 +32,17 @@ export default function PresenterView() {
 		});
 	}, [presentationId]);
 
-	const navigate = useNavigate();
+	useEffect(() => {
+		props.socket.on("user_list", (data: User[]) => {
+			setUserInfo(data);
+		});
+		props.socket.on("note_list", (data: Note[]) => {
+			setNotes(data);
+		});
+		//
+	}, [props.socket]);
 
-	// Receives the call when "user_list" is sent in index.js, it names the usernames of all the users
-	// that have uniquely joined this room and adds it to an array locally
-	socket.on("user_list", (data: User[]) => {
-		setUserInfo(data);
-	});
-	socket.on("note_list", (data: Note[]) => {
-		setNotes(data);
-	});
+	const navigate = useNavigate();
 
 	const endPresentation = () => {
 		client
@@ -85,9 +81,27 @@ export default function PresenterView() {
 				<ul>
 					{notes.map((note) =>
 						pdf ? (
-							<PdfNoteComponent {...(note as PdfNote)} key={note.note_id} />
+							<PdfNoteComponent
+								{...(note as PdfNote)}
+								key={note.note_id}
+								onDelete={() =>
+									props.socket.emit("delete_note", {
+										room: presentationId,
+										note_id: note.note_id,
+									})
+								}
+							/>
 						) : (
-							<VideoNoteComponent {...(note as VideoNote)} key={note.note_id} />
+							<VideoNoteComponent
+								{...(note as VideoNote)}
+								key={note.note_id}
+								onDelete={() =>
+									props.socket.emit("delete_note", {
+										room: presentationId,
+										note_id: note.note_id,
+									})
+								}
+							/>
 						)
 					)}
 				</ul>
