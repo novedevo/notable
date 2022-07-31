@@ -48,7 +48,7 @@ app.use(
 const server = createServer(app);
 const io = new Server(server);
 
-const users = [];
+let users = [];
 
 io.on("connection", (socket) => {
 	console.log("User Connected", socket.id);
@@ -69,10 +69,30 @@ io.on("connection", (socket) => {
 		);
 	});
 
+	socket.on("add_note", async (data) => {
+		console.log("note added");
+		await updateNoteList(data.room, socket);
+	});
+
+	socket.on("delete_note", async (data) => {
+		console.log("note deleted");
+		await pool.query(sql`DELETE FROM notes WHERE id = ${data.id}`);
+		await updateNoteList(data.room, socket);
+	});
+
 	socket.on("disconnect", () => {
 		console.log("User Disconnected", socket.id);
+		users = users.filter((user) => user.id !== socket.id);
 	});
 });
+
+async function updateNoteList(room, socket) {
+	const response = await pool.query(
+		sql`SELECT * FROM notes WHERE presentation_id=$1`,
+		[room]
+	);
+	socket.emit(room).emit("note_list", response.rows);
+}
 
 // API section
 
