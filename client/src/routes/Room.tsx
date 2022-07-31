@@ -7,6 +7,7 @@ import VideoNotes from "./VideoNotes";
 import PdfNotes from "./PdfNotes";
 import PresenterView from "./PresenterView";
 import Sidebar from "../components/Sidebar";
+import "./AppExtras.css";
 
 const client = axios.create({
 	headers: {
@@ -38,7 +39,7 @@ export default function Room() {
 			<div>
 				<Sidebar />
 				<div id="containerIfSidebar">
-					<h1>Loading...</h1>
+					<h1>Loading Notable...</h1>
 				</div>
 			</div>
 		);
@@ -48,9 +49,11 @@ export default function Room() {
 				<Sidebar />
 				<div id="containerIfSidebar">
 					{user.id === presentation.presenter_id ? (
-						<PresenterView></PresenterView>
+						<div id="pageHead">
+							<PresenterView></PresenterView>
+						</div>
 					) : (
-						<div>Welcome Viewer</div>
+						<div>Welcome Viewer!</div>
 					)}
 					<VideoNotes
 						url={presentation.youtube_url!}
@@ -69,7 +72,7 @@ export default function Room() {
 					{user.id === presentation.presenter_id ? (
 						<PresenterView></PresenterView>
 					) : (
-						<div>Welcome Viewer</div>
+						<div>Welcome Viewer!</div>
 					)}
 					<PdfNotes
 						pdf={pdf!}

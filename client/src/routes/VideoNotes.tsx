@@ -28,55 +28,54 @@ export default function VideoNotes({
 
 	return (
 		<div>
-			<Container>
-				<div id="containerIfSidebar">
-					<div id="adjustableSize">
-						<YouTube
-							id="YoutubeVideo"
-							videoId={videoId}
-							opts={{
-								height: 800,
-								width: 1000,
-								playerVars: {
-									// autoplay: 1,
-									playsInline: 1,
-									modestBranding: 1,
-								},
-							}}
-							onReady={(event) => setPlayer(event.target)}
-						/>
-					</div>
-					<div className="right-side">
-						<Typography>Notes</Typography>
-						<Container id="notes-display">
-							{notes.map((note, i) => (
-								<VideoNoteComponent {...note} key={i} player={player} />
-							))}
-						</Container>
-						<InputNotes
-							post={
-								async (value) => {
-									const time = player.getCurrentTime();
-									const result = await client.post("/api/addNote", {
-										note: value,
-										timestamp: time,
-										presentationId,
-									});
-									setNotes([
-										...notes,
-										{
-											note: value,
-											time_stamp: time,
-											note_id: result.data[0].note_id,
-										},
-									]);
-								}
-								//todo: add socket communication to update server notes
-							}
-						/>
-					</div>
+			<div id="containerIfSidebar">
+				<div id="adjustableSize">
+					<YouTube
+						id="YoutubeVideo"
+						videoId={videoId}
+						opts={{
+							height: 800,
+							width: 1000,
+							playerVars: {
+								// autoplay: 1,
+								playsInline: 1,
+								modestBranding: 1,
+							},
+						}}
+						onReady={(event) => setPlayer(event.target)}
+					/>
 				</div>
-			</Container>
+				<div className="right-side">
+					<Typography>Notes</Typography>
+					<Container id="notes-display">
+						{notes.map((note, i) => (
+							<VideoNoteComponent {...note} key={i} player={player} />
+						))}
+					</Container>
+					<InputNotes
+						post={
+							async (value) => {
+								const time = player.getCurrentTime();
+								const result = await client.post("/api/addNote", {
+									note: value,
+									timestamp: parseInt(time),
+									presentationId,
+								});
+								setNotes([
+									...notes,
+									{
+										note: value,
+										time_stamp: time,
+										note_id: result.data[0].note_id,
+									},
+								]);
+								console.log(parseInt(time));
+							}
+							//todo: add socket communication to update server notes
+						}
+					/>
+				</div>
+			</div>
 		</div>
 	);
 }

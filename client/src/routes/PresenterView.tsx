@@ -62,21 +62,25 @@ export default function PresenterView() {
 	return (
 		<div id="containerIfSidebar">
 			<Container>
-				<h1>Welcome to {title}</h1>
-				<h2>The Presentation ID for this room is {presentationId}</h2>
-				<Button variant="contained" onClick={endPresentation}>
-					End Presenation
-				</Button>
-				{userInfo.length ? (
-					<h3>The current users in this room are:</h3>
-				) : (
-					<h3>No users in this room</h3>
-				)}
+				<h5>
+					Viewing Presentation "{title}" | Room ID: {presentationId}
+				</h5>
+				{userInfo.length ? <h5>Viewers:</h5> : <h5>There are no viewers</h5>}
 				<ul>
 					{userInfo.map((user) => {
 						return <li>{user}</li>;
 					})}
 				</ul>
+				<Button
+					variant="contained"
+					onClick={endPresentation}
+					style={{
+						backgroundColor: "#1e2124",
+						color: "white",
+					}}
+				>
+					End Presentation
+				</Button>
 				<h3>All notes taken for this presentation:</h3>
 				<ul>
 					{notes.map((note) =>

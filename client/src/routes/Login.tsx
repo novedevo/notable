@@ -55,7 +55,7 @@ export default function Login() {
 				<div id="middlePanel">
 					{expired && <h2>Your session has expired.</h2>}
 					<br></br>
-					<h1>notable™</h1>
+					<h1>notable</h1>
 					<h4>LOGIN</h4>
 					<div
 						onKeyDown={(event) => {

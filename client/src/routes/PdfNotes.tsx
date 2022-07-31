@@ -7,6 +7,8 @@ import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
 import { PdfNote } from "../types";
+import Pagination from "react-bootstrap/Pagination";
+
 import { PdfNoteComponent } from "../components/Note";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -48,9 +50,22 @@ export default function PdfNotes({
 			setPageNumber(pageNumber + 1);
 		}
 	};
+	const last = () => {
+		setPageNumber(numPages);
+	};
+	const first = () => {
+		setPageNumber(1);
+	};
 	const dec = () => {
 		if (pageNumber !== 1) {
 			setPageNumber(pageNumber - 1);
+		}
+	};
+	const updatePage = (pageNum: number) => {
+		if (pageNum > numPages) {
+			return;
+		} else {
+			setPageNumber(pageNum);
 		}
 	};
 
@@ -58,13 +73,23 @@ export default function PdfNotes({
 
 	return (
 		<Container>
-			<Button variant="contained" onClick={dec}>
-				Prev
-			</Button>
 			<Button variant="contained" onClick={inc}>
 				Next
 			</Button>
-			<span id="pagenum">{pageNumber}</span>
+			<div style={{ display: "block", width: 700, padding: 30 }}>
+				<Pagination size="lg">
+					<Pagination.First onClick={first} />
+					<Pagination.Prev onClick={dec} />
+					<input
+						style={{ width: 60, height: 57 }}
+						type="number"
+						value={pageNumber}
+						onChange={(e) => updatePage(parseInt(e.target.value))}
+					></input>
+					<Pagination.Next onClick={inc} />
+					<Pagination.Last onClick={last} />
+				</Pagination>
+			</div>
 			<div id="container">
 				<Document
 					file={pdf}
@@ -96,20 +121,20 @@ export default function PdfNotes({
 							if (diff > 0 && pageNumber > 0) {
 								const result = await client.post("/api/addNote", {
 									note: note,
-									timestamp: diff,
+									timestamp: dayjs.duration(diff).asSeconds(),
 									pageNumber,
 									presentationId,
 								});
-
 								setNotes([
 									...notes,
 									{
 										note,
 										page_number: pageNumber,
-										time_stamp: diff,
-										note_id: result.data[0].id,
+										time_stamp: dayjs.duration(diff).asSeconds(),
+										note_id: result.data[0].note_id,
 									},
 								]);
+								console.log(dayjs.duration(diff).asSeconds());
 								//todo: add socket communication to update server notes
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");

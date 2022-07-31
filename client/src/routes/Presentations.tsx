@@ -1,6 +1,6 @@
 import { Button, Card, Container, TextField } from "@mui/material";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { User, Presentation } from "../types";
@@ -24,6 +24,7 @@ export default function Presentations() {
 	const user: User = JSON.parse(localStorage.getItem("user")!);
 	const [presentationID, setPresentationID] = useState(0);
 	const [dbPresentations, setDbPresentations] = useState<Presentation[]>([]);
+	const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
@@ -44,7 +45,7 @@ export default function Presentations() {
 				)
 			);
 		});
-	}, [user.id]);
+	}, [user.id, reducerValue]);
 
 	const joinRoom = () => {
 		// checks against the database of presentations if there is a valid presentation corresponding to the id
@@ -72,14 +73,20 @@ export default function Presentations() {
 		};
 	}) => {
 		if (dayjs().isBefore(event.currentTarget.name)) {
-			client
-				.delete(`/api/presentation/${event.currentTarget.value}`)
-				.then((res) => {
-					alert("Presentation Deleted!");
-					console.log(res.data);
-					navigate("/presentations");
-				})
-				.catch((err) => alert("invalid presentation: " + err.message));
+			var confirmed = window.confirm(
+				"Are you sure you want to delete this presentation?"
+			);
+			if (confirmed == true) {
+				client
+					.delete(`/api/presentation/${event.currentTarget.value}`)
+					.then((res) => {
+						alert("Presentation Deleted!");
+						console.log(res.data);
+						navigate("/presentations");
+						forceUpdate();
+					})
+					.catch((err) => alert("invalid presentation: " + err.message));
+			}
 		} else {
 			alert("You cannot delete a presentation that has started");
 		}
@@ -146,6 +153,7 @@ export default function Presentations() {
 						<TextField
 							style={{
 								backgroundColor: "white",
+								marginTop: "3%",
 							}}
 							variant="outlined"
 							id="PresentationID"
@@ -179,9 +187,13 @@ export default function Presentations() {
 									>
 										<div id="presentation-title">{presentation.title}</div>
 										<div>Host ID: {presentation.presenter_id}</div>
-										<div>
-											Starts at: {dateFormat(presentation.scheduled_date)}
-										</div>
+										{presentation.youtube_url ? (
+											<div></div>
+										) : (
+											<div>
+												Starts at: {dateFormat(presentation.scheduled_date)}
+											</div>
+										)}
 										<div>
 											Join with code: {presentation.presentation_instance_id}
 										</div>
