@@ -43,18 +43,14 @@ export default function Room() {
 				</div>
 			</div>
 		);
+	} else if (user.id === presentation.presenter_id) {
+		return <PresenterView />;
 	} else if (presentation.youtube_url) {
 		return (
 			<div>
 				<Sidebar />
 				<div id="containerIfSidebar">
-					{user.id === presentation.presenter_id ? (
-						<div id="pageHead">
-							<PresenterView></PresenterView>
-						</div>
-					) : (
-						<div>Welcome Viewer!</div>
-					)}
+					<div>Welcome Viewer!</div>
 					<VideoNotes
 						url={presentation.youtube_url!}
 						inputNotes={presentation.notes as VideoNote[]}
@@ -69,11 +65,7 @@ export default function Room() {
 			<div>
 				<Sidebar />
 				<div id="containerIfSidebar">
-					{user.id === presentation.presenter_id ? (
-						<PresenterView></PresenterView>
-					) : (
-						<div>Welcome Viewer!</div>
-					)}
+					<div>Welcome Viewer!</div>
 					<PdfNotes
 						pdf={pdf!}
 						startTime={presentation.scheduled_date}
