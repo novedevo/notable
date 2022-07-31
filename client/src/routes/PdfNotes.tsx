@@ -73,9 +73,6 @@ export default function PdfNotes({
 
 	return (
 		<Container>
-			<Button variant="contained" onClick={inc}>
-				Next
-			</Button>
 			<div style={{ display: "block", width: 700, padding: 30 }}>
 				<Pagination size="lg">
 					<Pagination.First onClick={first} />

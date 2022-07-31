@@ -21,7 +21,7 @@ test("renders buttons", () => {
 			<PdfNotes pdf="" inputNotes={[]} startTime="" />
 		</Router>
 	);
-	const buttons = ["Prev", "Return to Dashboard", "Next"].map((label) =>
+	const buttons = ["Previous", "Return to Dashboard", "Next"].map((label) =>
 		screen.getByText(label)
 	);
 	for (const button of buttons) {
