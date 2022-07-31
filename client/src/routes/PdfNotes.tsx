@@ -1,4 +1,4 @@
-import { Button, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import InputNotes from "../components/InputNotes";
 import dayjs from "dayjs";
@@ -109,7 +109,7 @@ export default function PdfNotes({
 					</Container>
 					<Container id="notes-display">
 						{notes.map((note) => (
-							<PdfNoteComponent {...note} />
+							<PdfNoteComponent {...note} key={note.note_id} />
 						))}
 					</Container>
 					<InputNotes

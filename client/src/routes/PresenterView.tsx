@@ -19,7 +19,7 @@ socket.on("connect_error", (err: { message: any }) => {
 
 export default function PresenterView() {
 	const [pdf, setPdf] = useState<boolean>(false);
-	const [userInfo, setUserInfo] = useState<string[]>([]);
+	const [userInfo, setUserInfo] = useState<User[]>([]);
 	const [notes, setNotes] = useState<Note[]>([]);
 	const [title, setTitle] = useState("");
 	const presentationId = parseInt(window.location.href.split("room/")[1]);
@@ -42,7 +42,7 @@ export default function PresenterView() {
 	// Receives the call when "user_list" is sent in index.js, it names the usernames of all the users
 	// that have uniquely joined this room and adds it to an array locally
 	socket.on("user_list", (data: User[]) => {
-		setUserInfo(data.map((user) => user.name));
+		setUserInfo(data);
 	});
 	socket.on("note_list", (data: Note[]) => {
 		setNotes(data);
@@ -68,7 +68,7 @@ export default function PresenterView() {
 				{userInfo.length ? <h5>Viewers:</h5> : <h5>There are no viewers</h5>}
 				<ul>
 					{userInfo.map((user) => {
-						return <li>{user}</li>;
+						return <li key={user.id}>{user.name}</li>;
 					})}
 				</ul>
 				<Button
@@ -85,9 +85,9 @@ export default function PresenterView() {
 				<ul>
 					{notes.map((note) =>
 						pdf ? (
-							<PdfNoteComponent {...(note as PdfNote)} />
+							<PdfNoteComponent {...(note as PdfNote)} key={note.note_id} />
 						) : (
-							<VideoNoteComponent {...(note as VideoNote)} />
+							<VideoNoteComponent {...(note as VideoNote)} key={note.note_id} />
 						)
 					)}
 				</ul>

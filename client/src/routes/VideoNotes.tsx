@@ -49,7 +49,11 @@ export default function VideoNotes({
 					<Typography>Notes</Typography>
 					<Container id="notes-display">
 						{notes.map((note, i) => (
-							<VideoNoteComponent {...note} key={i} player={player} />
+							<VideoNoteComponent
+								{...note}
+								key={note.note_id}
+								player={player}
+							/>
 						))}
 					</Container>
 					<InputNotes
