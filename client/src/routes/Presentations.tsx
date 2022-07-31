@@ -66,19 +66,13 @@ export default function Presentations() {
 		}
 	};
 
-	const deletePresentation = (event: {
-		currentTarget: {
-			name: any;
-			value: any;
-		};
-	}) => {
-		if (dayjs().isBefore(event.currentTarget.name)) {
-			var confirmed = window.confirm(
-				"Are you sure you want to delete this presentation?"
-			);
-			if (confirmed == true) {
+	const deletePresentation = (name: string, id: number) => {
+		if (dayjs().isBefore(name)) {
+			if (
+				window.confirm("Are you sure you want to delete this presentation?")
+			) {
 				client
-					.delete(`/api/presentation/${event.currentTarget.value}`)
+					.delete(`/api/presentation/${id}`)
 					.then((res) => {
 						alert("Presentation Deleted!");
 						console.log(res.data);
@@ -92,39 +86,24 @@ export default function Presentations() {
 		}
 	};
 
-	const dateFormat = (date: any) => {
-		let d = dayjs(date);
-		return d.format("ddd MMM DD YYYY H:mm");
-	};
-
-	const editPresentation = (event: {
-		currentTarget: {
-			name: any;
-			value: any;
-		};
-	}) => {
-		if (dayjs().isBefore(event.currentTarget.name)) {
-			navigate("/edit/" + event.currentTarget.value);
+	const editPresentation = (name: string, id: number) => {
+		if (dayjs().isBefore(name)) {
+			navigate("/edit/" + id);
 		} else {
 			alert("You cannot edit a presentation that has started");
 		}
 	};
 
-	const joinPresentation = (event: {
-		currentTarget: {
-			value: any;
-		};
-	}) => {
+	const joinOwnPresentation = (room: number) => {
 		const userData = {
-			room: event.currentTarget.value,
+			room,
 			name: user.name,
 		};
 		// sends userData to the server so that a person can join a room
 		socket.emit("join_room", userData);
 		// sends the user to that room
-		navigate("/room/" + event.currentTarget.value);
+		navigate("/room/" + room);
 	};
-
 	return (
 		<>
 			<Sidebar />
@@ -174,48 +153,52 @@ export default function Presentations() {
 					<div id="presentationsidebar"></div>
 					<div id="presentationlist">
 						<Container id="big-presentation-box">
-							{userPresentations
-								.sort((a, b) =>
-									dayjs(a.scheduled_date).isAfter(dayjs(b.scheduled_date))
-										? 1
-										: -1
-								)
-								.map((presentation) => (
-									<Card
-										id="small-presentation-box"
-										key={presentation.presentation_instance_id}
-									>
-										<div id="presentation-title">{presentation.title}</div>
-										<div>Host ID: {presentation.presenter_id}</div>
-										{presentation.youtube_url ? (
-											<div></div>
-										) : (
-											<div>
-												Starts at: {dateFormat(presentation.scheduled_date)}
-											</div>
-										)}
+							{userPresentations.map((presentation) => (
+								<Card
+									id="small-presentation-box"
+									key={presentation.presentation_instance_id}
+								>
+									<div id="presentation-title">{presentation.title}</div>
+									<div>Host ID: {presentation.presenter_id}</div>
+									{presentation.youtube_url ? (
+										<div></div>
+									) : (
 										<div>
-											Join with code: {presentation.presentation_instance_id}
+											Starts at:{" "}
+											{dayjs(presentation.scheduled_date).format(
+												"ddd MMM DD YYYY H:mm"
+											)}
 										</div>
-										<Button
-											id="deletebutton"
-											name={presentation.scheduled_date}
-											value={presentation.presentation_instance_id}
-											onClick={deletePresentation}
-										></Button>
-										<Button
-											id="editbutton"
-											name={presentation.scheduled_date}
-											value={presentation.presentation_instance_id}
-											onClick={editPresentation}
-										></Button>
-										<Button
-											id="joinbutton"
-											value={presentation.presentation_instance_id}
-											onClick={joinPresentation}
-										></Button>
-									</Card>
-								))}
+									)}
+									<div>
+										Join with code: {presentation.presentation_instance_id}
+									</div>
+									<Button
+										id="deletebutton"
+										onClick={() =>
+											deletePresentation(
+												presentation.scheduled_date,
+												presentation.presentation_instance_id
+											)
+										}
+									></Button>
+									<Button
+										id="editbutton"
+										onClick={() =>
+											editPresentation(
+												presentation.scheduled_date,
+												presentation.presentation_instance_id
+											)
+										}
+									></Button>
+									<Button
+										id="joinbutton"
+										onClick={() =>
+											joinOwnPresentation(presentation.presentation_instance_id)
+										}
+									></Button>
+								</Card>
+							))}
 						</Container>
 					</div>
 					<div id="presentationsidebar"></div>
