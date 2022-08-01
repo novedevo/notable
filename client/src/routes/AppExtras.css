@@ -23,6 +23,21 @@ body {
 	z-index: 500;
 }
 
+#invisibleHead {
+	color: white;
+	z-index: 30;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 600px;
+	height: 50px;
+	position: fixed;
+	top: 10%;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	z-index: 500;
+}
+
 #buttonPrimary {
 	background-color: #8400ff;
 	width: 240px;
