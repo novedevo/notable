@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
+import { io } from "socket.io-client";
 import mockWindowProperty from "../helpers";
 import PdfNotes from "../routes/PdfNotes";
 
@@ -18,10 +19,10 @@ mockWindowProperty("localStorage", {
 test("renders buttons", () => {
 	render(
 		<Router>
-			<PdfNotes pdf="" inputNotes={[]} startTime="" />
+			<PdfNotes pdf="" inputNotes={[]} startTime="" socket={io()} />
 		</Router>
 	);
-	const buttons = ["Prev", "Return to Dashboard", "Next"].map((label) =>
+	const buttons = ["Previous", "Return to Dashboard", "Next"].map((label) =>
 		screen.getByText(label)
 	);
 	for (const button of buttons) {
@@ -33,7 +34,7 @@ test("renders buttons", () => {
 test("renders without error", () => {
 	render(
 		<Router>
-			<PdfNotes pdf="" inputNotes={[]} startTime="" />
+			<PdfNotes pdf="" inputNotes={[]} startTime="" socket={io()} />
 		</Router>
 	);
 });

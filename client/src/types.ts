@@ -17,7 +17,7 @@ export type User = {
 };
 
 export interface Note {
-	note_id?: number;
+	note_id: number;
 	note: string;
 	notetaker_id?: number;
 	presentation_id?: number;

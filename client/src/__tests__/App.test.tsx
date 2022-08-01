@@ -1,8 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import App from "../App";
 
-test("renders a login prompt", () => {
+test("renders a notable header", () => {
 	render(<App />);
-	const linkElement = screen.getByText("Notable");
-	expect(linkElement).toBeInTheDocument();
+	const headerElement = screen.getByText("notable");
+	expect(headerElement).toBeInTheDocument();
+	expect(headerElement).toBeVisible();
+	expect(headerElement).toBeInstanceOf(HTMLHeadingElement);
 });
