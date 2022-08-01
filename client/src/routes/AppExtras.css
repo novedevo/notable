@@ -19,7 +19,7 @@ body {
 	position: fixed;
 	top: 10%;
 	left: 50%;
-	transform: translate(-50%, -100%);
+	transform: translate(32%, -100%);
 	z-index: 500;
 }
 
