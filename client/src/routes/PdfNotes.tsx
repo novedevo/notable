@@ -8,6 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
 import { PdfNote } from "../types";
 import Pagination from "react-bootstrap/Pagination";
+import "./AppExtras.css";
 
 import { PdfNoteComponent } from "../components/Note";
 import { Socket } from "socket.io-client";
@@ -71,7 +72,10 @@ export default function PdfNotes(props: {
 
 	return (
 		<Container>
-			<div style={{ display: "block", width: 700, padding: 30 }}>
+			<div
+				id="invisibleHead"
+				style={{ display: "block", width: 700, padding: 30 }}
+			>
 				<Pagination size="lg">
 					<Pagination.First onClick={first} />
 					<Pagination.Prev onClick={dec} />
@@ -85,7 +89,7 @@ export default function PdfNotes(props: {
 					<Pagination.Last onClick={last} />
 				</Pagination>
 			</div>
-			<div id="container">
+			<div>
 				<Document
 					file={props.pdf}
 					onLoadSuccess={({ numPages }) => {

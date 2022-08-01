@@ -121,7 +121,6 @@ export default function Presentations() {
 						<TextField
 							style={{
 								backgroundColor: "white",
-								marginTop: "3%",
 							}}
 							variant="outlined"
 							id="PresentationID"

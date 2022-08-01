@@ -132,6 +132,16 @@
 	height: 65%;
 }
 
+#pageSize {
+	position: absolute;
+	top: 15%;
+	left: 5%;
+	min-width: 15%;
+	min-height: 42.5%;
+	width: 30%;
+	height: 85%;
+}
+
 #pageNum {
 	width: 60;
 	height: 57;
