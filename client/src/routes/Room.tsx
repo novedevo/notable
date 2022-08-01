@@ -78,7 +78,6 @@ export default function Room() {
 			<div>
 				<Sidebar />
 				<div id="containerIfSidebar">
-					<div>Welcome Viewer!</div>
 					<VideoNotes
 						url={presentation.youtube_url!}
 						inputNotes={presentation.notes as VideoNote[]}
@@ -94,7 +93,6 @@ export default function Room() {
 			<div>
 				<Sidebar />
 				<div id="containerIfSidebar">
-					<div>Welcome Viewer!</div>
 					<PdfNotes
 						pdf={pdf!}
 						startTime={presentation.scheduled_date}
