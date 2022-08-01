@@ -111,7 +111,7 @@ export default function PresentationEdit() {
 								style={{
 									backgroundColor: "white",
 								}}
-								variant="outlined"
+								variant="filled"
 								id="title"
 								label="Title"
 								defaultValue={presentation.title}
@@ -140,7 +140,7 @@ export default function PresentationEdit() {
 								style={{
 									backgroundColor: "white",
 								}}
-								variant="outlined"
+								variant="filled"
 								id="video"
 								label="Video"
 								defaultValue={presentation!.youtube_url}

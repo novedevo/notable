@@ -72,7 +72,7 @@ export default function SchedulePresentation() {
 								style={{
 									backgroundColor: "white",
 								}}
-								variant="outlined"
+								variant="filled"
 								id="title"
 								label="Title"
 								onChange={(e) => {
@@ -101,7 +101,7 @@ export default function SchedulePresentation() {
 								style={{
 									backgroundColor: "white",
 								}}
-								variant="outlined"
+								variant="filled"
 								id="video"
 								label="Video"
 								onChange={(e) => {
@@ -119,6 +119,7 @@ export default function SchedulePresentation() {
 									style={{
 										backgroundColor: "white",
 									}}
+									variant="filled"
 									label="Presentation Start Time"
 									type="datetime-local"
 									defaultValue={scheduled_date.format("YYYY-MM-DDTHH:mm")}

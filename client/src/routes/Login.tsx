@@ -65,14 +65,14 @@ export default function Login() {
 					>
 						<TextField
 							id="textField"
-							variant="outlined"
+							variant="filled"
 							label="username"
 							onChange={(event) => setUsername(event.target.value)}
 						/>
 						<br></br>
 						<TextField
 							id="textField"
-							variant="outlined"
+							variant="filled"
 							label="password"
 							type="password"
 							onChange={(event) => setPassword(event.target.value)}
