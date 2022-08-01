@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import mockWindowProperty from "../helpers";
 import VideoNotes from "../routes/VideoNotes";
+import { io } from "socket.io-client";
 
 const storage: {
 	[key: string]: string;
@@ -20,7 +21,7 @@ mockWindowProperty("alert", jest.fn());
 test("renders buttons", () => {
 	render(
 		<Router>
-			<VideoNotes url="" inputNotes={[]} presentationId={1} />
+			<VideoNotes url="" inputNotes={[]} presentationId={1} socket={io()} />
 		</Router>
 	);
 	const buttons = ["Post Note", "Return to Dashboard", "Notes"].map((label) =>
@@ -35,7 +36,7 @@ test("renders buttons", () => {
 test("renders without error", () => {
 	render(
 		<Router>
-			<VideoNotes url="" inputNotes={[]} presentationId={1} />
+			<VideoNotes url="" inputNotes={[]} presentationId={1} socket={io()} />
 		</Router>
 	);
 });

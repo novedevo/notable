@@ -26,11 +26,7 @@ const ViewNotes = () => {
 			value: any;
 		};
 	}) => {
-		var confirmed = window.confirm(
-			"Are you sure you want to delete this note?"
-		);
-
-		if (confirmed == true) {
+		if (window.confirm("Are you sure you want to delete this note?")) {
 			console.log(event.currentTarget.value);
 			client
 				.delete(`/api/presentationNotes/${event.currentTarget.value}`)
@@ -67,7 +63,7 @@ const ViewNotes = () => {
 					</div>
 					<div id="noteSets_container">
 						{presentations.map((presentation) => (
-							<div>
+							<div key={presentation.presentation_instance_id}>
 								<Link
 									to={`/room/${presentation.presentation_instance_id}`}
 									id="noteSet"
