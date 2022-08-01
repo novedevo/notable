@@ -34,7 +34,7 @@ body {
 	position: relative;
 	top: 10%;
 	z-index: 500;
-	transform: translate(-32%, -50%);
+	transform: translate(-50%, -50%);
 }
 
 #buttonPrimary {
