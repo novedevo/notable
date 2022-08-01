@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { Presentation } from "../types";
 import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
@@ -13,29 +13,27 @@ const client = axios.create({
 
 const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
+	const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
+
 	useEffect(() => {
 		getPresentationWithNotes().then((notepresentations) => {
 			setPresentations(notepresentations);
 		});
-	}, []);
+	}, [reducerValue]);
 
 	const deleteNote = (event: {
 		currentTarget: {
 			value: any;
 		};
 	}) => {
-		var confirmed = window.confirm(
-			"Are you sure you want to delete this note?"
-		);
-
-		if (confirmed == true) {
+		if (window.confirm("Are you sure you want to delete this note?")) {
 			console.log(event.currentTarget.value);
 			client
 				.delete(`/api/presentationNotes/${event.currentTarget.value}`)
 				.then((res) => {
 					alert("Presentation Note Deleted!");
 					console.log(res.data);
-					window.location.reload();
+					forceUpdate();
 				})
 				.catch((err) => alert("invalid presentation: " + err.message));
 		}
@@ -65,7 +63,7 @@ const ViewNotes = () => {
 					</div>
 					<div id="noteSets_container">
 						{presentations.map((presentation) => (
-							<div>
+							<div key={presentation.presentation_instance_id}>
 								<Link
 									to={`/room/${presentation.presentation_instance_id}`}
 									id="noteSet"

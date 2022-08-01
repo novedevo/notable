@@ -1,15 +1,16 @@
-import { Button, Card, Container, Typography } from "@mui/material";
-import { SetStateAction, useEffect, useState } from "react";
+import { Container } from "@mui/material";
+import { useEffect, useState } from "react";
 import InputNotes from "../components/InputNotes";
 import dayjs from "dayjs";
 import axios from "axios";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
-import Sidebar from "../components/Sidebar";
 import { PdfNote } from "../types";
 import Pagination from "react-bootstrap/Pagination";
 
+import { PdfNoteComponent } from "../components/Note";
+import { Socket } from "socket.io-client";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -21,17 +22,14 @@ const client = axios.create({
 	},
 });
 
-export default function PdfNotes({
-	pdf,
-	startTime,
-	inputNotes,
-}: {
+export default function PdfNotes(props: {
 	pdf: string;
 	startTime: string;
 	inputNotes: PdfNote[];
+	socket: Socket;
 }) {
-	const [notes, setNotes] = useState<PdfNote[]>(inputNotes);
-	const date = dayjs(startTime);
+	const [notes, setNotes] = useState<PdfNote[]>(props.inputNotes);
+	const date = dayjs(props.startTime);
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -69,124 +67,84 @@ export default function PdfNotes({
 		}
 	};
 
+	const presentationId = parseInt(window.location.pathname.split("/").pop()!);
+
 	return (
-		<div>
-			<Container>
-				<Button variant="contained" onClick={inc}>
-					Next
-				</Button>
-				<div style={{ display: "block", width: 700, padding: 30 }}>
-					<Pagination size="lg">
-						<Pagination.First onClick={first} />
-						<Pagination.Prev onClick={dec} />
-						<input
-							style={{ width: 60, height: 57 }}
-							type="number"
-							value={pageNumber}
-							onChange={(e) => updatePage(parseInt(e.target.value))}
-						></input>
-						<Pagination.Next onClick={inc} />
-						<Pagination.Last onClick={last} />
-					</Pagination>
-				</div>
-				<div id="container">
-					<Document
-						file={pdf}
-						onLoadSuccess={({ numPages }) => {
-							setNumPages(numPages);
-							setPageNumber(1);
-						}}
-						renderMode="svg"
-					>
-						<Page
-							pageNumber={pageNumber || 1}
-							renderTextLayer={false} //https://github.com/wojtekmaj/react-pdf/issues/332
-							width={800}
-						/>
-					</Document>
-					<div className="right-side">
-						<Container>
-							Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
-							{date.format("YYYY-MM-DDTHH:mm")}, {time}
-						</Container>
-						<Container id="notes-display">{notes.map(generateNote)}</Container>
-						<InputNotes
-							post={async (note) => {
-								const diff = dayjs().diff(date);
-								const id = JSON.parse(localStorage.getItem("user")!).id;
-								const currentURL = window.location.href;
-								const presentationId = currentURL.split("room/")[1];
-								console.log(id);
-								if (diff > 0 && pageNumber > 0) {
+		<Container>
+			<div style={{ display: "block", width: 700, padding: 30 }}>
+				<Pagination size="lg">
+					<Pagination.First onClick={first} />
+					<Pagination.Prev onClick={dec} />
+					<input
+						style={{ width: 60, height: 57 }}
+						type="number"
+						value={pageNumber}
+						onChange={(e) => updatePage(parseInt(e.target.value))}
+					></input>
+					<Pagination.Next onClick={inc} />
+					<Pagination.Last onClick={last} />
+				</Pagination>
+			</div>
+			<div id="container">
+				<Document
+					file={props.pdf}
+					onLoadSuccess={({ numPages }) => {
+						setNumPages(numPages);
+						setPageNumber(1);
+					}}
+					renderMode="svg"
+				>
+					<Page
+						pageNumber={pageNumber || 1}
+						renderTextLayer={false} //https://github.com/wojtekmaj/react-pdf/issues/332
+						width={800}
+					/>
+				</Document>
+				<div className="right-side">
+					<Container>
+						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
+						{date.format("YYYY-MM-DDTHH:mm")}, {time}
+					</Container>
+					<Container id="notes-display">
+						{notes.map((note) => (
+							<PdfNoteComponent {...note} key={note.note_id} />
+						))}
+					</Container>
+					<InputNotes
+						post={async (note) => {
+							const diff = dayjs().diff(date);
+							if (diff > 0 && pageNumber > 0) {
+								try {
 									const result = await client.post("/api/addNote", {
 										note: note,
-										timestamp: parseInt(
-											dayjs.duration(diff).asSeconds().toString()
-										),
-										pageNumber: pageNumber,
-										notetakerId: id,
-										presentationId: presentationId,
+										timestamp: diff,
+										pageNumber,
+										presentationId,
 									});
+									props.socket.emit("add_note", { room: presentationId });
 									setNotes([
 										...notes,
 										{
 											note,
 											page_number: pageNumber,
-											time_stamp: parseInt(
-												dayjs.duration(diff).asSeconds().toString()
-											),
+											time_stamp: diff,
 											note_id: result.data[0].note_id,
 										},
 									]);
-									console.log(
-										parseInt(dayjs.duration(diff).asSeconds().toString())
-									);
-									//todo: add socket communication to update server notes
-								} else if (pageNumber > 0) {
-									alert("You can't post notes until the presentation starts");
-								} else {
-									alert("Please load a PDF to begin taking notes");
+								} catch (err) {
+									console.error(err);
+									alert(err);
 								}
-							}}
-						/>
-					</div>
+								//todo: add socket communication to update server notes
+							} else if (pageNumber > 0) {
+								alert("You can't post notes until the presentation starts");
+							} else {
+								alert("Please load a PDF to begin taking notes");
+							}
+						}}
+					/>
 				</div>
-			</Container>
-		</div>
+			</div>
+		</Container>
 	);
-}
-
-function generateNote(note: PdfNote, index: number) {
-	return (
-		<Card key={index}>
-			<Typography>{note.note}</Typography>
-			<Typography>
-				{new Date(Math.floor(note.time_stamp) * 1000)
-					.toISOString()
-					.substring(11, 19)}
-			</Typography>
-			<Typography>
-				Page {note.page_number}
-				<Button value={note.note_id} onClick={deleteNote}>
-					delete
-				</Button>
-			</Typography>
-		</Card>
-	);
-}
-
-function deleteNote(event: {
-	currentTarget: {
-		value: any;
-	};
-}) {
-	console.log("Note Deleted ", event.currentTarget.value);
-	client
-		.delete(`/api/note/${event.currentTarget.value}`)
-		.then((res) => {
-			console.log(res.data);
-		})
-		.catch((err) => alert("invalid note: " + err.message));
-
-	window.location.reload();
 }

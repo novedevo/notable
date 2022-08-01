@@ -4,7 +4,6 @@ import { Button, Container, TextField } from "@mui/material";
 import { useState } from "react";
 import jwtDecode from "jwt-decode";
 import "./AppExtras.css";
-import Sidebar from "../components/Sidebar";
 
 export default function Login() {
 	const [username, setUsername] = useState("");

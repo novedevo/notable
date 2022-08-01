@@ -10,7 +10,6 @@ function Sidebar() {
 	const user = JSON.parse(localStorage.getItem("user")!);
 	const navigate = useNavigate();
 	useEffect(() => {
-		console.log(user);
 		if (!user) {
 			navigate("/login");
 		}
