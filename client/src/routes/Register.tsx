@@ -53,19 +53,19 @@ export default function Register() {
 				>
 					<TextField
 						id="textField"
-						variant="outlined"
+						variant="filled"
 						label="name"
 						onChange={(event) => setName(event.target.value)}
 					/>
 					<TextField
 						id="textField"
-						variant="outlined"
+						variant="filled"
 						label="username"
 						onChange={(event) => setUsername(event.target.value)}
 					/>
 					<TextField
 						id="textField"
-						variant="outlined"
+						variant="filled"
 						label="password"
 						type="password"
 						onChange={(event) => setPassword(event.target.value)}

@@ -122,7 +122,7 @@ export default function Presentations() {
 							style={{
 								backgroundColor: "white",
 							}}
-							variant="outlined"
+							variant="filled"
 							id="PresentationID"
 							label="Presentation ID"
 							onChange={(event) =>
