@@ -44,6 +44,7 @@ export function VideoNoteComponent(props: {
 			<Typography>
 				<Link
 					onClick={() => props.player && props.player.seekTo(props.time_stamp)}
+					style={{ cursor: "pointer" }}
 				>
 					{new Date(Math.floor(props.time_stamp) * 1000)
 						.toISOString()
@@ -57,7 +58,7 @@ export function VideoNoteComponent(props: {
 						}
 					}}
 				>
-					delete
+					Delete
 				</Button>
 			</Typography>
 		</Card>
