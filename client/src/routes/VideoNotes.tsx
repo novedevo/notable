@@ -8,6 +8,12 @@ import axios from "axios";
 import { Socket } from "socket.io-client";
 import NotesControl from "../components/NotesControl";
 import PublicNotes from "../components/PublicNotes";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 
 const client = axios.create({
 	headers: {
@@ -27,6 +33,12 @@ export default function VideoNotes(props: {
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	const presentationId = parseInt(window.location.pathname.split("/").pop()!);
+
+	const [value, setValue] = React.useState("1");
+
+	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+		setValue(newValue);
+	};
 
 	return (
 		<div>
@@ -48,6 +60,59 @@ export default function VideoNotes(props: {
 					/>
 				</div>
 				<div className="right-side">
+					<Box sx={{ width: "100%", typography: "body1" }}>
+						<TabContext value={value}>
+							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+								<TabList onChange={handleChange} aria-label="chat tabs">
+									<Tab label="Your Notes" value="1" />
+									<Tab label="Everyone's Notes" value="2" />
+								</TabList>
+							</Box>
+							<TabPanel value="1">
+								<Container id="notes-display">
+									{notes.map((note, i) => (
+										<VideoNoteComponent
+											{...note}
+											key={note.note_id}
+											player={player}
+										/>
+									))}
+								</Container>
+								<InputNotes
+									post={
+										async (value) => {
+											const time = player.getCurrentTime();
+											const result = await client.post("/api/addNote", {
+												note: value,
+												timestamp: time,
+												presentationId,
+												visible,
+											});
+											props.socket.emit("add_note", { room: presentationId });
+											setNotes([
+												...notes,
+												{
+													note: value,
+													time_stamp: time,
+													note_id: result.data[0].note_id,
+													visible,
+												},
+											]);
+										}
+										//todo: add socket communication to update server notes
+									}
+								/>
+							</TabPanel>
+							<TabPanel value="2">
+								<PublicNotes
+									socket={props.socket}
+									presentationId={presentationId}
+									pdf={false}
+									notes={notes}
+								/>
+							</TabPanel>
+						</TabContext>
+					</Box>
 					<NotesControl
 						socket={props.socket}
 						presentationId={presentationId}
@@ -55,46 +120,7 @@ export default function VideoNotes(props: {
 						setVisible={setVisible}
 						client={client}
 					/>
-					<Container id="notes-display">
-						{notes.map((note, i) => (
-							<VideoNoteComponent
-								{...note}
-								key={note.note_id}
-								player={player}
-							/>
-						))}
-					</Container>
-					<InputNotes
-						post={
-							async (value) => {
-								const time = player.getCurrentTime();
-								const result = await client.post("/api/addNote", {
-									note: value,
-									timestamp: time,
-									presentationId,
-									visible,
-								});
-								props.socket.emit("add_note", { room: presentationId });
-								setNotes([
-									...notes,
-									{
-										note: value,
-										time_stamp: time,
-										note_id: result.data[0].note_id,
-										visible,
-									},
-								]);
-							}
-							//todo: add socket communication to update server notes
-						}
-					/>
 				</div>
-
-				<PublicNotes
-					socket={props.socket}
-					presentationId={presentationId}
-					pdf={false}
-				/>
 			</div>
 		</div>
 	);
