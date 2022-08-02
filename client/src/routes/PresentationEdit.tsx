@@ -25,11 +25,11 @@ export default function PresentationEdit() {
 	const [pdf, setPdf] = useState<File | null>(null);
 	const [presentation, setPresentation] = useState<Presentation | null>(null);
 	let { id } = useParams();
-	const stringPresentationId = id?.toString() ?? "";
 
 	useEffect(() => {
 		if (!id) {
 			alert("No presentation id provided");
+			navigate("/");
 			return;
 		}
 		getPresentationMetadata(parseInt(id)).then((presentation) => {
@@ -45,7 +45,7 @@ export default function PresentationEdit() {
 				setyoutube_url(presentation.youtube_url);
 			}
 		});
-	}, [id]);
+	}, [id, navigate]);
 
 	useEffect(() => {
 		console.log(title);
@@ -53,7 +53,7 @@ export default function PresentationEdit() {
 
 	const updatePresentation = () => {
 		const formData = new FormData();
-		formData.append("presentation_instance_id", stringPresentationId);
+		formData.append("presentation_instance_id", id!);
 		formData.append("title", title);
 		formData.append(
 			"scheduled_date",

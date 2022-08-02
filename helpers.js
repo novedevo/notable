@@ -31,14 +31,12 @@ export function addPresentationManagementRoutes(app, pool) {
 		res.send({ ...result.rows[0], notes: notes.rows });
 	});
 	app.get("/api/presentations", requiresLogin, async (req, res) => {
-		const result = await pool.query(
-			sql`SELECT * FROM presentations ORDER BY time_stamp ASC`
-		);
+		const result = await pool.query(sql`SELECT * FROM presentations`);
 		res.json(result.rows);
 	});
 	app.get("/api/currentPresentations", requiresLogin, async (req, res) => {
 		const result = await pool.query(
-			sql`SELECT * FROM presentations WHERE presentation_end_date IS NULL ORDER BY time_stamp ASC`
+			sql`SELECT * FROM presentations WHERE presentation_end_date IS NULL`
 		);
 		res.json(result.rows);
 	});

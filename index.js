@@ -69,14 +69,17 @@ io.on("connection", (socket) => {
 		);
 	});
 
-	socket.on("add_note", async (data) => {
-		console.log("note added");
-		await updateNoteList(data.room, socket);
-	});
+	const refreshers = ["add_note", "delete_note", "note_visibility"];
+	for (const refresher of refreshers) {
+		socket.on(refresher, async (data) => {
+			console.log(`received event: ${refresher}`);
+			await updateNoteList(data.room, socket);
+		});
+	}
 
-	socket.on("delete_note", async (data) => {
-		console.log("note deleted");
-		await updateNoteList(data.room, socket);
+	socket.on("end_presentation", async (data) => {
+		console.log("received event: end_presentation" + JSON.stringify(data));
+		//todo
 	});
 
 	socket.on("disconnect", () => {
@@ -87,7 +90,7 @@ io.on("connection", (socket) => {
 
 async function updateNoteList(room, socket) {
 	const response = await pool.query(
-		sql`SELECT * FROM notes WHERE presentation_id=$1`,
+		sql`SELECT * FROM notes WHERE presentation_id=$1 AND visible=true ORDER BY time_stamp ASC`,
 		[room]
 	);
 	socket.to(room).emit("note_list", response.rows);
@@ -119,38 +122,6 @@ app.post("/api/login", async (req, res) => {
 	}
 });
 
-// save user notes from PDFnotes to db
-app.post("/api/addNote", requiresLogin, async (req, res) => {
-	const { note, timestamp, pageNumber, presentationId } = req.body;
-	const id = req.jwt.id;
-	try {
-		const result = await pool.query(
-			sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) VALUES ($1, $2, $3, $4, $5) RETURNING note_id`,
-			[note, timestamp, pageNumber, id, parseInt(presentationId)]
-		);
-		if (result.rowCount) {
-			res.json(result.rows);
-		} else {
-			res.status(400).send("invalid request");
-		}
-	} catch (err) {
-		console.log(err);
-		res.status(500).send("postgres error");
-	}
-});
-
-app.get("/api/presentations", requiresLogin, async (req, res) => {
-	const result = await pool.query(sql`SELECT * FROM presentations`);
-	res.json(result.rows);
-});
-
-app.get("/api/currentPresentations", requiresLogin, async (req, res) => {
-	const result = await pool.query(
-		sql`SELECT * FROM presentations WHERE presentation_end_date IS NULL`
-	);
-	res.json(result.rows);
-});
-
 app.post("/api/register", async (req, res) => {
 	const { username, password, name } = req.body;
 	try {
@@ -179,19 +150,53 @@ app.post("/api/register", async (req, res) => {
 
 // save user notes from PDFnotes to db
 app.post("/api/addNote", requiresLogin, async (req, res) => {
-	const { note, timestamp, pageNumber, presentationId } = req.body;
-	const result = await pool.query(
-		sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id) 
-		VALUES ($1, $2, $3, $4, $5)`,
-		[note, timestamp, pageNumber, req.jwt.id, parseInt(presentationId)]
-	);
-	if (result.rowCount) {
-		res.send("Note saved to database");
-	} else {
-		res.status(400).send("invalid request");
+	const { note, timestamp, pageNumber, presentationId, visible } = req.body;
+	try {
+		const result = await pool.query(
+			sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id, visible)
+			VALUES ($1, $2, $3, $4, $5, $6) RETURNING note_id`,
+			[note, timestamp, pageNumber, req.jwt.id, presentationId, visible]
+		);
+		if (result.rowCount) {
+			res.json(result.rows);
+		} else {
+			res.status(400).send("invalid request");
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("postgres error");
 	}
 });
-
+app.get("/api/publicNotes/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	try {
+		const result = await pool.query(
+			sql`SELECT * FROM notes WHERE presentation_id = $1 AND visible = true ORDER BY time_stamp ASC`,
+			[parseInt(id)]
+		);
+		res.send(result.rows);
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("postgres error");
+	}
+});
+app.patch("/api/noteVisibility", requiresLogin, async (req, res) => {
+	const { id, visible } = req.body;
+	try {
+		const result = await pool.query(
+			sql`UPDATE notes SET visible = $1 WHERE presentation_id=$2 AND notetaker_id=$3`,
+			[visible, id, req.jwt.id]
+		);
+		if (result.rowCount) {
+			res.send("success");
+		} else {
+			res.status(400).send("invalid request");
+		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("postgres error");
+	}
+});
 app.delete("/api/presentationNotes/:id", requiresLogin, async (req, res) => {
 	const { id } = req.params;
 	console.log(id);
@@ -202,33 +207,10 @@ app.delete("/api/presentationNotes/:id", requiresLogin, async (req, res) => {
 	);
 	res.send("Presentation Notes has been deleted.");
 });
-app.delete("/api/presentation/:id", requiresLogin, async (req, res) => {
-	const { id } = req.params;
-	await pool.query(
-		sql`DELETE FROM presentations WHERE presentation_instance_id = $1`,
-		[parseInt(id)]
-	);
-	res.send("All notes for this presentation have been deleted.");
-});
 app.delete("/api/note/:id", requiresLogin, async (req, res) => {
 	const { id } = req.params;
 	await pool.query(sql`DELETE FROM notes WHERE note_id = $1`, [parseInt(id)]);
 	res.send("Note has been deleted.");
-});
-app.get("/api/presentation/:id", async (req, res) => {
-	const { id } = req.params;
-	const result = await pool.query(
-		sql`SELECT * FROM presentations WHERE presentation_instance_id = $1`,
-		[id]
-	);
-	const notes = await pool.query(
-		sql`SELECT * FROM notes WHERE presentation_id = $1 ORDER BY time_stamp ASC`,
-		[id]
-	);
-	if (result.rows.length === 0) {
-		res.status(404).send("Presentation does not exist.");
-	}
-	res.send({ ...result.rows[0], notes: notes.rows });
 });
 app.get("/api/notePresentations/", requiresLogin, async (req, res) => {
 	const result = await pool.query(
