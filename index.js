@@ -224,8 +224,11 @@ app.get("/api/notePresentations/", requiresLogin, async (req, res) => {
 addAdminRoutes(app, pool);
 addPresentationManagementRoutes(app, pool);
 
+
 app.get("/*", (req, res) => {
 	res.sendFile(`${__dirname}/client/build/index.html`);
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+export default app;
