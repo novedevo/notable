@@ -94,7 +94,6 @@ export default function VideoNotes(props: {
 					socket={props.socket}
 					presentationId={presentationId}
 					pdf={false}
-					notes={notes}
 				/>
 			</div>
 		</div>
