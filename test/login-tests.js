@@ -32,8 +32,23 @@ describe("logins", function () {
 			.send(userClass.BAD_USER_1)
 			.end(function (error, res) {
 				res.should.have.status(403);
-                res.body.should.be.empty;
-                res.text.should.eql("Invalid username or password");
+				res.body.should.be.empty;
+				res.text.should.eql("Invalid username or password");
+				done();
+			});
+	});
+});
+
+describe("registering users", function () {
+	it("should successfully register user given username is unique", function (done) {
+		chai
+			.request(server)
+			.post("/api/register")
+			.send(userClass.NEW_USER_2)
+			.end(function (error, res) {
+				res.should.have.status(200);
+				res.body.should.have.property("token");
+				console.log(res);
 				done();
 			});
 	});
