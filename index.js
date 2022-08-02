@@ -69,14 +69,17 @@ io.on("connection", (socket) => {
 		);
 	});
 
-	socket.on("add_note", async (data) => {
-		console.log("note added");
-		await updateNoteList(data.room, socket);
-	});
+	const refreshers = ["add_note", "delete_note", "note_visibility"];
+	for (const refresher of refreshers) {
+		socket.on(refresher, async (data) => {
+			console.log(`received event: ${refresher}`);
+			await updateNoteList(data.room, socket);
+		});
+	}
 
-	socket.on("delete_note", async (data) => {
-		console.log("note deleted");
-		await updateNoteList(data.room, socket);
+	socket.on("end_presentation", async (data) => {
+		console.log("received event: end_presentation" + JSON.stringify(data));
+		//todo
 	});
 
 	socket.on("disconnect", () => {
@@ -87,7 +90,7 @@ io.on("connection", (socket) => {
 
 async function updateNoteList(room, socket) {
 	const response = await pool.query(
-		sql`SELECT * FROM notes WHERE presentation_id=$1`,
+		sql`SELECT * FROM notes WHERE presentation_id=$1 AND visible=true ORDER BY time_stamp ASC`,
 		[room]
 	);
 	socket.to(room).emit("note_list", response.rows);
@@ -159,6 +162,19 @@ app.post("/api/addNote", requiresLogin, async (req, res) => {
 		} else {
 			res.status(400).send("invalid request");
 		}
+	} catch (err) {
+		console.log(err);
+		res.status(500).send("postgres error");
+	}
+});
+app.get("/api/publicNotes/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	try {
+		const result = await pool.query(
+			sql`SELECT * FROM notes WHERE presentation_id = $1 AND visible = true ORDER BY time_stamp ASC`,
+			[parseInt(id)]
+		);
+		res.send(result.rows);
 	} catch (err) {
 		console.log(err);
 		res.status(500).send("postgres error");
