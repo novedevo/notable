@@ -8,12 +8,12 @@ import axios from "axios";
 import { Socket } from "socket.io-client";
 import NotesControl from "../components/NotesControl";
 import PublicNotes from "../components/PublicNotes";
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 
 const client = axios.create({
 	headers: {
@@ -21,7 +21,7 @@ const client = axios.create({
 	},
 });
 
-const [value, setValue] = React.useState('1');
+const [value, setValue] = React.useState("1");
 
 const handleChange = (event: React.SyntheticEvent, newValue: string) => {
 	setValue(newValue);
@@ -60,12 +60,12 @@ export default function VideoNotes(props: {
 					/>
 				</div>
 				<div className="right-side">
-					<Box sx={{ width: '100%', typography: 'body1' }}>
+					<Box sx={{ width: "100%", typography: "body1" }}>
 						<TabContext value={value}>
-							<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 								<TabList onChange={handleChange} aria-label="chat tabs">
-										<Tab label="Your Notes" value="1" />
-										<Tab label="Everyone's Notes" value="2" />
+									<Tab label="Your Notes" value="1" />
+									<Tab label="Everyone's Notes" value="2" />
 								</TabList>
 							</Box>
 							<TabPanel value="1">
@@ -112,7 +112,7 @@ export default function VideoNotes(props: {
 								/>
 							</TabPanel>
 						</TabContext>
-    			</Box>
+					</Box>
 					<NotesControl
 						socket={props.socket}
 						presentationId={presentationId}
