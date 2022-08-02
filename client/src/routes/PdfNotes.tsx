@@ -165,7 +165,6 @@ export default function PdfNotes(props: {
 					socket={props.socket}
 					presentationId={presentationId}
 					pdf={true}
-					notes={notes}
 				/>
 			</div>
 		</Container>

@@ -27,8 +27,9 @@ export function addPresentationManagementRoutes(app, pool) {
 		);
 		if (result.rows.length === 0) {
 			res.status(404).send("Presentation does not exist.");
+		} else {
+			res.send({ ...result.rows[0], notes: notes.rows });
 		}
-		res.send({ ...result.rows[0], notes: notes.rows });
 	});
 	app.get("/api/presentations", requiresLogin, async (req, res) => {
 		const result = await pool.query(sql`SELECT * FROM presentations`);
