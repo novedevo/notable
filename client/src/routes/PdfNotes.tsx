@@ -13,6 +13,7 @@ import "./AppExtras.css";
 
 import { PdfNoteComponent } from "../components/Note";
 import { Socket } from "socket.io-client";
+import PublicNotes from "../components/PublicNotes";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -159,6 +160,13 @@ export default function PdfNotes(props: {
 						}}
 					/>
 				</div>
+
+				<PublicNotes
+					socket={props.socket}
+					presentationId={presentationId}
+					pdf={true}
+					notes={notes}
+				/>
 			</div>
 		</Container>
 	);

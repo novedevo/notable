@@ -7,6 +7,7 @@ import { VideoNoteComponent } from "../components/Note";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import NotesControl from "../components/NotesControl";
+import PublicNotes from "../components/PublicNotes";
 
 const client = axios.create({
 	headers: {
@@ -88,6 +89,13 @@ export default function VideoNotes(props: {
 						}
 					/>
 				</div>
+
+				<PublicNotes
+					socket={props.socket}
+					presentationId={presentationId}
+					pdf={false}
+					notes={notes}
+				/>
 			</div>
 		</div>
 	);
