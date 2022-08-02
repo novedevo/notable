@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import InputNotes from "../components/InputNotes";
+import NotesControl from "../components/NotesControl";
 import dayjs from "dayjs";
 import axios from "axios";
 import duration from "dayjs/plugin/duration";
@@ -29,6 +30,7 @@ export default function PdfNotes(props: {
 	inputNotes: PdfNote[];
 	socket: Socket;
 }) {
+	const [visible, setVisible] = useState(props.inputNotes[0]?.visible ?? true);
 	const [notes, setNotes] = useState<PdfNote[]>(props.inputNotes);
 	const date = dayjs(props.startTime);
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
@@ -109,6 +111,13 @@ export default function PdfNotes(props: {
 						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
 						{date.format("YYYY-MM-DDTHH:mm")}, {time}
 					</Container>
+					<NotesControl
+						socket={props.socket}
+						presentationId={presentationId}
+						visible={visible}
+						setVisible={setVisible}
+						client={client}
+					/>
 					<Container id="notes-display">
 						{notes.map((note) => (
 							<PdfNoteComponent {...note} key={note.note_id} />
@@ -133,6 +142,7 @@ export default function PdfNotes(props: {
 											page_number: pageNumber,
 											time_stamp: diff,
 											note_id: result.data[0].note_id,
+											visible,
 										},
 									]);
 								} catch (err) {

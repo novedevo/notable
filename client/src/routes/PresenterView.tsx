@@ -53,6 +53,7 @@ export default function PresenterView(props: { socket: Socket }) {
 				navigate("/");
 			})
 			.catch((err) => alert("invalid presentation: " + err.message));
+		props.socket.emit("end_presentation", { id: presentationId });
 	};
 
 	return (

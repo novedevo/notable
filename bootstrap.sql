@@ -20,7 +20,13 @@ CREATE TABLE presentations (
     pdf TEXT,
     presenter_id integer REFERENCES users (id) NOT NULL
 );
-INSERT INTO presentations (title, scheduled_date, presentation_end_date, youtube_url, presenter_id)
+INSERT INTO presentations (
+        title,
+        scheduled_date,
+        presentation_end_date,
+        youtube_url,
+        presenter_id
+    )
 VALUES (
         'Example Presentation',
         '2022-07-19 10:00:00',
@@ -35,7 +41,8 @@ CREATE TABLE notes (
     time_stamp integer,
     page_number TEXT,
     notetaker_id integer REFERENCES users (id),
-    presentation_id integer REFERENCES presentations (presentation_instance_id)
+    presentation_id integer REFERENCES presentations (presentation_instance_id),
+    public BOOLEAN NOT NULL DEFAULT TRUE
 );
 INSERT INTO notes (
         note,
