@@ -150,12 +150,12 @@ app.post("/api/register", async (req, res) => {
 
 // save user notes from PDFnotes to db
 app.post("/api/addNote", requiresLogin, async (req, res) => {
-	const { note, timestamp, pageNumber, presentationId } = req.body;
+	const { note, timestamp, pageNumber, presentationId, visible } = req.body;
 	try {
 		const result = await pool.query(
-			sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id)
-			VALUES ($1, $2, $3, $4, $5) RETURNING note_id`,
-			[note, timestamp, pageNumber, req.jwt.id, parseInt(presentationId)]
+			sql`INSERT INTO notes (note, time_stamp, page_number, notetaker_id, presentation_id, visible)
+			VALUES ($1, $2, $3, $4, $5, $6) RETURNING note_id`,
+			[note, timestamp, pageNumber, req.jwt.id, presentationId, visible]
 		);
 		if (result.rowCount) {
 			res.json(result.rows);
@@ -184,7 +184,7 @@ app.patch("/api/noteVisibility", requiresLogin, async (req, res) => {
 	const { id, visible } = req.body;
 	try {
 		const result = await pool.query(
-			sql`UPDATE notes SET public = $1 WHERE presentation_id=$2 AND notetaker_id=$3`,
+			sql`UPDATE notes SET visible = $1 WHERE presentation_id=$2 AND notetaker_id=$3`,
 			[visible, id, req.jwt.id]
 		);
 		if (result.rowCount) {

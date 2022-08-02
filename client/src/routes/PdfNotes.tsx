@@ -133,6 +133,7 @@ export default function PdfNotes(props: {
 										timestamp: diff,
 										pageNumber,
 										presentationId,
+										visible,
 									});
 									props.socket.emit("add_note", { room: presentationId });
 									setNotes([

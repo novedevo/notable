@@ -71,6 +71,7 @@ export default function VideoNotes(props: {
 									note: value,
 									timestamp: parseInt(time),
 									presentationId,
+									visible,
 								});
 								props.socket.emit("add_note", { room: presentationId });
 								setNotes([
