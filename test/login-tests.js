@@ -1,5 +1,6 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
+import pool from "../dbHelper.js";
 import server from "../index.js";
 import * as userClass from "./user-constants.js";
 var should = chai.should();
@@ -48,8 +49,23 @@ describe("registering users", function () {
 			.end(function (error, res) {
 				res.should.have.status(200);
 				res.body.should.have.property("token");
-				console.log(res);
 				done();
 			});
+	});
+	it("should not register user given username already exists", function (done) {
+		chai
+			.request(server)
+			.post("/api/register")
+			.send(userClass.EXISTING_USERNAME_1)
+			.end(function (error, res) {
+				res.should.have.status(400);
+				res.text.should.eql("Username already exists");
+				done();
+			});
+	});
+	after(function (done) {
+		pool.query(`DELETE FROM users WHERE username = 'newtestuser'`);
+		console.log("deleted jolyne!!");
+		done();
 	});
 });
