@@ -15,6 +15,19 @@ export function addPresentationManagementRoutes(app, pool) {
 		);
 		res.send("Presentation has been deleted.");
 	});
+	app.get("/api/publicNotes/:id", requiresLogin, async (req, res) => {
+		const { id } = req.params;
+		try {
+			const result = await pool.query(
+				sql`SELECT * FROM notes WHERE presentation_id = $1 AND visible = true`,
+				[parseInt(id)]
+			);
+			res.send(result.rows);
+		} catch (err) {
+			console.log(err);
+			res.status(500).send("postgres error");
+		}
+	});
 	app.get("/api/presentation/:id", requiresLogin, async (req, res) => {
 		const { id } = req.params;
 		const result = await pool.query(

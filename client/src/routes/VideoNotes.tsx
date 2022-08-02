@@ -1,9 +1,4 @@
-import {
-	Checkbox,
-	Container,
-	FormControlLabel,
-	Typography,
-} from "@mui/material";
+import { Container } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";

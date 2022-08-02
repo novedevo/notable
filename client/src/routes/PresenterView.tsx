@@ -24,12 +24,12 @@ export default function PresenterView(props: { socket: Socket }) {
 				alert("Invalid presentation ID");
 			} else {
 				setTitle(presentation.title ?? "Invalid presentation");
-				setNotes(presentation.notes!);
 				if (presentation.pdf) {
 					setPdf(true);
 				}
 			}
 		});
+		getNotes(presentationId).then(setNotes);
 	}, [presentationId]);
 
 	useEffect(() => {
@@ -119,5 +119,14 @@ async function getPresentation(
 		return result.data;
 	} catch (err) {
 		alert("Failed to get presentations: " + err);
+	}
+}
+async function getNotes(presentationId: number): Promise<Note[]> {
+	try {
+		const result = await client("/api/publicNotes/" + presentationId);
+		return result.data;
+	} catch (err) {
+		alert("Failed to get notes: " + err);
+		return [];
 	}
 }

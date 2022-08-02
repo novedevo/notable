@@ -42,7 +42,7 @@ CREATE TABLE notes (
     page_number TEXT,
     notetaker_id integer REFERENCES users (id),
     presentation_id integer REFERENCES presentations (presentation_instance_id),
-    public BOOLEAN NOT NULL DEFAULT TRUE
+    visible BOOLEAN NOT NULL DEFAULT TRUE
 );
 INSERT INTO notes (
         note,
