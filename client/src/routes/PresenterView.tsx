@@ -3,8 +3,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
-import { Note, PdfNote, Presentation, User, VideoNote } from "../types";
+import { Note, PdfNote, Presentation, User } from "../types";
 import { PdfNoteComponent, VideoNoteComponent } from "../components/Note";
+import PublicNotes from "../components/PublicNotes";
 
 const client = axios.create({
 	headers: {
@@ -24,12 +25,12 @@ export default function PresenterView(props: { socket: Socket }) {
 				alert("Invalid presentation ID");
 			} else {
 				setTitle(presentation.title ?? "Invalid presentation");
-				setNotes(presentation.notes!);
 				if (presentation.pdf) {
 					setPdf(true);
 				}
 			}
 		});
+		getNotes(presentationId).then(setNotes);
 	}, [presentationId]);
 
 	useEffect(() => {
@@ -53,6 +54,7 @@ export default function PresenterView(props: { socket: Socket }) {
 				navigate("/");
 			})
 			.catch((err) => alert("invalid presentation: " + err.message));
+		props.socket.emit("end_presentation", { id: presentationId });
 	};
 
 	return (
@@ -77,34 +79,12 @@ export default function PresenterView(props: { socket: Socket }) {
 				>
 					End Presentation
 				</Button>
-				<h3>All notes taken for this presentation:</h3>
-				<ul>
-					{notes.map((note) =>
-						pdf ? (
-							<PdfNoteComponent
-								{...(note as PdfNote)}
-								key={note.note_id}
-								onDelete={() =>
-									props.socket.emit("delete_note", {
-										room: presentationId,
-										note_id: note.note_id,
-									})
-								}
-							/>
-						) : (
-							<VideoNoteComponent
-								{...(note as VideoNote)}
-								key={note.note_id}
-								onDelete={() =>
-									props.socket.emit("delete_note", {
-										room: presentationId,
-										note_id: note.note_id,
-									})
-								}
-							/>
-						)
-					)}
-				</ul>
+				<PublicNotes
+					socket={props.socket}
+					presentationId={presentationId}
+					pdf={Boolean(pdf)}
+					notes={notes}
+				/>
 			</Container>
 		</div>
 	);
@@ -118,5 +98,14 @@ async function getPresentation(
 		return result.data;
 	} catch (err) {
 		alert("Failed to get presentations: " + err);
+	}
+}
+async function getNotes(presentationId: number): Promise<Note[]> {
+	try {
+		const result = await client("/api/publicNotes/" + presentationId);
+		return result.data;
+	} catch (err) {
+		alert("Failed to get notes: " + err);
+		return [];
 	}
 }

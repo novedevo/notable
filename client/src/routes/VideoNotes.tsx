@@ -1,4 +1,4 @@
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
@@ -6,6 +6,8 @@ import { VideoNote } from "../types";
 import { VideoNoteComponent } from "../components/Note";
 import axios from "axios";
 import { Socket } from "socket.io-client";
+import NotesControl from "../components/NotesControl";
+import PublicNotes from "../components/PublicNotes";
 
 const client = axios.create({
 	headers: {
@@ -20,7 +22,7 @@ export default function VideoNotes(props: {
 	socket: Socket;
 }) {
 	const videoId = parseId(props.url);
-
+	const [visible, setVisible] = useState(props.inputNotes[0]?.visible ?? true);
 	const [notes, setNotes] = useState<VideoNote[]>(props.inputNotes);
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
@@ -46,7 +48,13 @@ export default function VideoNotes(props: {
 					/>
 				</div>
 				<div className="right-side">
-					<Typography>Notes</Typography>
+					<NotesControl
+						socket={props.socket}
+						presentationId={presentationId}
+						visible={visible}
+						setVisible={setVisible}
+						client={client}
+					/>
 					<Container id="notes-display">
 						{notes.map((note, i) => (
 							<VideoNoteComponent
@@ -62,8 +70,9 @@ export default function VideoNotes(props: {
 								const time = player.getCurrentTime();
 								const result = await client.post("/api/addNote", {
 									note: value,
-									timestamp: parseInt(time),
+									timestamp: time,
 									presentationId,
+									visible,
 								});
 								props.socket.emit("add_note", { room: presentationId });
 								setNotes([
@@ -72,14 +81,21 @@ export default function VideoNotes(props: {
 										note: value,
 										time_stamp: time,
 										note_id: result.data[0].note_id,
+										visible,
 									},
 								]);
-								console.log(parseInt(time));
 							}
 							//todo: add socket communication to update server notes
 						}
 					/>
 				</div>
+
+				<PublicNotes
+					socket={props.socket}
+					presentationId={presentationId}
+					pdf={false}
+					notes={notes}
+				/>
 			</div>
 		</div>
 	);

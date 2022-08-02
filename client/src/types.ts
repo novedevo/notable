@@ -21,6 +21,7 @@ export interface Note {
 	note: string;
 	notetaker_id?: number;
 	presentation_id?: number;
+	visible: boolean;
 }
 
 export interface VideoNote extends Note {
