@@ -3,8 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
-import { Note, PdfNote, Presentation, User } from "../types";
-import { PdfNoteComponent, VideoNoteComponent } from "../components/Note";
+import { Presentation, User } from "../types";
 import PublicNotes from "../components/PublicNotes";
 
 const client = axios.create({
@@ -16,7 +15,6 @@ const client = axios.create({
 export default function PresenterView(props: { socket: Socket }) {
 	const [pdf, setPdf] = useState<boolean>(false);
 	const [userInfo, setUserInfo] = useState<User[]>([]);
-	const [notes, setNotes] = useState<Note[]>([]);
 	const [title, setTitle] = useState("");
 	const presentationId = parseInt(window.location.href.split("room/")[1]);
 	useEffect(() => {
@@ -30,17 +28,12 @@ export default function PresenterView(props: { socket: Socket }) {
 				}
 			}
 		});
-		getNotes(presentationId).then(setNotes);
 	}, [presentationId]);
 
 	useEffect(() => {
 		props.socket.on("user_list", (data: User[]) => {
 			setUserInfo(data);
 		});
-		props.socket.on("note_list", (data: Note[]) => {
-			setNotes(data);
-		});
-		//
 	}, [props.socket]);
 
 	const navigate = useNavigate();
@@ -83,7 +76,6 @@ export default function PresenterView(props: { socket: Socket }) {
 					socket={props.socket}
 					presentationId={presentationId}
 					pdf={Boolean(pdf)}
-					notes={notes}
 				/>
 			</Container>
 		</div>
@@ -98,14 +90,5 @@ async function getPresentation(
 		return result.data;
 	} catch (err) {
 		alert("Failed to get presentations: " + err);
-	}
-}
-async function getNotes(presentationId: number): Promise<Note[]> {
-	try {
-		const result = await client("/api/publicNotes/" + presentationId);
-		return result.data;
-	} catch (err) {
-		alert("Failed to get notes: " + err);
-		return [];
 	}
 }
