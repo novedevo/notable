@@ -13,12 +13,14 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@mui/lab": "^5.0.0-alpha.93",
 		"axios": "^0.27.2",
 		"cors": "^2.8.5",
 		"express": "^4.18.1",
 		"express-fileupload": "^1.4.0",
 		"express-jwt": "^7.7.5",
 		"jsonwebtoken": "^8.5.1",
+		"lab": "^18.0.2",
 		"pg": "^8.7.3",
 		"socket.io": "^4.5.1"
 	},
