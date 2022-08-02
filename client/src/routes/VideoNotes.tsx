@@ -21,12 +21,6 @@ const client = axios.create({
 	},
 });
 
-const [value, setValue] = React.useState("1");
-
-const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-	setValue(newValue);
-};
-
 export default function VideoNotes(props: {
 	url: string;
 	inputNotes: VideoNote[];
@@ -39,6 +33,12 @@ export default function VideoNotes(props: {
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
 
 	const presentationId = parseInt(window.location.pathname.split("/").pop()!);
+
+	const [value, setValue] = React.useState("1");
+
+	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+		setValue(newValue);
+	};
 
 	return (
 		<div>
