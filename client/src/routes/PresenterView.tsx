@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
-import { Note, PdfNote, Presentation, User, VideoNote } from "../types";
+import { Note, PdfNote, Presentation, User } from "../types";
 import { PdfNoteComponent, VideoNoteComponent } from "../components/Note";
 
 const client = axios.create({
@@ -56,6 +56,8 @@ export default function PresenterView(props: { socket: Socket }) {
 		props.socket.emit("end_presentation", { id: presentationId });
 	};
 
+	const NoteComponent = pdf ? PdfNoteComponent : VideoNoteComponent;
+
 	return (
 		<div id="containerIfSidebar">
 			<Container>
@@ -80,31 +82,18 @@ export default function PresenterView(props: { socket: Socket }) {
 				</Button>
 				<h3>All notes taken for this presentation:</h3>
 				<ul>
-					{notes.map((note) =>
-						pdf ? (
-							<PdfNoteComponent
-								{...(note as PdfNote)}
-								key={note.note_id}
-								onDelete={() =>
-									props.socket.emit("delete_note", {
-										room: presentationId,
-										note_id: note.note_id,
-									})
-								}
-							/>
-						) : (
-							<VideoNoteComponent
-								{...(note as VideoNote)}
-								key={note.note_id}
-								onDelete={() =>
-									props.socket.emit("delete_note", {
-										room: presentationId,
-										note_id: note.note_id,
-									})
-								}
-							/>
-						)
-					)}
+					{notes.map((note) => (
+						<NoteComponent
+							{...(note as PdfNote)} //static typing is a little broken here, could use some work
+							key={note.note_id}
+							onDelete={() =>
+								props.socket.emit("delete_note", {
+									room: presentationId,
+									note_id: note.note_id,
+								})
+							}
+						/>
+					))}
 				</ul>
 			</Container>
 		</div>
