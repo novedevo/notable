@@ -3,8 +3,8 @@ import chaiHttp from "chai-http";
 import pool from "../dbHelper.js";
 import server from "../index.js";
 import * as userClass from "./user-constants.js";
-var should = chai.should();
 
+chai.should();
 chai.use(chaiHttp);
 
 describe("logins", function () {
