@@ -10,6 +10,12 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { PdfNote } from "../types";
 import Pagination from "react-bootstrap/Pagination";
 import "./AppExtras.css";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 
 import { PdfNoteComponent } from "../components/Note";
 import { Socket } from "socket.io-client";
@@ -73,6 +79,12 @@ export default function PdfNotes(props: {
 
 	const presentationId = parseInt(window.location.pathname.split("/").pop()!);
 
+	const [value, setValue] = React.useState("1");
+
+	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+		setValue(newValue);
+	};
+
 	return (
 		<Container>
 			<div
@@ -112,60 +124,75 @@ export default function PdfNotes(props: {
 						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
 						{date.format("YYYY-MM-DDTHH:mm")}, {time}
 					</Container>
-					<NotesControl
-						socket={props.socket}
-						presentationId={presentationId}
-						visible={visible}
-						setVisible={setVisible}
-						client={client}
-					/>
-					<Container id="notes-display">
-						{notes.map((note) => (
-							<PdfNoteComponent {...note} key={note.note_id} />
-						))}
-					</Container>
-					<InputNotes
-						post={async (note) => {
-							const diff = dayjs().diff(date);
-							if (diff > 0 && pageNumber > 0) {
-								try {
-									const result = await client.post("/api/addNote", {
-										note: note,
-										timestamp: diff,
-										pageNumber,
-										presentationId,
-										visible,
-									});
-									props.socket.emit("add_note", { room: presentationId });
-									setNotes([
-										...notes,
-										{
-											note,
-											page_number: pageNumber,
-											time_stamp: diff,
-											note_id: result.data[0].note_id,
-											visible,
-										},
-									]);
-								} catch (err) {
-									console.error(err);
-									alert(err);
-								}
-								//todo: add socket communication to update server notes
-							} else if (pageNumber > 0) {
-								alert("You can't post notes until the presentation starts");
-							} else {
-								alert("Please load a PDF to begin taking notes");
-							}
-						}}
-					/>
+					<Box sx={{ width: "100%", typography: "body1" }}>
+						<TabContext value={value}>
+							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+								<TabList onChange={handleChange} aria-label="chat tabs">
+									<Tab label="Your Notes" value="1" />
+									<Tab label="Everyone's Notes" value="2" />
+								</TabList>
+							</Box>
+							<TabPanel value="1">
+								<NotesControl
+									socket={props.socket}
+									presentationId={presentationId}
+									visible={visible}
+									setVisible={setVisible}
+									client={client}
+								/>
+								<Container id="notes-display">
+									{notes.map((note) => (
+										<PdfNoteComponent {...note} key={note.note_id} />
+									))}
+								</Container>
+								<InputNotes
+									post={async (note) => {
+										const diff = dayjs().diff(date);
+										if (diff > 0 && pageNumber > 0) {
+											try {
+												const result = await client.post("/api/addNote", {
+													note: note,
+													timestamp: diff,
+													pageNumber,
+													presentationId,
+													visible,
+												});
+												props.socket.emit("add_note", { room: presentationId });
+												setNotes([
+													...notes,
+													{
+														note,
+														page_number: pageNumber,
+														time_stamp: diff,
+														note_id: result.data[0].note_id,
+														visible,
+													},
+												]);
+											} catch (err) {
+												console.error(err);
+												alert(err);
+											}
+											//todo: add socket communication to update server notes
+										} else if (pageNumber > 0) {
+											alert(
+												"You can't post notes until the presentation starts"
+											);
+										} else {
+											alert("Please load a PDF to begin taking notes");
+										}
+									}}
+								/>
+							</TabPanel>
+							<TabPanel value="2">
+								<PublicNotes
+									socket={props.socket}
+									presentationId={presentationId}
+									pdf={true}
+								/>
+							</TabPanel>
+						</TabContext>
+					</Box>
 				</div>
-
-				<PublicNotes
-					socket={props.socket}
-					presentationId={presentationId}
-					pdf={true}
-				/>
 			</div>
 		</Container>
 	);
