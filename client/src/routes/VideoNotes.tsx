@@ -69,7 +69,7 @@ export default function VideoNotes(props: {
 								const time = player.getCurrentTime();
 								const result = await client.post("/api/addNote", {
 									note: value,
-									timestamp: parseInt(time),
+									timestamp: time,
 									presentationId,
 									visible,
 								});
@@ -83,7 +83,6 @@ export default function VideoNotes(props: {
 										visible,
 									},
 								]);
-								console.log(parseInt(time));
 							}
 							//todo: add socket communication to update server notes
 						}
