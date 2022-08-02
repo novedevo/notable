@@ -174,7 +174,9 @@ export default function PdfNotes(props: {
 											}
 											//todo: add socket communication to update server notes
 										} else if (pageNumber > 0) {
-											alert("You can't post notes until the presentation starts");
+											alert(
+												"You can't post notes until the presentation starts"
+											);
 										} else {
 											alert("Please load a PDF to begin taking notes");
 										}
@@ -190,7 +192,7 @@ export default function PdfNotes(props: {
 							</TabPanel>
 						</TabContext>
 					</Box>
-				</div>			
+				</div>
 			</div>
 		</Container>
 	);
