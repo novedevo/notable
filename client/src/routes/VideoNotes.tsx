@@ -69,6 +69,13 @@ export default function VideoNotes(props: {
 								</TabList>
 							</Box>
 							<TabPanel value="1">
+								<NotesControl
+									socket={props.socket}
+									presentationId={presentationId}
+									visible={visible}
+									setVisible={setVisible}
+									client={client}
+								/>
 								<Container id="notes-display">
 									{notes.map((note, i) => (
 										<VideoNoteComponent
@@ -113,13 +120,6 @@ export default function VideoNotes(props: {
 							</TabPanel>
 						</TabContext>
 					</Box>
-					<NotesControl
-						socket={props.socket}
-						presentationId={presentationId}
-						visible={visible}
-						setVisible={setVisible}
-						client={client}
-					/>
 				</div>
 			</div>
 		</div>
