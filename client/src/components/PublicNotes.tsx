@@ -30,7 +30,7 @@ export default function PublicNotes(props: {
 	return (
 		<>
 			<h3>All notes taken for this presentation:</h3>
-			<ul>
+			<ul className="notes-display">
 				{notes.map((note) => (
 					<NoteComponent
 						{...(note as PdfNote)} //static typing is a little broken here, could use some work
