@@ -41,10 +41,12 @@ export function PdfNoteComponent(props: {
 export function VideoNoteComponent(props: {
 	player?: YouTubePlayer;
 	note_id: number;
+	notetaker_id?: number;
 	note: string;
 	time_stamp: number;
 	onDelete?: () => void;
 }) {
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 	return (
 		<Card>
 			<Typography>{props.note}</Typography>
@@ -57,16 +59,18 @@ export function VideoNoteComponent(props: {
 						.toISOString()
 						.substring(11, 19)}
 				</Link>
-				<Button
-					onClick={() => {
-						deleteNote(props.note_id);
-						if (props.onDelete) {
-							props.onDelete();
-						}
-					}}
-				>
-					Delete
-				</Button>
+				{props.notetaker_id === user.id && (
+					<Button
+						onClick={() => {
+							deleteNote(props.note_id);
+							if (props.onDelete) {
+								props.onDelete();
+							}
+						}}
+					>
+						Delete
+					</Button>
+				)}
 			</Typography>
 		</Card>
 	);
