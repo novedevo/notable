@@ -1,9 +1,10 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useEffect, useState, useReducer } from "react";
-import { Presentation } from "../types";
+import { Presentation, User } from "../types";
 import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
+import { isNull } from "lodash";
 
 const client = axios.create({
 	headers: {
@@ -14,6 +15,7 @@ const client = axios.create({
 const ViewNotes = () => {
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
 	const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 
 	useEffect(() => {
 		getPresentationWithNotes().then((notepresentations) => {
@@ -32,6 +34,30 @@ const ViewNotes = () => {
 				.delete(`/api/presentationNotes/${event.currentTarget.value}`)
 				.then((res) => {
 					alert("Presentation Note Deleted!");
+					console.log(res.data);
+					forceUpdate();
+				})
+				.catch((err) => alert("invalid presentation: " + err.message));
+		}
+	};
+
+	const changeNote = (event: {
+		currentTarget: {
+			value: any;
+		};
+	}) => {
+		const youtube_url = prompt('Please enter the youtube url');
+
+			console.log(event.currentTarget.value);
+		if (youtube_url != null) {
+			const formData = new FormData();
+			formData.append("youtube_url", youtube_url);
+			formData.append("presentation_instance_id", event.currentTarget.value);
+
+			client
+				.put("/api/changePresentation", formData)
+				.then((res) => {
+					alert("Presentation Note Changed!");
 					console.log(res.data);
 					forceUpdate();
 				})
@@ -76,6 +102,12 @@ const ViewNotes = () => {
 									value={presentation.presentation_instance_id}
 									onClick={deleteNote}
 								></Button>
+								{presentation.pdf != null && ( //&& presentation.presenter_id == user.id 
+								<Button
+									value={presentation.presentation_instance_id}
+									onClick={changeNote}
+								>change</Button>	
+								)}
 							</div>
 						))}
 					</div>
