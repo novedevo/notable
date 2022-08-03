@@ -102,7 +102,7 @@ const ViewNotes = () => {
 									value={presentation.presentation_instance_id}
 									onClick={deleteNote}
 								></Button>
-								{presentation.pdf != null && ( //&& presentation.presenter_id == user.id 
+								{presentation.pdf != null && presentation.presenter_id == user.id  && (
 								<Button
 									id="editbutton"
 									value={presentation.presentation_instance_id}

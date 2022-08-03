@@ -215,7 +215,9 @@ app.delete("/api/note/:id", requiresLogin, async (req, res) => {
 app.get("/api/notePresentations/", requiresLogin, async (req, res) => {
 	const result = await pool.query(
 		sql`SELECT * FROM presentations WHERE presentation_instance_id IN 
-		(SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)`,
+		(SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)
+		UNION
+		SELECT * FROM presentations WHERE presenter_id = $1`,
 		[req.jwt.id]
 	);
 	res.send(result.rows);
