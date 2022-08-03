@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useReducer } from "react";
-import { Presentation } from "../types";
+import { Presentation, User } from "../types";
 import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 
@@ -12,8 +12,15 @@ const client = axios.create({
 });
 
 const ViewNotes = () => {
+	const navigate = useNavigate();
 	const [presentations, setPresentations] = useState<Presentation[]>([]);
 	const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
+	const user: User = JSON.parse(localStorage.getItem("user")!);
+
+	if (user.id === undefined) {
+		localStorage.clear();
+		navigate("/");
+	}
 
 	useEffect(() => {
 		getPresentationWithNotes().then((notepresentations) => {
