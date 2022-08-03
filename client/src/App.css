@@ -75,7 +75,7 @@
 }
 
 .right-side {
-	overflow:scroll;
+	overflow: scroll;
 	display: grid;
 	background-color: aliceblue;
 	color: black;
