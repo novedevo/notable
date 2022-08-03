@@ -140,7 +140,7 @@ export default function PdfNotes(props: {
 									setVisible={setVisible}
 									client={client}
 								/>
-								<Container id="notes-display">
+								<Container className="notes-display">
 									{notes.map((note) => (
 										<PdfNoteComponent {...note} key={note.note_id} />
 									))}
