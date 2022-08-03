@@ -28,7 +28,6 @@
 }
 
 .notes-display {
-	overflow: auto;
 	max-height: 52vh;
 	word-break: break-all;
 	color: black;
@@ -76,13 +75,14 @@
 }
 
 .right-side {
+	overflow:scroll;
 	display: grid;
 	background-color: aliceblue;
 	color: black;
 	grid-template-rows: 10% 70% 20%;
 	outline: 2px black solid;
 	position: absolute;
-	top: 16%;
+	top: 12%;
 	left: 70%;
 	min-width: 20%;
 	min-height: 20%;
@@ -97,7 +97,7 @@
 	grid-template-rows: 10% 70% 20%;
 	outline: 2px black solid;
 	position: absolute;
-	top: 77%;
+	top: 70%;
 	left: 70%;
 	min-width: 20%;
 	min-height: 5%;
