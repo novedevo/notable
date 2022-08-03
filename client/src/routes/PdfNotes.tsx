@@ -124,6 +124,7 @@ export default function PdfNotes(props: {
 						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
 						{date.format("YYYY-MM-DDTHH:mm")}, {time}
 					</Container>
+					<Container>
 					<Box sx={{ width: "100%", typography: "body1" }}>
 						<TabContext value={value}>
 							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -145,43 +146,6 @@ export default function PdfNotes(props: {
 										<PdfNoteComponent {...note} key={note.note_id} />
 									))}
 								</Container>
-								<InputNotes
-									post={async (note) => {
-										const diff = dayjs().diff(date);
-										if (diff > 0 && pageNumber > 0) {
-											try {
-												const result = await client.post("/api/addNote", {
-													note: note,
-													timestamp: diff,
-													pageNumber,
-													presentationId,
-													visible,
-												});
-												props.socket.emit("add_note", { room: presentationId });
-												setNotes([
-													...notes,
-													{
-														note,
-														page_number: pageNumber,
-														time_stamp: diff,
-														note_id: result.data[0].note_id,
-														visible,
-													},
-												]);
-											} catch (err) {
-												console.error(err);
-												alert(err);
-											}
-											//todo: add socket communication to update server notes
-										} else if (pageNumber > 0) {
-											alert(
-												"You can't post notes until the presentation starts"
-											);
-										} else {
-											alert("Please load a PDF to begin taking notes");
-										}
-									}}
-								/>
 							</TabPanel>
 							<TabPanel value="2">
 								<PublicNotes
@@ -192,6 +156,42 @@ export default function PdfNotes(props: {
 							</TabPanel>
 						</TabContext>
 					</Box>
+					</Container>
+					<InputNotes
+						post={async (note) => {
+							const diff = dayjs().diff(date);
+							if (diff > 0 && pageNumber > 0) {
+								try {
+									const result = await client.post("/api/addNote", {
+										note: note,
+										timestamp: diff,
+										pageNumber,
+										presentationId,
+										visible,
+									});
+									props.socket.emit("add_note", { room: presentationId });
+									setNotes([
+										...notes,
+										{
+											note,
+											page_number: pageNumber,
+											time_stamp: diff,
+											note_id: result.data[0].note_id,
+											visible,
+										},
+									]);
+								} catch (err) {
+									console.error(err);
+									alert(err);
+								}
+								//todo: add socket communication to update server notes
+							} else if (pageNumber > 0) {
+								alert("You can't post notes until the presentation starts");
+							} else {
+								alert("Please load a PDF to begin taking notes");
+							}
+						}}
+					/>
 				</div>
 			</div>
 		</Container>
