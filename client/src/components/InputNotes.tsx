@@ -31,7 +31,7 @@ export default function InputNotes({ post }: { post: (note: string) => void }) {
 				style={{
 					backgroundColor: "#8400ff",
 					color: "white",
-					top: "10.5rem",
+					top: "11rem",
 					height: "2.5rem",
 				}}
 				onClick={(e) => {
