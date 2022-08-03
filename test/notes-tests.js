@@ -10,7 +10,7 @@ chai.should();
 chai.use(chaiHttp);
 var numVisibleNotes = 3;
 
-describe("notes", function () {
+describe("adding notes & notes visibility", function () {
 	before("insert test data", function () {
 		for (var i = 0; i < numVisibleNotes; i++) {
 			try {
