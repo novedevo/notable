@@ -217,7 +217,7 @@ app.get("/api/notePresentations/", requiresLogin, async (req, res) => {
 		sql`SELECT * FROM presentations WHERE presentation_instance_id IN 
 		(SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)
 		UNION
-		SELECT * FROM presentations WHERE presenter_id = $1`,
+		SELECT * FROM presentations WHERE presenter_id = $1 ORDER BY presenter_id`,
 		[req.jwt.id]
 	);
 	res.send(result.rows);

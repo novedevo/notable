@@ -115,10 +115,7 @@ export function addPresentationManagementRoutes(app, pool) {
 
 			await pool.query(
 				sql`UPDATE presentations SET youtube_url = $1, pdf = null WHERE presentation_instance_id = $2`,
-				[
-					youtube_url,
-					parseInt(presentation_instance_id),
-				]
+				[youtube_url, parseInt(presentation_instance_id)]
 			);
 			res.send("Presentation has been updated.");
 		}

@@ -46,9 +46,9 @@ const ViewNotes = () => {
 			value: any;
 		};
 	}) => {
-		const youtube_url = prompt('Please enter the youtube url');
+		const youtube_url = prompt("Please enter the youtube url");
 
-			console.log(event.currentTarget.value);
+		console.log(event.currentTarget.value);
 		if (youtube_url != null) {
 			const formData = new FormData();
 			formData.append("youtube_url", youtube_url);
@@ -102,13 +102,14 @@ const ViewNotes = () => {
 									value={presentation.presentation_instance_id}
 									onClick={deleteNote}
 								></Button>
-								{presentation.pdf != null && presentation.presenter_id == user.id  && (
-								<Button
-									id="editbutton"
-									value={presentation.presentation_instance_id}
-									onClick={changeNote}
-								></Button>	
-								)}
+								{presentation.pdf != null &&
+									presentation.presenter_id == user.id && (
+										<Button
+											id="editbutton"
+											value={presentation.presentation_instance_id}
+											onClick={changeNote}
+										></Button>
+									)}
 							</div>
 						))}
 					</div>
