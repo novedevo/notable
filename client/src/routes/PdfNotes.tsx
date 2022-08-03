@@ -124,7 +124,7 @@ export default function PdfNotes(props: {
 						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
 						{date.format("YYYY-MM-DDTHH:mm")}, {time}
 					</Container>
-					<Container>
+					<Container className="notes-display">
 						<Box sx={{ width: "100%", typography: "body1" }}>
 							<TabContext value={value}>
 								<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
