@@ -20,17 +20,17 @@ export function PdfNoteComponent(props: {
 				{dayjs.duration(props.time_stamp, "milliseconds").format("HH:mm:ss")}
 			</Typography>
 			<Typography>Page {props.page_number}</Typography>
-			{props.notetaker_id === user.id && ( 
-			<Button
-				onClick={() => {
-					deleteNote(props.note_id);
-					if (props.onDelete) {
-						props.onDelete();
-					}
-				}}
-			>
-				delete
-			</Button>
+			{props.notetaker_id === user.id && (
+				<Button
+					onClick={() => {
+						deleteNote(props.note_id);
+						if (props.onDelete) {
+							props.onDelete();
+						}
+					}}
+				>
+					delete
+				</Button>
 			)}
 		</Card>
 	);
