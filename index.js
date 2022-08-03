@@ -207,6 +207,14 @@ app.delete("/api/presentationNotes/:id", requiresLogin, async (req, res) => {
 	);
 	res.send("Presentation Notes has been deleted.");
 });
+app.delete("/api/presentation/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	await pool.query(
+		sql`DELETE FROM presentations WHERE presentation_instance_id = $1`,
+		[parseInt(id)]
+	);
+	res.send("Presentation has been deleted.");
+});
 app.delete("/api/note/:id", requiresLogin, async (req, res) => {
 	const { id } = req.params;
 	await pool.query(sql`DELETE FROM notes WHERE note_id = $1`, [parseInt(id)]);
