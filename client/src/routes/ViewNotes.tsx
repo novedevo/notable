@@ -104,9 +104,10 @@ const ViewNotes = () => {
 								></Button>
 								{presentation.pdf != null && ( //&& presentation.presenter_id == user.id 
 								<Button
+									id="editbutton"
 									value={presentation.presentation_instance_id}
 									onClick={changeNote}
-								>change</Button>	
+								></Button>	
 								)}
 							</div>
 						))}
