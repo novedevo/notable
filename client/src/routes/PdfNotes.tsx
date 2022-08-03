@@ -125,37 +125,37 @@ export default function PdfNotes(props: {
 						{date.format("YYYY-MM-DDTHH:mm")}, {time}
 					</Container>
 					<Container>
-					<Box sx={{ width: "100%", typography: "body1" }}>
-						<TabContext value={value}>
-							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-								<TabList onChange={handleChange} aria-label="chat tabs">
-									<Tab label="Your Notes" value="1" />
-									<Tab label="Everyone's Notes" value="2" />
-								</TabList>
-							</Box>
-							<TabPanel value="1">
-								<NotesControl
-									socket={props.socket}
-									presentationId={presentationId}
-									visible={visible}
-									setVisible={setVisible}
-									client={client}
-								/>
-								<Container className="notes-display">
-									{notes.map((note) => (
-										<PdfNoteComponent {...note} key={note.note_id} />
-									))}
-								</Container>
-							</TabPanel>
-							<TabPanel value="2">
-								<PublicNotes
-									socket={props.socket}
-									presentationId={presentationId}
-									pdf={true}
-								/>
-							</TabPanel>
-						</TabContext>
-					</Box>
+						<Box sx={{ width: "100%", typography: "body1" }}>
+							<TabContext value={value}>
+								<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+									<TabList onChange={handleChange} aria-label="chat tabs">
+										<Tab label="Your Notes" value="1" />
+										<Tab label="Everyone's Notes" value="2" />
+									</TabList>
+								</Box>
+								<TabPanel value="1">
+									<NotesControl
+										socket={props.socket}
+										presentationId={presentationId}
+										visible={visible}
+										setVisible={setVisible}
+										client={client}
+									/>
+									<Container className="notes-display">
+										{notes.map((note) => (
+											<PdfNoteComponent {...note} key={note.note_id} />
+										))}
+									</Container>
+								</TabPanel>
+								<TabPanel value="2">
+									<PublicNotes
+										socket={props.socket}
+										presentationId={presentationId}
+										pdf={true}
+									/>
+								</TabPanel>
+							</TabContext>
+						</Box>
 					</Container>
 					<InputNotes
 						post={async (note) => {
