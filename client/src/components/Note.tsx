@@ -2,14 +2,17 @@ import { Button, Card, Link, Typography } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
 import { YouTubePlayer } from "react-youtube";
+import { User } from "../types";
 
 export function PdfNoteComponent(props: {
 	note_id: number;
+	notetaker_id?: number;
 	note: string;
 	time_stamp: number;
 	page_number: number;
 	onDelete?: () => void;
 }) {
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 	return (
 		<Card>
 			<Typography>{props.note}</Typography>
@@ -19,16 +22,18 @@ export function PdfNoteComponent(props: {
 					.substring(11, 19)}
 			</Typography>
 			<Typography>Page {props.page_number}</Typography>
-			<Button
-				onClick={() => {
-					deleteNote(props.note_id);
-					if (props.onDelete) {
-						props.onDelete();
-					}
-				}}
-			>
-				delete
-			</Button>
+			{props.notetaker_id === user.id && (
+				<Button
+					onClick={() => {
+						deleteNote(props.note_id);
+						if (props.onDelete) {
+							props.onDelete();
+						}
+					}}
+				>
+					delete
+				</Button>
+			)}
 		</Card>
 	);
 }

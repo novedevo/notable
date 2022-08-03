@@ -7,7 +7,7 @@ import axios from "axios";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Document, Page, pdfjs } from "react-pdf";
-import { PdfNote } from "../types";
+import { PdfNote, User } from "../types";
 import Pagination from "react-bootstrap/Pagination";
 import "./AppExtras.css";
 import * as React from "react";
@@ -20,6 +20,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import { PdfNoteComponent } from "../components/Note";
 import { Socket } from "socket.io-client";
 import PublicNotes from "../components/PublicNotes";
+import { userInfo } from "os";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -39,6 +40,7 @@ export default function PdfNotes(props: {
 }) {
 	const [visible, setVisible] = useState(props.inputNotes[0]?.visible ?? true);
 	const [notes, setNotes] = useState<PdfNote[]>(props.inputNotes);
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 	const date = dayjs(props.startTime);
 	const [time, setTime] = useState(date.format("HH:mm:ss"));
 	useEffect(() => {
@@ -183,6 +185,7 @@ export default function PdfNotes(props: {
 												dayjs.duration(diff).asSeconds().toString()
 											),
 											note_id: result.data[0].note_id,
+											notetaker_id: user.id,
 											visible,
 										},
 									]);
