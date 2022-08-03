@@ -2,8 +2,8 @@ import { render, screen, cleanup } from "@testing-library/react";
 import ViewNotes from "../routes/ViewNotes";
 
 afterEach(() => {
-    cleanup();
-})
+	cleanup();
+});
 
 test("should properly render ViewNotes component", () => {
 	render(<ViewNotes />);

@@ -11,6 +11,6 @@ test("should render proper text and buttons", () => {
 	const sidebar = screen.getByTestId("sidebar");
 	expect(sidebar).toBeInTheDocument();
 	expect(sidebar).toHaveTextContent("notable");
-    expect(sidebar).toHaveTextContent("My Notes");
-    expect(sidebar).toHaveTextContent("Presentations");
+	expect(sidebar).toHaveTextContent("My Notes");
+	expect(sidebar).toHaveTextContent("Presentations");
 });
