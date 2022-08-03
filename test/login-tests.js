@@ -65,7 +65,6 @@ describe("registering users", function () {
 	});
 	after(function (done) {
 		pool.query(`DELETE FROM users WHERE username = 'newtestuser'`);
-		console.log("deleted jolyne!!");
 		done();
 	});
 });
