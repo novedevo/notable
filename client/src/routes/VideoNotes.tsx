@@ -60,41 +60,43 @@ export default function VideoNotes(props: {
 					/>
 				</div>
 				<div className="right-side">
-					<Box sx={{ width: "100%", typography: "body1" }}>
-						<TabContext value={value}>
-							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-								<TabList onChange={handleChange} aria-label="chat tabs">
-									<Tab label="Your Notes" value="1" />
-									<Tab label="Everyone's Notes" value="2" />
-								</TabList>
-							</Box>
-							<TabPanel value="1">
-								<NotesControl
-									socket={props.socket}
-									presentationId={presentationId}
-									visible={visible}
-									setVisible={setVisible}
-									client={client}
-								/>
-								<Container className="notes-display">
-									{notes.map((note, i) => (
-										<VideoNoteComponent
-											{...note}
-											key={note.note_id}
-											player={player}
-										/>
-									))}
-								</Container>
-							</TabPanel>
-							<TabPanel value="2">
-								<PublicNotes
-									socket={props.socket}
-									presentationId={presentationId}
-									pdf={false}
-								/>
-							</TabPanel>
-						</TabContext>
-					</Box>
+					<Container className="notes-display">
+						<Box sx={{ width: "100%", typography: "body1" }}>
+							<TabContext value={value}>
+								<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+									<TabList onChange={handleChange} aria-label="chat tabs">
+										<Tab label="Your Notes" value="1" />
+										<Tab label="Everyone's Notes" value="2" />
+									</TabList>
+								</Box>
+								<TabPanel value="1">
+									<NotesControl
+										socket={props.socket}
+										presentationId={presentationId}
+										visible={visible}
+										setVisible={setVisible}
+										client={client}
+									/>
+									<Container className="notes-display">
+										{notes.map((note, i) => (
+											<VideoNoteComponent
+												{...note}
+												key={note.note_id}
+												player={player}
+											/>
+										))}
+									</Container>
+								</TabPanel>
+								<TabPanel value="2">
+									<PublicNotes
+										socket={props.socket}
+										presentationId={presentationId}
+										pdf={false}
+									/>
+								</TabPanel>
+							</TabContext>
+						</Box>
+					</Container>
 					<InputNotes
 						post={
 							async (value) => {
