@@ -76,7 +76,7 @@ export default function VideoNotes(props: {
 									setVisible={setVisible}
 									client={client}
 								/>
-								<Container id="notes-display">
+								<Container className="notes-display">
 									{notes.map((note, i) => (
 										<VideoNoteComponent
 											{...note}
