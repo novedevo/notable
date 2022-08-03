@@ -40,7 +40,7 @@ const ViewNotes = () => {
 	};
 
 	return (
-		<div>
+		<div data-testid="ViewNotes-component">
 			<Sidebar />
 			<div id="containerIfSidebar">
 				<Container>
