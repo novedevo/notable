@@ -85,30 +85,6 @@ export default function VideoNotes(props: {
 										/>
 									))}
 								</Container>
-								<InputNotes
-									post={
-										async (value) => {
-											const time = player.getCurrentTime();
-											const result = await client.post("/api/addNote", {
-												note: value,
-												timestamp: time,
-												presentationId,
-												visible,
-											});
-											props.socket.emit("add_note", { room: presentationId });
-											setNotes([
-												...notes,
-												{
-													note: value,
-													time_stamp: time,
-													note_id: result.data[0].note_id,
-													visible,
-												},
-											]);
-										}
-										//todo: add socket communication to update server notes
-									}
-								/>
 							</TabPanel>
 							<TabPanel value="2">
 								<PublicNotes
@@ -119,6 +95,30 @@ export default function VideoNotes(props: {
 							</TabPanel>
 						</TabContext>
 					</Box>
+					<InputNotes
+						post={
+							async (value) => {
+								const time = player.getCurrentTime();
+								const result = await client.post("/api/addNote", {
+									note: value,
+									timestamp: time,
+									presentationId,
+									visible,
+								});
+								props.socket.emit("add_note", { room: presentationId });
+								setNotes([
+									...notes,
+									{
+										note: value,
+										time_stamp: time,
+										note_id: result.data[0].note_id,
+										visible,
+									},
+								]);
+							}
+							//todo: add socket communication to update server notes
+						}
+					/>
 				</div>
 			</div>
 		</div>
