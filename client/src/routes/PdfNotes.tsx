@@ -157,6 +157,8 @@ export default function PdfNotes(props: {
 							</TabContext>
 						</Box>
 					</Container>
+				</div>
+				<div className="input-side">
 					<InputNotes
 						post={async (note) => {
 							const diff = dayjs().diff(date);
