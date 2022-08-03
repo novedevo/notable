@@ -14,7 +14,9 @@ export function PdfNoteComponent(props: {
 		<Card>
 			<Typography>{props.note}</Typography>
 			<Typography>
-				{dayjs.duration(props.time_stamp, "milliseconds").format("HH:mm:ss")}
+				{new Date(Math.floor(props.time_stamp) * 1000)
+					.toISOString()
+					.substring(11, 19)}
 			</Typography>
 			<Typography>Page {props.page_number}</Typography>
 			<Button

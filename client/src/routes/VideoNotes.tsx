@@ -91,7 +91,7 @@ export default function VideoNotes(props: {
 											const time = player.getCurrentTime();
 											const result = await client.post("/api/addNote", {
 												note: value,
-												timestamp: time,
+												timestamp: parseInt(time),
 												presentationId,
 												visible,
 											});
