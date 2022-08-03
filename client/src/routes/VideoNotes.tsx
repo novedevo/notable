@@ -97,6 +97,8 @@ export default function VideoNotes(props: {
 							</TabContext>
 						</Box>
 					</Container>
+				</div>
+				<div className="input-side">
 					<InputNotes
 						post={
 							async (value) => {
