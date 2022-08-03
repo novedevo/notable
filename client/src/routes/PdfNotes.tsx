@@ -124,74 +124,74 @@ export default function PdfNotes(props: {
 						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
 						{date.format("YYYY-MM-DDTHH:mm")}, {time}
 					</Container>
-					<Box sx={{ width: "100%", typography: "body1" }}>
-						<TabContext value={value}>
-							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-								<TabList onChange={handleChange} aria-label="chat tabs">
-									<Tab label="Your Notes" value="1" />
-									<Tab label="Everyone's Notes" value="2" />
-								</TabList>
-							</Box>
-							<TabPanel value="1">
-								<NotesControl
-									socket={props.socket}
-									presentationId={presentationId}
-									visible={visible}
-									setVisible={setVisible}
-									client={client}
-								/>
-								<Container id="notes-display">
-									{notes.map((note) => (
-										<PdfNoteComponent {...note} key={note.note_id} />
-									))}
-								</Container>
-								<InputNotes
-									post={async (note) => {
-										const diff = dayjs().diff(date);
-										if (diff > 0 && pageNumber > 0) {
-											try {
-												const result = await client.post("/api/addNote", {
-													note: note,
-													timestamp: parseInt(dayjs.duration(diff).asSeconds().toString()),
-													pageNumber,
-													presentationId,
-													visible,
-												});
-												props.socket.emit("add_note", { room: presentationId });
-												setNotes([
-													...notes,
-													{
-														note,
-														page_number: pageNumber,
-														time_stamp: parseInt(dayjs.duration(diff).asSeconds().toString()),
-														note_id: result.data[0].note_id,
-														visible,
-													},
-												]);
-											} catch (err) {
-												console.error(err);
-												alert(err);
-											}
-											//todo: add socket communication to update server notes
-										} else if (pageNumber > 0) {
-											alert(
-												"You can't post notes until the presentation starts"
-											);
-										} else {
-											alert("Please load a PDF to begin taking notes");
-										}
-									}}
-								/>
-							</TabPanel>
-							<TabPanel value="2">
-								<PublicNotes
-									socket={props.socket}
-									presentationId={presentationId}
-									pdf={true}
-								/>
-							</TabPanel>
-						</TabContext>
-					</Box>
+					<Container className="notes-display">
+						<Box sx={{ width: "100%", typography: "body1" }}>
+							<TabContext value={value}>
+								<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+									<TabList onChange={handleChange} aria-label="chat tabs">
+										<Tab label="Your Notes" value="1" />
+										<Tab label="Everyone's Notes" value="2" />
+									</TabList>
+								</Box>
+								<TabPanel value="1">
+									<NotesControl
+										socket={props.socket}
+										presentationId={presentationId}
+										visible={visible}
+										setVisible={setVisible}
+										client={client}
+									/>
+									<Container className="notes-display">
+										{notes.map((note) => (
+											<PdfNoteComponent {...note} key={note.note_id} />
+										))}
+									</Container>
+								</TabPanel>
+								<TabPanel value="2">
+									<PublicNotes
+										socket={props.socket}
+										presentationId={presentationId}
+										pdf={true}
+									/>
+								</TabPanel>
+							</TabContext>
+						</Box>
+					</Container>
+					<InputNotes
+						post={async (note) => {
+							const diff = dayjs().diff(date);
+							if (diff > 0 && pageNumber > 0) {
+								try {
+									const result = await client.post("/api/addNote", {
+										note: note,
+										timestamp: parseInt(dayjs.duration(diff).asSeconds().toString()),
+										pageNumber,
+										presentationId,
+										visible,
+									});
+									props.socket.emit("add_note", { room: presentationId });
+									setNotes([
+										...notes,
+										{
+											note,
+											page_number: pageNumber,
+											time_stamp: parseInt(dayjs.duration(diff).asSeconds().toString()),
+											note_id: result.data[0].note_id,
+											visible,
+										},
+									]);
+								} catch (err) {
+									console.error(err);
+									alert(err);
+								}
+								//todo: add socket communication to update server notes
+							} else if (pageNumber > 0) {
+								alert("You can't post notes until the presentation starts");
+							} else {
+								alert("Please load a PDF to begin taking notes");
+							}
+						}}
+					/>
 				</div>
 			</div>
 		</Container>

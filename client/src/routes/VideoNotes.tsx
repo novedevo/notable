@@ -60,65 +60,67 @@ export default function VideoNotes(props: {
 					/>
 				</div>
 				<div className="right-side">
-					<Box sx={{ width: "100%", typography: "body1" }}>
-						<TabContext value={value}>
-							<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-								<TabList onChange={handleChange} aria-label="chat tabs">
-									<Tab label="Your Notes" value="1" />
-									<Tab label="Everyone's Notes" value="2" />
-								</TabList>
-							</Box>
-							<TabPanel value="1">
-								<NotesControl
-									socket={props.socket}
-									presentationId={presentationId}
-									visible={visible}
-									setVisible={setVisible}
-									client={client}
-								/>
-								<Container id="notes-display">
-									{notes.map((note, i) => (
-										<VideoNoteComponent
-											{...note}
-											key={note.note_id}
-											player={player}
-										/>
-									))}
-								</Container>
-								<InputNotes
-									post={
-										async (value) => {
-											const time = player.getCurrentTime();
-											const result = await client.post("/api/addNote", {
-												note: value,
-												timestamp: parseInt(time),
-												presentationId,
-												visible,
-											});
-											props.socket.emit("add_note", { room: presentationId });
-											setNotes([
-												...notes,
-												{
-													note: value,
-													time_stamp: time,
-													note_id: result.data[0].note_id,
-													visible,
-												},
-											]);
-										}
-										//todo: add socket communication to update server notes
-									}
-								/>
-							</TabPanel>
-							<TabPanel value="2">
-								<PublicNotes
-									socket={props.socket}
-									presentationId={presentationId}
-									pdf={false}
-								/>
-							</TabPanel>
-						</TabContext>
-					</Box>
+					<Container className="notes-display">
+						<Box sx={{ width: "100%", typography: "body1" }}>
+							<TabContext value={value}>
+								<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+									<TabList onChange={handleChange} aria-label="chat tabs">
+										<Tab label="Your Notes" value="1" />
+										<Tab label="Everyone's Notes" value="2" />
+									</TabList>
+								</Box>
+								<TabPanel value="1">
+									<NotesControl
+										socket={props.socket}
+										presentationId={presentationId}
+										visible={visible}
+										setVisible={setVisible}
+										client={client}
+									/>
+									<Container className="notes-display">
+										{notes.map((note, i) => (
+											<VideoNoteComponent
+												{...note}
+												key={note.note_id}
+												player={player}
+											/>
+										))}
+									</Container>
+								</TabPanel>
+								<TabPanel value="2">
+									<PublicNotes
+										socket={props.socket}
+										presentationId={presentationId}
+										pdf={false}
+									/>
+								</TabPanel>
+							</TabContext>
+						</Box>
+					</Container>
+					<InputNotes
+						post={
+							async (value) => {
+								const time = player.getCurrentTime();
+								const result = await client.post("/api/addNote", {
+									note: value,
+									timestamp: parseInt(time),
+									presentationId,
+									visible,
+								});
+								props.socket.emit("add_note", { room: presentationId });
+								setNotes([
+									...notes,
+									{
+										note: value,
+										time_stamp: parseInt(time),
+										note_id: result.data[0].note_id,
+										visible,
+									},
+								]);
+							}
+							//todo: add socket communication to update server notes
+						}
+					/>
 				</div>
 			</div>
 		</div>

@@ -11,8 +11,6 @@ export default function NotesControl(props: {
 }) {
 	return (
 		<div>
-			<Typography>My Notes</Typography>
-
 			<FormControlLabel
 				control={
 					<Checkbox
