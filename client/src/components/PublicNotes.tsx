@@ -29,7 +29,6 @@ export default function PublicNotes(props: {
 
 	return (
 		<>
-			<h3>All notes taken for this presentation:</h3>
 			<ul className="notes-display">
 				{notes.map((note) => (
 					<NoteComponent
