@@ -168,7 +168,9 @@ export default function PdfNotes(props: {
 								try {
 									const result = await client.post("/api/addNote", {
 										note: note,
-										timestamp: diff,
+										timestamp: parseInt(
+											dayjs.duration(diff).asSeconds().toString()
+										),
 										pageNumber,
 										presentationId,
 										visible,
@@ -179,7 +181,9 @@ export default function PdfNotes(props: {
 										{
 											note,
 											page_number: pageNumber,
-											time_stamp: diff,
+											time_stamp: parseInt(
+												dayjs.duration(diff).asSeconds().toString()
+											),
 											note_id: result.data[0].note_id,
 											notetaker_id: user.id,
 											visible,
