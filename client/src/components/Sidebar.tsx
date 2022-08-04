@@ -17,7 +17,7 @@ function Sidebar() {
 	return (
 		<div
 			style={{
-				width: "170px",
+				width: "180px",
 				height: "100%",
 				zIndex: 10,
 				lineHeight: "4em",
