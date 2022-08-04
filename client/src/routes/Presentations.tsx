@@ -186,9 +186,6 @@ export default function Presentations() {
 									<div>
 										Join with code: {presentation.presentation_instance_id}
 									</div>
-									{presentation.presentation_end_date != null && (
-										<div>This Presentation has ended</div>
-									)}
 									<Button
 										id="deletebutton"
 										onClick={() =>
