@@ -189,14 +189,6 @@ export default function Presentations() {
 									{presentation.presentation_end_date != null && (
 										<div>This Presentation has ended</div>
 									)}
-									{presentation.pdf != null &&
-										presentation.presentation_end_date != null && (
-											<Button
-												id="mediabutton"
-												value={presentation.presentation_instance_id}
-												onClick={changeNote}
-											></Button>
-										)}
 									<Button
 										id="deletebutton"
 										onClick={() =>
@@ -221,6 +213,14 @@ export default function Presentations() {
 											navigate("/room/" + presentation.presentation_instance_id)
 										}
 									></Button>
+									{presentation.pdf != null &&
+										presentation.presentation_end_date != null && (
+											<Button
+												id="mediabutton"
+												value={presentation.presentation_instance_id}
+												onClick={changeNote}
+											></Button>
+										)}
 								</Card>
 							))}
 						</Container>
