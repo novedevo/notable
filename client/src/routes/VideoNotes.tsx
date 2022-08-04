@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
@@ -26,6 +26,7 @@ export default function VideoNotes(props: {
 	inputNotes: VideoNote[];
 	presentationId: number;
 	socket: Socket;
+	ended: boolean;
 }) {
 	const videoId = parseId(props.url);
 	const [visible, setVisible] = useState(props.inputNotes[0]?.visible ?? true);
@@ -43,6 +44,9 @@ export default function VideoNotes(props: {
 
 	return (
 		<div>
+			<Button variant="contained" href={`/room/${presentationId}?forcePdf`}>
+				Switch to pdf view
+			</Button>
 			<div id="containerIfSidebar">
 				<div id="adjustableSize">
 					<YouTube

@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import InputNotes from "../components/InputNotes";
 import NotesControl from "../components/NotesControl";
@@ -36,6 +36,7 @@ export default function PdfNotes(props: {
 	startTime: string;
 	inputNotes: PdfNote[];
 	socket: Socket;
+	ended: boolean;
 }) {
 	const [visible, setVisible] = useState(props.inputNotes[0]?.visible ?? true);
 	const [notes, setNotes] = useState<PdfNote[]>(props.inputNotes);
@@ -169,47 +170,57 @@ export default function PdfNotes(props: {
 						</Box>
 					</Container>
 				</div>
-				<div className="input-side">
-					<InputNotes
-						post={async (note) => {
-							const diff = dayjs().diff(date);
-							if (diff > 0 && pageNumber > 0) {
-								try {
-									const result = await client.post("/api/addNote", {
-										note: note,
-										timestamp: parseInt(
-											dayjs.duration(diff).asSeconds().toString()
-										),
-										pageNumber,
-										presentationId,
-										visible,
-									});
-									props.socket.emit("add_note", { room: presentationId });
-									setNotes([
-										...notes,
-										{
-											note,
-											page_number: pageNumber,
-											time_stamp: parseInt(
+
+				{props.ended || (
+					<div className="input-side">
+						<InputNotes
+							post={async (note) => {
+								const diff = dayjs().diff(date);
+								if (diff > 0 && pageNumber > 0) {
+									try {
+										const result = await client.post("/api/addNote", {
+											note: note,
+											timestamp: parseInt(
 												dayjs.duration(diff).asSeconds().toString()
 											),
-											note_id: result.data[0].note_id,
-											notetaker_id: user.id,
+											pageNumber,
+											presentationId,
 											visible,
-										},
-									]);
-								} catch (err) {
-									console.error(err);
-									alert(err);
+										});
+										props.socket.emit("add_note", { room: presentationId });
+										setNotes([
+											...notes,
+											{
+												note,
+												page_number: pageNumber,
+												time_stamp: parseInt(
+													dayjs.duration(diff).asSeconds().toString()
+												),
+												note_id: result.data[0].note_id,
+												notetaker_id: user.id,
+												visible,
+											},
+										]);
+									} catch (err) {
+										console.error(err);
+										alert(err);
+									}
+								} else if (pageNumber > 0) {
+									alert("You can't post notes until the presentation starts");
+								} else {
+									alert("Please load a PDF to begin taking notes");
 								}
-							} else if (pageNumber > 0) {
-								alert("You can't post notes until the presentation starts");
-							} else {
-								alert("Please load a PDF to begin taking notes");
-							}
-						}}
-					/>
-				</div>
+							}}
+						/>
+					</div>
+				)}
+				{props.ended && (
+					<div className="input-side">
+						<Button variant="contained" href={`/room/${presentationId}`}>
+							Switch to video mode
+						</Button>
+					</div>
+				)}
 			</div>
 		</Container>
 	);

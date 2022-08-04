@@ -31,6 +31,24 @@ export function addPresentationManagementRoutes(app, pool) {
 			res.send({ ...result.rows[0], notes: notes.rows });
 		}
 	});
+	app.patch("/api/presentation/:id", requiresLogin, async (req, res) => {
+		const { id } = req.params;
+		const { youtube_url } = req.body;
+		try {
+			const result = await pool.query(
+				sql`UPDATE presentations SET youtube_url = $1 WHERE presentation_instance_id = $2`,
+				[youtube_url, id]
+			);
+			if (result.rowCount === 0) {
+				res.status(404).send("Presentation does not exist.");
+			} else {
+				res.send("Presentation has been updated.");
+			}
+		} catch (err) {
+			console.error(err);
+			res.status(500).send("Internal postgres error");
+		}
+	});
 	app.get("/api/presentations", requiresLogin, async (req, res) => {
 		const result = await pool.query(sql`SELECT * FROM presentations`);
 		res.json(result.rows);

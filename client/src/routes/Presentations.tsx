@@ -28,6 +28,7 @@ export default function Presentations() {
 	const [userPresentations, setUserPresentations] = useState<Presentation[]>(
 		[]
 	);
+	const [urls, setUrls] = useState<any>({});
 
 	useEffect(() => {
 		if (!user) {
@@ -161,6 +162,38 @@ export default function Presentations() {
 									<div>
 										Join with code: {presentation.presentation_instance_id}
 									</div>
+									{presentation.presentation_end_date && presentation.pdf && (
+										<>
+											<TextField
+												label="new url"
+												onChange={(e) => {
+													const oldUrl: any = { ...urls };
+													oldUrl[presentation.presentation_instance_id] =
+														e.target.value;
+													setUrls(oldUrl);
+												}}
+											></TextField>
+											<Button
+												variant="contained"
+												onClick={async () => {
+													client
+														.patch(
+															"/api/presentation/" +
+																presentation.presentation_instance_id,
+															{
+																youtube_url:
+																	urls[presentation.presentation_instance_id],
+															}
+														)
+														.then(() => window.location.reload());
+												}}
+											>
+												{presentation.youtube_url
+													? "Modify an existing video"
+													: "Add a video"}
+											</Button>
+										</>
+									)}
 									<Button
 										id="deletebutton"
 										onClick={() =>
@@ -201,7 +234,7 @@ export default function Presentations() {
 
 async function getPresentations(): Promise<Presentation[]> {
 	try {
-		const result = await client("/api/currentPresentations");
+		const result = await client("/api/presentations");
 		console.log(result.data);
 		return result.data;
 	} catch (err) {

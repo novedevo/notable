@@ -20,7 +20,7 @@ export function PdfNoteComponent(props: {
 					.toISOString()
 					.substring(11, 19)}
 			</Typography>
-			<Typography>Page {props.page_number}</Typography>
+			{props.page_number && <Typography>Page {props.page_number}</Typography>}
 			{props.notetaker_id === user.id && (
 				<Button
 					onClick={() => {

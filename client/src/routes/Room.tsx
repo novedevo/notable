@@ -73,7 +73,10 @@ export default function Room() {
 				<PresenterView socket={socket} />
 			</div>
 		);
-	} else if (presentation.youtube_url) {
+	} else if (
+		presentation.youtube_url &&
+		!(window.location.href.includes("forcePdf") && presentation.pdf)
+	) {
 		return (
 			<div>
 				<Sidebar />
@@ -83,6 +86,7 @@ export default function Room() {
 						inputNotes={presentation.notes as VideoNote[]}
 						presentationId={presentation.presentation_instance_id}
 						socket={socket}
+						ended={Boolean(presentation.presentation_end_date)}
 					/>
 				</div>
 			</div>
@@ -98,6 +102,7 @@ export default function Room() {
 						startTime={presentation.scheduled_date}
 						inputNotes={presentation.notes as PdfNote[]}
 						socket={socket}
+						ended={window.location.href.includes("forcePdf")}
 					/>
 				</div>
 			</div>
