@@ -9,8 +9,8 @@ function LogoutButton() {
 			style={{
 				width: "130px",
 				zIndex: 999,
-				marginLeft: "22px",
-				marginTop: "550px",
+				marginLeft: "1.5vw",
+				marginTop: "60vh",
 			}}
 			onClick={() => {
 				localStorage.clear();
