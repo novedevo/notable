@@ -28,52 +28,12 @@ const ViewNotes = () => {
 		});
 	}, [reducerValue]);
 
-	const deleteNote = (
-		presenter_id: number,
-		presentation_instance_id: number
-	) => {
-		if (presenter_id === user.id) {
-			if (window.confirm("Are you sure you want to delete this note?")) {
-				client
-					.delete(`/api/presentation/${presentation_instance_id}`)
-					.then((res) => {
-						alert("Presentation Deleted!");
-						console.log(res.data);
-						forceUpdate();
-					})
-					.catch((err) => alert("invalid presentation: " + err.message));
-			}
-		} else {
-			if (window.confirm("Are you sure you want to delete this note?")) {
-				client
-					.delete(`/api/presentationNotes/${presentation_instance_id}`)
-					.then((res) => {
-						alert("Presentation note deleted!");
-						console.log(res.data);
-						forceUpdate();
-					})
-					.catch((err) => alert("invalid presentation: " + err.message));
-			}
-		}
-	};
-
-	const changeNote = (event: {
-		currentTarget: {
-			value: any;
-		};
-	}) => {
-		const youtube_url = prompt("Please enter a YouTube link:");
-
-		console.log(event.currentTarget.value);
-		if (youtube_url != null) {
-			const formData = new FormData();
-			formData.append("youtube_url", youtube_url);
-			formData.append("presentation_instance_id", event.currentTarget.value);
-
+	const deleteNote = (presentation_instance_id: number) => {
+		if (window.confirm("Are you sure you want to delete this note?")) {
 			client
-				.put("/api/changePresentation", formData)
+				.delete(`/api/presentationNotes/${presentation_instance_id}`)
 				.then((res) => {
-					alert("Presentation Note Changed!");
+					alert("Presentation note deleted!");
 					console.log(res.data);
 					forceUpdate();
 				})
@@ -120,20 +80,9 @@ const ViewNotes = () => {
 									id="deletebuttonsmall"
 									value={presentation.presentation_instance_id}
 									onClick={() =>
-										deleteNote(
-											presentation.presenter_id,
-											presentation.presentation_instance_id
-										)
+										deleteNote(presentation.presentation_instance_id)
 									}
 								></Button>
-								{presentation.pdf != null &&
-									presentation.presenter_id === user.id && (
-										<Button
-											id="editbuttonsmall"
-											value={presentation.presentation_instance_id}
-											onClick={changeNote}
-										></Button>
-									)}
 							</div>
 						))}
 					</div>
