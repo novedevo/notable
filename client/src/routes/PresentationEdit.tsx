@@ -159,6 +159,7 @@ export default function PresentationEdit() {
 								style={{
 									backgroundColor: "white",
 								}}
+								variant="filled"
 								label="Presentation Start Time"
 								type="datetime-local"
 								defaultValue={dayjs(presentation.scheduled_date).format(
