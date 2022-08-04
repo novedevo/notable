@@ -168,6 +168,7 @@
 }
 
 #schedulePanel {
+	margin-top: 1.5em;
 	color: white;
 	background-color: #1e2124;
 	justify-content: center;
