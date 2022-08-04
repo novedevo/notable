@@ -14,6 +14,7 @@ export default function PublicNotes(props: {
 	pdf: boolean;
 	socket: Socket;
 	presentationId: number;
+	player?: string;
 }) {
 	const [notes, setNotes] = useState<Note[]>([]);
 	const NoteComponent = props.pdf ? PdfNoteComponent : VideoNoteComponent;
@@ -34,6 +35,7 @@ export default function PublicNotes(props: {
 					<NoteComponent
 						{...(note as PdfNote)} //static typing is a little broken here, could use some work
 						key={note.note_id}
+						player={props.player}
 						onDelete={() =>
 							props.socket.emit("delete_note", {
 								room: props.presentationId,

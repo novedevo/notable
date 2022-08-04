@@ -93,6 +93,31 @@ export default function Presentations() {
 			alert("You cannot edit a presentation that has started");
 		}
 	};
+
+	const changeNote = (event: {
+		currentTarget: {
+			value: any;
+		};
+	}) => {
+		const youtube_url = prompt("Please enter a YouTube link:");
+
+		console.log(event.currentTarget.value);
+		if (youtube_url != null) {
+			const formData = new FormData();
+			formData.append("youtube_url", youtube_url);
+			formData.append("presentation_instance_id", event.currentTarget.value);
+
+			client
+				.put("/api/changePresentation", formData)
+				.then((res) => {
+					alert("Presentation Note Changed!");
+					console.log(res.data);
+					forceUpdate();
+				})
+				.catch((err) => alert("invalid presentation: " + err.message));
+		}
+	};
+
 	return (
 		<>
 			<Sidebar />
@@ -117,7 +142,7 @@ export default function Presentations() {
 					<div id="presentationheader"></div>
 					<div id="presentationsidebar"></div>
 					<div id="presentationjoin">
-						<h3>Join a Presentation </h3>
+						<h3> Join a Presentation </h3>
 						<TextField
 							style={{
 								backgroundColor: "white",
@@ -161,6 +186,17 @@ export default function Presentations() {
 									<div>
 										Join with code: {presentation.presentation_instance_id}
 									</div>
+									{presentation.presentation_end_date != null && (
+										<div>This Presentation has ended</div>
+									)}
+									{presentation.pdf != null &&
+										presentation.presentation_end_date != null && (
+											<Button
+												id="editbuttonsmall"
+												value={presentation.presentation_instance_id}
+												onClick={changeNote}
+											></Button>
+										)}
 									<Button
 										id="deletebutton"
 										onClick={() =>
@@ -201,7 +237,7 @@ export default function Presentations() {
 
 async function getPresentations(): Promise<Presentation[]> {
 	try {
-		const result = await client("/api/currentPresentations");
+		const result = await client("/api/presentations");
 		console.log(result.data);
 		return result.data;
 	} catch (err) {

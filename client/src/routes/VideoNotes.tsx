@@ -84,12 +84,20 @@ export default function VideoNotes(props: {
 												{...note}
 												key={note.note_id}
 												player={player}
+												onDelete={() =>
+													setNotes(
+														notes.filter(
+															(oldNote) => oldNote.note_id !== note.note_id
+														)
+													)
+												}
 											/>
 										))}
 									</Container>
 								</TabPanel>
 								<TabPanel value="2">
 									<PublicNotes
+										player={player}
 										socket={props.socket}
 										presentationId={presentationId}
 										pdf={false}

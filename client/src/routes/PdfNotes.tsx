@@ -20,7 +20,6 @@ import TabPanel from "@mui/lab/TabPanel";
 import { PdfNoteComponent } from "../components/Note";
 import { Socket } from "socket.io-client";
 import PublicNotes from "../components/PublicNotes";
-import { userInfo } from "os";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
@@ -124,7 +123,7 @@ export default function PdfNotes(props: {
 				<div className="right-side">
 					<Container>
 						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
-						{date.format("YYYY-MM-DDTHH:mm")}, {time}
+						{date.format("ddd MMM DD YYYY H:mm")}, {time}
 					</Container>
 					<Container className="notes-display">
 						<Box sx={{ width: "100%", typography: "body1" }}>
@@ -145,7 +144,17 @@ export default function PdfNotes(props: {
 									/>
 									<Container className="notes-display">
 										{notes.map((note) => (
-											<PdfNoteComponent {...note} key={note.note_id} />
+											<PdfNoteComponent
+												{...note}
+												key={note.note_id}
+												onDelete={() =>
+													setNotes(
+														notes.filter(
+															(oldNote) => oldNote.note_id !== note.note_id
+														)
+													)
+												}
+											/>
 										))}
 									</Container>
 								</TabPanel>
@@ -193,7 +202,6 @@ export default function PdfNotes(props: {
 									console.error(err);
 									alert(err);
 								}
-								//todo: add socket communication to update server notes
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");
 							} else {

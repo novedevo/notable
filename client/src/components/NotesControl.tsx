@@ -1,4 +1,4 @@
-import { Typography, FormControlLabel, Checkbox } from "@mui/material";
+import { FormControlLabel, Checkbox } from "@mui/material";
 import { AxiosInstance } from "axios";
 import { Socket } from "socket.io-client";
 
