@@ -123,7 +123,7 @@ export default function PdfNotes(props: {
 				<div className="right-side">
 					<Container>
 						Presentation start{dayjs().diff(date) > 0 ? "ed " : "s at "}
-						{date.format("YYYY-MM-DDTHH:mm")}, {time}
+						{date.format("ddd MMM DD YYYY H:mm")}, {time}
 					</Container>
 					<Container className="notes-display">
 						<Box sx={{ width: "100%", typography: "body1" }}>
