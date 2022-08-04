@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import { useState } from "react";
 import YouTube, { YouTubePlayer } from "react-youtube";
 import InputNotes from "../components/InputNotes";
-import { VideoNote } from "../types";
+import { User, VideoNote } from "../types";
 import { VideoNoteComponent } from "../components/Note";
 import axios from "axios";
 import { Socket } from "socket.io-client";
@@ -31,6 +31,7 @@ export default function VideoNotes(props: {
 	const [visible, setVisible] = useState(props.inputNotes[0]?.visible ?? true);
 	const [notes, setNotes] = useState<VideoNote[]>(props.inputNotes);
 	const [player, setPlayer] = useState<YouTubePlayer>(null);
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 
 	const presentationId = parseInt(window.location.pathname.split("/").pop()!);
 
@@ -105,7 +106,7 @@ export default function VideoNotes(props: {
 								const time = player.getCurrentTime();
 								const result = await client.post("/api/addNote", {
 									note: value,
-									timestamp: time,
+									timestamp: parseInt(time),
 									presentationId,
 									visible,
 								});
@@ -114,8 +115,9 @@ export default function VideoNotes(props: {
 									...notes,
 									{
 										note: value,
-										time_stamp: time,
+										time_stamp: parseInt(time),
 										note_id: result.data[0].note_id,
+										notetaker_id: user.id,
 										visible,
 									},
 								]);

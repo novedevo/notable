@@ -5,6 +5,7 @@ function LoginButton() {
 	let navigate = useNavigate();
 	return (
 		<Button
+			data-testid="LoginButton"
 			variant="contained"
 			color="primary"
 			onClick={() => navigate("/login")} //redirect to login page

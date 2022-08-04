@@ -1,8 +1,8 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
-import pool from "../dbHelper.js";
+import pool from "./dbHelper.js";
 import server from "../index.js";
-import * as userClass from "./user-constants.js";
+import * as userClass from "./user-testing-constants.js";
 
 chai.should();
 chai.use(chaiHttp);
@@ -65,7 +65,6 @@ describe("registering users", function () {
 	});
 	after(function (done) {
 		pool.query(`DELETE FROM users WHERE username = 'newtestuser'`);
-		console.log("deleted jolyne!!");
 		done();
 	});
 });
