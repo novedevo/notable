@@ -86,8 +86,8 @@ const ViewNotes = () => {
 		<div data-testid="ViewNotes-component">
 			<Sidebar />
 			<div id="containerIfSidebar">
+			<div id="viewNotesWithBacking"></div>
 				<Container>
-					<div id="viewNotesWithBacking"></div>
 					<div>
 						<div id="pageHead">
 							<h1>View Notes</h1>
