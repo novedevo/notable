@@ -20,7 +20,6 @@ import TabPanel from "@mui/lab/TabPanel";
 import { PdfNoteComponent } from "../components/Note";
 import { Socket } from "socket.io-client";
 import PublicNotes from "../components/PublicNotes";
-import { userInfo } from "os";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 dayjs.extend(duration);
