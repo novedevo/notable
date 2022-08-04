@@ -4,7 +4,6 @@ import { useEffect, useState, useReducer } from "react";
 import { Presentation, User } from "../types";
 import { Button, Container } from "@mui/material";
 import Sidebar from "../components/Sidebar";
-import { isNull } from "lodash";
 
 const client = axios.create({
 	headers: {
