@@ -29,8 +29,8 @@ function Sidebar() {
 		>
 			<div
 				style={{
-					marginLeft: "22px",
-					marginTop: "22px",
+					marginLeft: "1.5vw",
+					marginTop: "2vh",
 				}}
 			>
 				<h1>notable</h1>
@@ -41,7 +41,7 @@ function Sidebar() {
 				id="buttonSidebarExtra"
 				style={{
 					width: "130px",
-					marginLeft: "22px",
+					marginLeft: "1.5vw",
 				}}
 			>
 				My Notes
@@ -52,7 +52,7 @@ function Sidebar() {
 				id="buttonSidebarExtra"
 				style={{
 					width: "130px",
-					marginLeft: "22px",
+					marginLeft: "1.5vw",
 				}}
 			>
 				Presentations
@@ -64,7 +64,7 @@ function Sidebar() {
 					id="buttonSecondary"
 					style={{
 						width: "130px",
-						marginLeft: "22px",
+						marginLeft: "1.5vw",
 					}}
 				>
 					Console
