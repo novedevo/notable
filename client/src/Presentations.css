@@ -31,6 +31,7 @@
 }
 
 #presentationcreate {
+	padding-top: 1em;
 	grid-area: "presentationcreate";
 	justify-content: center;
 	align-items: center;
@@ -53,6 +54,7 @@
 	justify-content: center;
 	align-items: center;
 	text-align: center;
+	padding-top: 1.5em;
 }
 
 #presentationlist {
@@ -69,7 +71,7 @@
 }
 
 #presentation-title {
-	font-size: 30px;
+	font-size: 2em;
 }
 
 #small-presentation-box {
@@ -77,22 +79,23 @@
 }
 
 #big-presentation-box {
+	padding-top: 5em;
 	font-family: Arial, Helvetica, sans-serif;
 	color: white;
 }
 
 #presentationbutton {
 	background-color: #8400ff;
-	padding: 15px;
+	padding: 1.1em;
 }
 
 #deletebutton {
 	background-image: url("delete.png");
 	background-size: cover;
 	border: none;
-	width: 35px;
-	height: 35px;
-	background-size: 35px 35px;
+	width: 2em;
+	height: 2.5em;
+	background-size: 2.5em 2.5em;
 	background-repeat: no-repeat;
 	float: right;
 	transform: translate(0%, -135%);
@@ -114,9 +117,9 @@
 	background-image: url("edit.png");
 	background-size: cover;
 	border: none;
-	width: 35px;
-	height: 35px;
-	background-size: 35px 35px;
+	width: 2em;
+	height: 2.5em;
+	background-size: 2.5em 2.5em;
 	background-repeat: no-repeat;
 	float: right;
 	transform: translate(-50%, -135%);
@@ -138,9 +141,9 @@
 	background-image: url("join.png");
 	background-size: cover;
 	border: none;
-	width: 35px;
-	height: 35px;
-	background-size: 35px 35px;
+	width: 2em;
+	height: 2.5em;
+	background-size: 2.5em 2.5em;
 	background-repeat: no-repeat;
 	float: right;
 	transform: translate(-100%, -135%);
@@ -165,13 +168,14 @@
 }
 
 #schedulePanel {
+	margin-top: 1.5em;
 	color: white;
 	background-color: #1e2124;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	width: 600px;
-	height: 500px;
+	width: 35em;
+	height: 30em;;
 	padding-left: 10%;
 	position: fixed;
 	top: 50%;
