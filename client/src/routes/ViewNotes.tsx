@@ -115,7 +115,7 @@ const ViewNotes = () => {
 									<p>{presentation.presentation_instance_id}</p>
 								</Link>
 								<Button
-									id="deletebutton"
+									id="deletebuttonsmall"
 									value={presentation.presentation_instance_id}
 									onClick={() =>
 										deleteNote(
@@ -127,7 +127,7 @@ const ViewNotes = () => {
 								{presentation.pdf != null &&
 									presentation.presenter_id === user.id && (
 										<Button
-											id="editbutton"
+											id="editbuttonsmall"
 											value={presentation.presentation_instance_id}
 											onClick={changeNote}
 										></Button>

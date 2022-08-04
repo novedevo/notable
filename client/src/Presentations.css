@@ -98,6 +98,18 @@
 	transform: translate(0%, -135%);
 }
 
+#deletebuttonsmall {
+	background-image: url("delete.png");
+	background-size: cover;
+	border: none;
+	width: 35px;
+	height: 35px;
+	background-size: 40% 80%;
+	background-repeat: no-repeat;
+	float: right;
+	transform: translate(45%, -120%);
+}
+
 #editbutton {
 	background-image: url("edit.png");
 	background-size: cover;
@@ -108,6 +120,18 @@
 	background-repeat: no-repeat;
 	float: right;
 	transform: translate(-50%, -135%);
+}
+
+#editbuttonsmall {
+	background-image: url("edit.png");
+	background-size: cover;
+	border: none;
+	width: 35px;
+	height: 35px;
+	background-size: 40% 80%;
+	background-repeat: no-repeat;
+	float: right;
+	transform: translate(-155%, -110%);
 }
 
 #joinbutton {
