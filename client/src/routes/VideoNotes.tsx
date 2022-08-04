@@ -97,6 +97,7 @@ export default function VideoNotes(props: {
 								</TabPanel>
 								<TabPanel value="2">
 									<PublicNotes
+										player={player}
 										socket={props.socket}
 										presentationId={presentationId}
 										pdf={false}
