@@ -105,8 +105,6 @@ app.post("/api/login", async (req, res) => {
 		[username, password]
 	);
 	if (result.rows.length === 0) {
-		console.log(result);
-		console.log(req.body);
 		res.status(403).send("Invalid username or password");
 	} else {
 		const token = generateAccessToken(result.rows[0].id, result.rows[0].admin);
