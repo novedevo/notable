@@ -72,7 +72,7 @@ const ViewNotes = () => {
 									<p>{presentation.presentation_instance_id}</p>
 								</Link>
 								<Button
-									id="deletebutton"
+									id="deletebuttonsmall"
 									value={presentation.presentation_instance_id}
 									onClick={deleteNote}
 								></Button>
