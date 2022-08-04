@@ -193,7 +193,7 @@ export default function Presentations() {
 									{presentation.pdf != null &&
 										presentation.presentation_end_date != null && (
 											<Button
-												id="editbuttonsmall"
+												id="mediabutton"
 												value={presentation.presentation_instance_id}
 												onClick={changeNote}
 											></Button>
