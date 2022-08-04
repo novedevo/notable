@@ -48,7 +48,7 @@ const ViewNotes = () => {
 				client
 					.delete(`/api/presentationNotes/${presentation_instance_id}`)
 					.then((res) => {
-						alert("Presentation Note Deleted!");
+						alert("Presentation note deleted!");
 						console.log(res.data);
 						forceUpdate();
 					})
@@ -62,7 +62,7 @@ const ViewNotes = () => {
 			value: any;
 		};
 	}) => {
-		const youtube_url = prompt("Please enter the youtube url");
+		const youtube_url = prompt("Please enter a YouTube link:");
 
 		console.log(event.currentTarget.value);
 		if (youtube_url != null) {
