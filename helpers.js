@@ -33,7 +33,7 @@ export function addPresentationManagementRoutes(app, pool) {
 	});
 	app.get("/api/presentations", requiresLogin, async (req, res) => {
 		const result = await pool.query(
-			sql`SELECT * FROM presentations ORDER BY presentation_end_date DESC`
+			sql`SELECT * FROM presentations ORDER BY presentation_end_date DESC, scheduled_date ASC`
 		);
 		res.json(result.rows);
 	});

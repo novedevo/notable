@@ -186,7 +186,7 @@ export default function Presentations() {
 									<div>
 										Join with code: {presentation.presentation_instance_id}
 									</div>
-									{presentation.presentation_end_date != null && (
+									{presentation.presentation_end_date != null && presentation.pdf != null && (
 										<div>This Presentation has ended</div>
 									)}
 									{presentation.pdf != null &&
