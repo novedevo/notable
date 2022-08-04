@@ -62,16 +62,17 @@ const ViewNotes = () => {
 			value: any;
 		};
 	}) => {
-		const youtube_url = prompt("Please enter the youtube url");
+		const youtube_url = prompt(
+			"Please enter the youtube link to the recording of this presentation"
+		);
 
 		console.log(event.currentTarget.value);
-		if (youtube_url != null) {
-			const formData = new FormData();
-			formData.append("youtube_url", youtube_url);
-			formData.append("presentation_instance_id", event.currentTarget.value);
-
+		if (youtube_url) {
 			client
-				.put("/api/changePresentation", formData)
+				.put("/api/changePresentation", {
+					youtube_url,
+					presentation_instance_id: event.currentTarget.value,
+				})
 				.then((res) => {
 					alert("Presentation Note Changed!");
 					console.log(res.data);
