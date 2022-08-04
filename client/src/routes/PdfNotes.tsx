@@ -144,7 +144,15 @@ export default function PdfNotes(props: {
 									/>
 									<Container className="notes-display">
 										{notes.map((note) => (
-											<PdfNoteComponent {...note} key={note.note_id} />
+											<PdfNoteComponent
+												{...note}
+												key={note.note_id}
+												onDelete={() =>
+													setNotes(
+														notes.filter((oldNote) => oldNote.note_id !== note.note_id)
+													)
+												}
+											/>
 										))}
 									</Container>
 								</TabPanel>
@@ -192,7 +200,6 @@ export default function PdfNotes(props: {
 									console.error(err);
 									alert(err);
 								}
-								//todo: add socket communication to update server notes
 							} else if (pageNumber > 0) {
 								alert("You can't post notes until the presentation starts");
 							} else {

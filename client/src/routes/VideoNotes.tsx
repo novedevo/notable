@@ -84,6 +84,13 @@ export default function VideoNotes(props: {
 												{...note}
 												key={note.note_id}
 												player={player}
+												onDelete={() =>
+													setNotes(
+														notes.filter(
+															(oldNote) => oldNote.note_id !== note.note_id
+														)
+													)
+												}
 											/>
 										))}
 									</Container>
