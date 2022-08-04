@@ -80,7 +80,6 @@ body {
 	height: 100vh;
 	width: 100vw;
 	float: right;
-	transform: translate(20%);
 }
 
 #middlePanel {
