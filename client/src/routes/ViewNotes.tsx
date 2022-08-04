@@ -111,6 +111,9 @@ const ViewNotes = () => {
 									id="noteSet"
 								>
 									<p>{presentation.title}</p>
+									{presentation.presenter_id === user.id && (
+										<div>Presenter View</div>
+									)}
 									<p>{presentation.presentation_instance_id}</p>
 								</Link>
 								<Button
