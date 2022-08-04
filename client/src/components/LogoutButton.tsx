@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 function LogoutButton() {
 	return (
 		<Button
+			data-testid="LogoutButton"
 			variant="contained"
 			color="error"
 			style={{

@@ -2,31 +2,38 @@ import { Button, Card, Link, Typography } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
 import { YouTubePlayer } from "react-youtube";
+import { User } from "../types";
 
 export function PdfNoteComponent(props: {
 	note_id: number;
+	notetaker_id?: number;
 	note: string;
 	time_stamp: number;
 	page_number: number;
 	onDelete?: () => void;
 }) {
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 	return (
 		<Card>
 			<Typography>{props.note}</Typography>
 			<Typography>
-				{dayjs.duration(props.time_stamp, "milliseconds").format("HH:mm:ss")}
+				{new Date(Math.floor(props.time_stamp) * 1000)
+					.toISOString()
+					.substring(11, 19)}
 			</Typography>
 			<Typography>Page {props.page_number}</Typography>
-			<Button
-				onClick={() => {
-					deleteNote(props.note_id);
-					if (props.onDelete) {
-						props.onDelete();
-					}
-				}}
-			>
-				delete
-			</Button>
+			{props.notetaker_id === user.id && (
+				<Button
+					onClick={() => {
+						deleteNote(props.note_id);
+						if (props.onDelete) {
+							props.onDelete();
+						}
+					}}
+				>
+					delete
+				</Button>
+			)}
 		</Card>
 	);
 }
@@ -34,10 +41,12 @@ export function PdfNoteComponent(props: {
 export function VideoNoteComponent(props: {
 	player?: YouTubePlayer;
 	note_id: number;
+	notetaker_id?: number;
 	note: string;
 	time_stamp: number;
 	onDelete?: () => void;
 }) {
+	const user: User = JSON.parse(localStorage.getItem("user")!);
 	return (
 		<Card>
 			<Typography>{props.note}</Typography>
@@ -50,16 +59,18 @@ export function VideoNoteComponent(props: {
 						.toISOString()
 						.substring(11, 19)}
 				</Link>
-				<Button
-					onClick={() => {
-						deleteNote(props.note_id);
-						if (props.onDelete) {
-							props.onDelete();
-						}
-					}}
-				>
-					Delete
-				</Button>
+				{props.notetaker_id === user.id && (
+					<Button
+						onClick={() => {
+							deleteNote(props.note_id);
+							if (props.onDelete) {
+								props.onDelete();
+							}
+						}}
+					>
+						Delete
+					</Button>
+				)}
 			</Typography>
 		</Card>
 	);

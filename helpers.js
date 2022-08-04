@@ -105,6 +105,21 @@ export function addPresentationManagementRoutes(app, pool) {
 			res.send("Presentation has been updated.");
 		}
 	);
+	app.put(
+		"/api/changePresentation",
+		requiresLogin,
+		express.urlencoded({ extended: false }),
+		fileupload(),
+		async (req, res) => {
+			const { youtube_url, presentation_instance_id } = req.body;
+
+			await pool.query(
+				sql`UPDATE presentations SET youtube_url = $1, pdf = null WHERE presentation_instance_id = $2`,
+				[youtube_url, parseInt(presentation_instance_id)]
+			);
+			res.send("Presentation has been updated.");
+		}
+	);
 	app.post("/api/endPresentation/:id", requiresLogin, async (req, res) => {
 		const { id } = req.params;
 		await pool.query(

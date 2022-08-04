@@ -64,6 +64,23 @@ VALUES (
         101
     );
 
+INSERT INTO presentations (
+    presentation_instance_id,
+    title, 
+    scheduled_date, 
+    presentation_end_date, 
+    pdf, 
+    presenter_id
+    )
+VALUES (
+        105,
+        'Test presentation with no notes',
+        '2022-07-31 10:00:00',
+        null,
+        'testpdf3',
+        100
+    );
+
 
 INSERT INTO notes (
         note_id,
@@ -117,12 +134,31 @@ INSERT INTO notes (
         note,
         time_stamp,
         notetaker_id,
-        presentation_id
+        presentation_id,
+        visible
     )
 VALUES (
         105,
         'This is a test note by user 102 for presentation 3',
         290,
         102,
-        104
+        104,
+        FALSE
+    );
+
+INSERT INTO notes (
+        note_id,
+        note,
+        time_stamp,
+        notetaker_id,
+        presentation_id,
+        visible
+    )
+VALUES (
+        106,
+        'This should be a non-visible test note by user 102 for presentation 4',
+        400,
+        102,
+        105,
+        FALSE
     );

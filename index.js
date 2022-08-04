@@ -105,8 +105,6 @@ app.post("/api/login", async (req, res) => {
 		[username, password]
 	);
 	if (result.rows.length === 0) {
-		console.log(result);
-		console.log(req.body);
 		res.status(403).send("Invalid username or password");
 	} else {
 		const token = generateAccessToken(result.rows[0].id, result.rows[0].admin);
@@ -207,6 +205,14 @@ app.delete("/api/presentationNotes/:id", requiresLogin, async (req, res) => {
 	);
 	res.send("Presentation Notes has been deleted.");
 });
+app.delete("/api/presentation/:id", requiresLogin, async (req, res) => {
+	const { id } = req.params;
+	await pool.query(
+		sql`DELETE FROM presentations WHERE presentation_instance_id = $1`,
+		[parseInt(id)]
+	);
+	res.send("Presentation has been deleted.");
+});
 app.delete("/api/note/:id", requiresLogin, async (req, res) => {
 	const { id } = req.params;
 	await pool.query(sql`DELETE FROM notes WHERE note_id = $1`, [parseInt(id)]);
@@ -215,7 +221,9 @@ app.delete("/api/note/:id", requiresLogin, async (req, res) => {
 app.get("/api/notePresentations/", requiresLogin, async (req, res) => {
 	const result = await pool.query(
 		sql`SELECT * FROM presentations WHERE presentation_instance_id IN 
-		(SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)`,
+		(SELECT DISTINCT presentation_id FROM notes WHERE notetaker_id = $1)
+		UNION
+		SELECT * FROM presentations WHERE presenter_id = $1 ORDER BY presenter_id`,
 		[req.jwt.id]
 	);
 	res.send(result.rows);
