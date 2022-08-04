@@ -149,7 +149,9 @@ export default function PdfNotes(props: {
 												key={note.note_id}
 												onDelete={() =>
 													setNotes(
-														notes.filter((oldNote) => oldNote.note_id !== note.note_id)
+														notes.filter(
+															(oldNote) => oldNote.note_id !== note.note_id
+														)
 													)
 												}
 											/>
