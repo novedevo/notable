@@ -104,10 +104,10 @@
 	border: none;
 	width: 35px;
 	height: 35px;
-	background-size: 35% 70%;
+	background-size: 40% 80%;
 	background-repeat: no-repeat;
 	float: right;
-	transform: translate(40%, 80%);
+	transform: translate(45%, -120%);
 }
 
 #editbutton {
