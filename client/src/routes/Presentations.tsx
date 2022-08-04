@@ -117,7 +117,7 @@ export default function Presentations() {
 					<div id="presentationheader"></div>
 					<div id="presentationsidebar"></div>
 					<div id="presentationjoin">
-						<h3>Join a Presentation </h3>
+						<h3> Join a Presentation </h3>
 						<TextField
 							style={{
 								backgroundColor: "white",
